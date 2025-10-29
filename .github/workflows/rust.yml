@@ -16,8 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Nuxt Build
+      run: yarn build --generate
+
     - name: Build
-      run: tauri build --verbose
+      working-directory: src-tauri
+      run: cargo build --verbose
 
     - name: Run tests
-      run: tauri test --verbose
+      working-directory: src-tauri
+      run: cargo test --verbose
