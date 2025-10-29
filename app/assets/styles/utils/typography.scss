@@ -1,0 +1,319 @@
+@use '../utils/utils.scss' as *;
+@use 'sass:map';
+
+/* stylelint-disable */
+$thickness-family: (
+  'i': 'ivymode',
+);
+
+$thickness: (
+  't': 100,
+  'xl': 200,
+  'l': 300,
+  'r': 400,
+  'm': 500,
+  's': 600,
+  'b': 700,
+);
+
+$typography: (
+  d1: (
+    font-size: 72,
+    line-height: 79,
+    letter-spacing: 0.04,
+  ),
+  h1: (
+    font-size: 56,
+    line-height: 67,
+    letter-spacing: 0.02,
+  ),
+  h2: (
+    font-size: 44,
+    line-height: 50,
+    letter-spacing: 0.02,
+  ),
+  h3: (
+    font-size: 34,
+    line-height: 38,
+  ),
+  h4: (
+    font-size: 24,
+    line-height: 28,
+    letter-spacing: 0.02,
+  ),
+  h5: (
+    font-size: 22,
+    line-height: 21,
+    letter-spacing: 0.02,
+  ),
+  h6: (
+    font-size: 20,
+    line-height: 24,
+    letter-spacing: 0.02,
+  ),
+  h7: (
+    font-size: 14,
+    line-height: 16,
+    letter-spacing: 0.02,
+  ),
+  s1: (
+    font-size: 18,
+    line-height: 28,
+    letter-spacing: 0.02,
+  ),
+  s2: (
+    font-size: 16,
+    line-height: 22,
+    letter-spacing: 0.02,
+  ),
+  s3: (
+    font-size: 14,
+    line-height: 20,
+    letter-spacing: 0.02,
+  ),
+  i1: (
+    font-size: 15,
+    line-height: 20,
+    letter-spacing: 0,
+  ),
+  i2: (
+    font-size: 14,
+    line-height: 22,
+    letter-spacing: 0,
+  ),
+  i3: (
+    font-size: 13,
+    line-height: 20,
+    letter-spacing: 0,
+  ),
+  c1: (
+    font-size: 15,
+    line-height: 28,
+    letter-spacing: 0,
+  ),
+);
+
+$typography-mobile: (
+  d1: (
+    font-size: 40,
+    line-height: 40,
+    letter-spacing: 0.02,
+  ),
+  h1: (
+    font-size: 40,
+    line-height: 44,
+    letter-spacing: 0.02,
+  ),
+  h2: (
+    font-size: 32,
+    line-height: 37,
+    letter-spacing: 0.02,
+  ),
+  h3: (
+    font-size: 32,
+    line-height: 36,
+  ),
+  h4: (
+    font-size: 18,
+    line-height: 21,
+    letter-spacing: 0.02,
+  ),
+  h5: (
+    font-size: 16,
+    line-height: 19,
+    letter-spacing: 0.02,
+  ),
+  h6: (
+    font-size: 14,
+    line-height: 16,
+    letter-spacing: 0.02,
+  ),
+  h7: (
+    font-size: 14,
+    line-height: 16,
+    letter-spacing: 0.02,
+  ),
+  s1: (
+    font-size: 16,
+    line-height: 19,
+    letter-spacing: 0.02,
+  ),
+  s2: (
+    font-size: 15,
+    line-height: 21,
+    letter-spacing: 0.02,
+  ),
+  s3: (
+    font-size: 13,
+    line-height: 18,
+    letter-spacing: 0.02,
+  ),
+  i1: (
+    font-size: 16,
+    line-height: 20,
+    letter-spacing: 0,
+  ),
+  i2: (
+    font-size: 14,
+    line-height: 20,
+    letter-spacing: 0,
+  ),
+  i3: (
+    font-size: 12,
+    line-height: 20,
+    letter-spacing: 0,
+  ),
+  c1: (
+    font-size: 13,
+    line-height: 24,
+    letter-spacing: 0,
+  ),
+);
+
+@mixin typography($name, $fWeight: 'r', $fFamily: 'i') {
+  $styles: map.get($typography, $name);
+
+  font-size: em(map.get($styles, font-size));
+  font-family: map.get($thickness-family, $fFamily), sans-serif;
+  line-height: calc(
+    map.get($styles, line-height) / map.get($styles, font-size)
+  );
+
+  @if map.has-key($styles, letter-spacing) {
+    $letterSpacing: map.get($styles, letter-spacing);
+    letter-spacing: #{$letterSpacing}em;
+  }
+
+  text-transform: map.get($styles, text-transform);
+  font-weight: map.get($thickness, $fWeight);
+}
+
+@mixin typography-mobile($name, $fWeight: 'r', $fFamily: 'i') {
+  $styles: map.get($typography-mobile, $name);
+
+  font-size: em(map.get($styles, font-size));
+  font-family: map.get($thickness-family, $fFamily), sans-serif;
+  line-height: calc(
+    map.get($styles, line-height) / map.get($styles, font-size)
+  );
+
+  @if map.has-key($styles, letter-spacing) {
+    $letterSpacing: map.get($styles, letter-spacing);
+    letter-spacing: #{$letterSpacing}em;
+  }
+
+  text-transform: map.get($styles, text-transform);
+  font-weight: map.get($thickness, $fWeight);
+}
+
+@mixin h1($weight: 'r', $family: 'i') {
+  @include typography('h1', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('h1', $weight, $family);
+  }
+}
+
+@mixin h2($weight: 'r', $family: 'i') {
+  @include typography('h2', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('h2', $weight, $family);
+  }
+}
+
+@mixin h3($weight: 'r', $family: 'i') {
+  @include typography('h3', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('h3', $weight, $family);
+  }
+}
+
+@mixin h4($weight: 'r', $family: 'i') {
+  @include typography('h4', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('h4', $weight, $family);
+  }
+}
+
+@mixin h5($weight: 'r', $family: 'i') {
+  @include typography('h5', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('h5', $weight, $family);
+  }
+}
+
+@mixin h6($weight: 'r', $family: 'i') {
+  @include typography('h6', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('h6', $weight, $family);
+  }
+}
+
+@mixin h7($weight: 'r', $family: 'i') {
+  @include typography('h7', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('h7', $weight, $family);
+  }
+}
+
+@mixin s1($weight: 'r', $family: 'i') {
+  @include typography('s1', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('s1', $weight, $family);
+  }
+}
+
+@mixin s2($weight: 'r', $family: 'i') {
+  @include typography('s2', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('s2', $weight, $family);
+  }
+}
+
+@mixin s3($weight: 'r', $family: 'i') {
+  @include typography('s3', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('s3', $weight, $family);
+  }
+}
+
+@mixin i1($weight: 'r', $family: 'i') {
+  @include typography('i1', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('i1', $weight, $family);
+  }
+}
+
+@mixin i2($weight: 'r', $family: 'i') {
+  @include typography('i2', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('i2', $weight, $family);
+  }
+}
+
+@mixin i3($weight: 'r', $family: 'i') {
+  @include typography('i3', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('i3', $weight, $family);
+  }
+}
+
+@mixin c1($weight: 'r', $family: 'i') {
+  @include typography('c1', $weight, $family);
+
+  @include media-breakpoint-down(sm) {
+    @include typography-mobile('c1', $weight, $family);
+  }
+}

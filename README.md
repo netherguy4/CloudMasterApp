@@ -7,10 +7,9 @@ This stack lets you develop a fast, lightweight desktop app using Vue 3, Vite, a
 
 ## ⚙️ Tech Stack
 
-- 🧩 **Nuxt 4** — Vue 3 framework with Vite and Nitro
+- 🧩 **Nuxt 4** — Vue 3 framework with Vite
 - 🦀 **Tauri** — Secure, lightweight Rust-based desktop shell
 - ⚡ **Vite** — Instant hot-module reloading
-- 🧠 **TypeScript** — Type-safe configuration and components
 - 🧶 **Yarn** — Reliable package and script manager
 
 ---
@@ -20,6 +19,7 @@ This stack lets you develop a fast, lightweight desktop app using Vue 3, Vite, a
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/your-username/nuxt4-tauri-app.git
-cd nuxt4-tauri-app
+git clone https://github.com/netherguy4/CloudMasterApp.git
+cd CloudMasterApp
 yarn install
+```
