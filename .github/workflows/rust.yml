@@ -24,6 +24,9 @@ jobs:
     - name: Yarn Install
       run: yarn install
 
+    - name: Tauri Install
+      run: cargo install tauri-cli
+
     - name: Build
       run: yarn tauri build --verbose
 
