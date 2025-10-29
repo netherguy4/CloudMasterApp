@@ -1,10 +1,10 @@
 [package]
-name = "app"
+name = "cloud-master"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "An App to manage gcloud servers"
+authors = ["NetherG"]
 license = ""
-repository = ""
+repository = "https://github.com/netherguy4/CloudMasterApp"
 edition = "2021"
 rust-version = "1.77.2"
 

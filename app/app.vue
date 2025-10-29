@@ -1,6 +1,28 @@
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
-  </div>
+  <CResize id="app" class="app">
+    <NuxtLayout v-slot="{ className }" class="app__layout">
+      <div :class="className">
+        <NuxtPage :keepalive="false" />
+      </div>
+    </NuxtLayout>
+  </CResize>
 </template>
+
+<script setup></script>
+
+<style scoped lang="scss">
+.app {
+  $parent: &;
+
+  display: flex;
+  flex-direction: column;
+
+  &:deep(#{$parent}__layout) {
+    flex-grow: 1;
+  }
+
+  @include rtl {
+    direction: rtl;
+  }
+}
+</style>

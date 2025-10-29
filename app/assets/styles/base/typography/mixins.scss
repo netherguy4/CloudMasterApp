@@ -16,7 +16,7 @@
     .#{$label + $suffixString + $familyString} {
       @include typography($label, $suffix, $family-key);
 
-      @include media-breakpoint-down(md) {
+      @include media-breakpoint-down(sm) {
         @include typography-mobile($label, $suffix, $family-key);
       }
     }
