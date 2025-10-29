@@ -28,7 +28,7 @@ jobs:
       run: cargo install tauri-cli
 
     - name: Build
-      run: yarn tauri build --verbose
+      run: tauri build --verbose
 
     - name: Run tests
-      run: yarn tauri test --verbose
+      run: tauri test --verbose
