@@ -20,14 +20,12 @@ jobs:
       uses: actions/setup-node@v6
       with: 
         node-version: 24
-
-    - name: Nuxt Build
-      run: yarn build
+        
+    - name: Yarn Install
+      run: yarn install
 
     - name: Build
-      working-directory: src-tauri
-      run: cargo build --verbose
+      run: tauri build --verbose
 
     - name: Run tests
-      working-directory: src-tauri
-      run: cargo test --verbose
+      run: tauri test --verbose
