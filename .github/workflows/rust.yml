@@ -22,7 +22,7 @@ jobs:
         node-version: 24
 
     - name: Nuxt Build
-      run: yarn build --generate
+      run: yarn build
 
     - name: Build
       working-directory: src-tauri
