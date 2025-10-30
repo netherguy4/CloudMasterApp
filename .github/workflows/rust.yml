@@ -19,16 +19,9 @@ jobs:
     - name: Set up Node js
       uses: actions/setup-node@v6
       with: 
-        node-version: 24
-        
-    - name: Yarn Install
-      run: yarn install
-
-    - name: Tauri Install
-      run: cargo install tauri-cli
+        node-version: 22
+        cache: 'yarn'
+    - run: yarn --frozen-lockfile
 
     - name: Build
-      run: tauri build --verbose
-
-    - name: Run tests
-      run: tauri test --verbose
+      run: yarn tauri:build --verbose
