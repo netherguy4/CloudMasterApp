@@ -24,4 +24,4 @@ jobs:
     - run: yarn --frozen-lockfile
 
     - name: Build
-      run: yarn tauri:build --verbose
+      run: yarn tauri:build
