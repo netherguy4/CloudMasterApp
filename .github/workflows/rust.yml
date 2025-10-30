@@ -21,7 +21,9 @@ jobs:
       with: 
         node-version: 22
         cache: 'yarn'
-    - run: yarn --frozen-lockfile
+
+    - name: Install depencies
+      run: yarn --frozen-lockfile
 
     - name: Build
-      run: yarn tauri:build
+      run: yarn build
