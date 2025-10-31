@@ -10,7 +10,6 @@
   "scripts": {
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
-    "server:build": "pkg server/index.js --output server/node-server --targets node22-win-x64 && node ./server/utils/rename.js",
     "dev": "nuxt dev --host",
     "build": "nuxt generate",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --ignore-path .gitignore",
@@ -20,7 +19,7 @@
     "@google-cloud/language": "^7.2.1",
     "@google-cloud/storage": "^7.17.2",
     "@tauri-apps/plugin-opener": "~2",
-    "@tauri-apps/plugin-shell": "^2.3.3",
+    "@tauri-apps/plugin-shell": "~2",
     "@vueuse/components": "^11.0.3",
     "@vueuse/core": "^11.0.3",
     "bootstrap": "^5.3.3",
