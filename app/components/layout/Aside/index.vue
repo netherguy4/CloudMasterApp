@@ -13,7 +13,8 @@
 <style lang="scss" scoped>
 .layout-aside {
   display: flex;
-  border-right: 1px solid $stroke-color-primary;
+  background-color: $background-color-secondary;
+  border-right: 1px solid $border-color-primary;
 
   &__content {
     display: flex;

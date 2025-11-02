@@ -23,10 +23,14 @@ import navigationRoutes from '~/configs/navigationRoutes';
   &__link {
     display: block;
     padding: em(10) em(20);
+    transition: background-color $time-normal $ease;
+
+    @include hover-active-focus {
+      background-color: $actions-color-primary;
+    }
 
     &.router-link-active {
-      color: $text-color-invert;
-      background-color: $background-color-primary;
+      background-color: $actions-color-secondary;
     }
   }
 }

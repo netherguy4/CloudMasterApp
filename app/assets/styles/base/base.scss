@@ -18,8 +18,8 @@ body {
   font-size: em($font-size-default);
   font-weight: 400;
   line-height: 1;
-  color: $color-black;
-  background-color: $background-color-invert;
+  color: $text-color-primary;
+  background-color: $background-color-primary;
 }
 
 #__nuxt {

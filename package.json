@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@fontsource-variable/roboto": "^5.2.8",
+    "@tauri-apps/plugin-clipboard-manager": "~2",
     "@vueuse/components": "^11.0.3",
     "@vueuse/core": "^11.0.3",
     "bootstrap": "^5.3.3",

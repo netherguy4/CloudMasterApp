@@ -1,38 +1,51 @@
 /* stylelint-disable */
 
 // colors
+// --------------------------
+// basic
 $color-white: #ffffff;
 $color-black: #000000;
-
-$text-color-primary: #302e2d;
-$text-color-secondary: #818181;
-$text-color-invert: #ffffff;
-
-$background-color-primary: #302e2d;
-$background-color-invert: #f8f8f8;
-
-$icon-color-primary: #302e2d;
-$icon-color-invert: #ffffff;
-
-$stroke-color-primary: #e7e6e3;
-$stroke-color-secondary: rgba(34, 34, 34, 0.2);
-$stroke-color-invert: #fff;
+// text
+$text-color-primary: #e6e6f2;
+$text-color-secondary: #b4b4c7;
+$text-color-tertiary: #6d6d80;
+// background
+$background-color-primary: #0e0e12;
+$background-color-secondary: #181821;
+$background-color-tertiary: #1f1f2e;
+// accent
+$accent-color-primary: #4a47a3;
+$accent-color-secondary: #6d6aff;
+$accent-color-success: #3fcf8e;
+$accent-color-warning: #f0b232;
+$accent-color-error: #e05b65;
+// border
+$border-color-primary: #2a2a3d;
+$border-color-secondary: #3d3d55;
+// actions
+$actions-color-primary: #26236b;
+$actions-color-secondary: #322e82;
+$actions-color-tertiary: #1d1a54;
 
 // paths
+// --------------------------
 $fonts-path: '/fonts';
 $images-path: '/images';
 
 // timing
+// --------------------------
 $time-fast: 150ms;
 $time-normal: 250ms;
 $time-slow: 350ms;
 
 // font
+// --------------------------
 $font-size-default: 16;
 $font-family-default-name: 'Roboto Variable';
 $font-family-default: $font-family-default-name, sans-serif;
 
 // header
+// --------------------------
 $header-default-size: 70;
 $header-adaptive-size: 50;
 

@@ -5,6 +5,9 @@ const isDev = process.env.NODE_ENV === 'development';
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-10-29',
+  app: {
+    pageTransition: { name: 'fade', mode: 'out-in' },
+  },
   components: [
     '@/components',
     { path: '@/components/common', prefix: 'C' },

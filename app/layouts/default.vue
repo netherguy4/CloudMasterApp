@@ -25,6 +25,7 @@
     display: flex;
     flex-grow: 1;
     flex-direction: column;
+    padding: em(20);
 
     // padding-top: em($header-default-size);
 
