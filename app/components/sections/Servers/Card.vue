@@ -1,6 +1,5 @@
 <script setup>
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
-import instanceStatus from '~/configs/instanceStatus';
 
 const props = defineProps({
   name: {
@@ -10,7 +9,6 @@ const props = defineProps({
   status: {
     type: String,
     required: true,
-    validator: (status) => [...instanceStatus].includes(status.toUpperCase()),
   },
   port: {
     type: String,
@@ -65,41 +63,33 @@ const onClickCard = async (text) => {
 </script>
 
 <template>
-  <div class="sections-instances-card">
-    <div class="sections-instances-card__wrapper">
-      <div class="sections-instances-card__part">
+  <div class="sections-servers-card">
+    <div class="sections-servers-card__wrapper">
+      <div class="sections-servers-card__part">
         <p class="i2-r-r">Name:</p>
 
         <p class="h6-r-r">{{ name }}</p>
       </div>
 
-      <div
-        class="sections-instances-card__part sections-instances-card__part--ip"
-      >
+      <div class="sections-servers-card__part sections-servers-card__part--ip">
         <p class="i2-r-r">IP:</p>
 
         <p class="h6-r-r">{{ vm?.external_ips[0] }}</p>
       </div>
 
-      <div class="sections-instances-card__part">
+      <div class="sections-servers-card__part">
         <p class="i2-r-r">VM Name:</p>
 
         <p class="h6-r-r">{{ vm?.name }}</p>
       </div>
 
-      <div
-        class="sections-instances-card__status"
-        :class="{
-          [`sections-instances-card__status--${status.toLowerCase()}`]:
-            !!status,
-        }"
-      />
+      <UiStatus class="sections-servers-card__status" :status="status" />
     </div>
 
-    <div class="sections-instances-card__overlay">
+    <div class="sections-servers-card__overlay">
       <div
         v-if="vm?.external_ips[0]"
-        class="sections-instances-card__part"
+        class="sections-servers-card__part"
         @click="onClickCard(vm?.external_ips[0])"
       >
         <p class="i2-r-r">Copy IP:</p>
@@ -113,9 +103,9 @@ const onClickCard = async (text) => {
 
       <button
         v-if="buttonComputed?.text"
-        class="sections-instances-card__button"
+        class="sections-servers-card__button"
         :class="{
-          [`sections-instances-card__button--${buttonComputed.text.toLowerCase()}`]:
+          [`sections-servers-card__button--${buttonComputed.text.toLowerCase()}`]:
             !!buttonComputed.text,
         }"
       >
@@ -156,7 +146,7 @@ const onClickCard = async (text) => {
   syntax: '<angle>';
 }
 
-.sections-instances-card {
+.sections-servers-card {
   $parent: &;
 
   position: relative;
@@ -262,18 +252,6 @@ const onClickCard = async (text) => {
     top: 0;
     right: 0;
     z-index: 1;
-    width: em(13);
-    height: em(13);
-    background-color: $accent-color-warning;
-    border-radius: 50%;
-
-    &--running {
-      background-color: $accent-color-success;
-    }
-
-    &--terminated {
-      background-color: $accent-color-error;
-    }
   }
 }
 </style>

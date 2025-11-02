@@ -1,6 +1,5 @@
 <script setup>
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
-import instanceStatus from '~/configs/instanceStatus';
 
 const props = defineProps({
   name: {
@@ -14,7 +13,6 @@ const props = defineProps({
   status: {
     type: String,
     required: true,
-    validator: (status) => [...instanceStatus].includes(status.toUpperCase()),
   },
   internal_ips: {
     type: Array,
@@ -91,13 +89,7 @@ const onClickCard = async (text) => {
         <p class="h6-r-r">{{ zone }}</p>
       </div>
 
-      <div
-        class="sections-instances-card__status"
-        :class="{
-          [`sections-instances-card__status--${status.toLowerCase()}`]:
-            !!status,
-        }"
-      />
+      <UiStatus class="sections-instances-card__status" :status="status" />
     </div>
 
     <div class="sections-instances-card__overlay">
@@ -265,18 +257,6 @@ const onClickCard = async (text) => {
     top: 0;
     right: 0;
     z-index: 1;
-    width: em(13);
-    height: em(13);
-    background-color: $accent-color-warning;
-    border-radius: 50%;
-
-    &--running {
-      background-color: $accent-color-success;
-    }
-
-    &--terminated {
-      background-color: $accent-color-error;
-    }
   }
 }
 </style>
