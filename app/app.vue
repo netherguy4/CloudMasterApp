@@ -2,7 +2,7 @@
   <CResize id="app" class="app">
     <NuxtLayout v-slot="{ className }" class="app__layout">
       <div :class="className">
-        <NuxtPage :keepalive="false" />
+        <NuxtPage class="app__page" :keepalive="false" />
       </div>
     </NuxtLayout>
   </CResize>
@@ -18,6 +18,10 @@
   flex-direction: column;
 
   &:deep(#{$parent}__layout) {
+    flex-grow: 1;
+  }
+
+  &:deep(#{$parent}__page) {
     flex-grow: 1;
   }
 

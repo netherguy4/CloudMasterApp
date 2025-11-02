@@ -3,11 +3,5 @@
   "identifier": "default",
   "description": "enables the default permissions",
   "windows": ["main"],
-  "permissions": [
-    "core:default",
-    {
-      "identifier": "shell:allow-execute"
-    },
-    "shell:default"
-  ]
+  "permissions": ["core:default"]
 }
