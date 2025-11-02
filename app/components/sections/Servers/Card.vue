@@ -7,26 +7,22 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  id: {
-    type: String,
-    required: true,
-  },
   status: {
     type: String,
     required: true,
     validator: (status) => [...instanceStatus].includes(status.toUpperCase()),
   },
-  internal_ips: {
-    type: Array,
-    default: undefined,
-  },
-  external_ips: {
-    type: Array,
-    default: undefined,
-  },
-  zone: {
+  port: {
     type: String,
     default: '',
+  },
+  preset: {
+    type: String,
+    default: '',
+  },
+  vm: {
+    type: Object,
+    required: true,
   },
 });
 
@@ -82,13 +78,13 @@ const onClickCard = async (text) => {
       >
         <p class="i2-r-r">IP:</p>
 
-        <p class="h6-r-r">{{ external_ips[0] }}</p>
+        <p class="h6-r-r">{{ vm?.external_ips[0] }}</p>
       </div>
 
       <div class="sections-instances-card__part">
-        <p class="i2-r-r">Zone:</p>
+        <p class="i2-r-r">VM Name:</p>
 
-        <p class="h6-r-r">{{ zone }}</p>
+        <p class="h6-r-r">{{ vm?.name }}</p>
       </div>
 
       <div
@@ -102,9 +98,9 @@ const onClickCard = async (text) => {
 
     <div class="sections-instances-card__overlay">
       <div
-        v-if="external_ips[0]"
+        v-if="vm?.external_ips[0]"
         class="sections-instances-card__part"
-        @click="onClickCard(external_ips[0])"
+        @click="onClickCard(vm?.external_ips[0])"
       >
         <p class="i2-r-r">Copy IP:</p>
 
@@ -112,7 +108,7 @@ const onClickCard = async (text) => {
 
         <p v-else-if="showError" class="h6-r-r">ERROR</p>
 
-        <p v-else class="h6-r-r">{{ external_ips[0] }}</p>
+        <p v-else class="h6-r-r">{{ vm?.external_ips[0] }}</p>
       </div>
 
       <button
@@ -215,6 +211,7 @@ const onClickCard = async (text) => {
   }
 
   &__button {
+    flex-shrink: 0;
     min-width: em(100);
     padding: em(13);
     text-align: center;

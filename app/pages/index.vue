@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="page">Hello world!</div>
+  <div class="pages-index">Hello world!</div>
 </template>
 
 <style lang="scss" scoped></style>

@@ -1,14 +1,14 @@
 <script setup>
-const instancesStore = useInstancesStore();
+const serversStore = useServersStore();
 
-onMounted(instancesStore.fetchInstances);
+onMounted(serversStore.fetchServers);
 </script>
 
 <template>
   <div class="pages-server">
-    <SectionsInstances
+    <SectionsServers
       class="pages-server__section"
-      :items="instancesStore.instances"
+      :items="serversStore.servers"
     />
   </div>
 </template>
