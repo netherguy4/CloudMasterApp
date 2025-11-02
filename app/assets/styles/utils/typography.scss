@@ -4,6 +4,7 @@
 /* stylelint-disable */
 $thickness-family: (
   'i': 'ivymode',
+  'r': 'Roboto Variable',
 );
 
 $thickness: (
@@ -170,7 +171,7 @@ $typography-mobile: (
   ),
 );
 
-@mixin typography($name, $fWeight: 'r', $fFamily: 'i') {
+@mixin typography($name, $fWeight: 'r', $fFamily: 'r') {
   $styles: map.get($typography, $name);
 
   font-size: em(map.get($styles, font-size));
@@ -188,7 +189,7 @@ $typography-mobile: (
   font-weight: map.get($thickness, $fWeight);
 }
 
-@mixin typography-mobile($name, $fWeight: 'r', $fFamily: 'i') {
+@mixin typography-mobile($name, $fWeight: 'r', $fFamily: 'r') {
   $styles: map.get($typography-mobile, $name);
 
   font-size: em(map.get($styles, font-size));
@@ -206,7 +207,7 @@ $typography-mobile: (
   font-weight: map.get($thickness, $fWeight);
 }
 
-@mixin h1($weight: 'r', $family: 'i') {
+@mixin h1($weight: 'r', $family: 'r') {
   @include typography('h1', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -214,7 +215,7 @@ $typography-mobile: (
   }
 }
 
-@mixin h2($weight: 'r', $family: 'i') {
+@mixin h2($weight: 'r', $family: 'r') {
   @include typography('h2', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -222,7 +223,7 @@ $typography-mobile: (
   }
 }
 
-@mixin h3($weight: 'r', $family: 'i') {
+@mixin h3($weight: 'r', $family: 'r') {
   @include typography('h3', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -230,7 +231,7 @@ $typography-mobile: (
   }
 }
 
-@mixin h4($weight: 'r', $family: 'i') {
+@mixin h4($weight: 'r', $family: 'r') {
   @include typography('h4', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -238,7 +239,7 @@ $typography-mobile: (
   }
 }
 
-@mixin h5($weight: 'r', $family: 'i') {
+@mixin h5($weight: 'r', $family: 'r') {
   @include typography('h5', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -246,7 +247,7 @@ $typography-mobile: (
   }
 }
 
-@mixin h6($weight: 'r', $family: 'i') {
+@mixin h6($weight: 'r', $family: 'r') {
   @include typography('h6', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -254,7 +255,7 @@ $typography-mobile: (
   }
 }
 
-@mixin h7($weight: 'r', $family: 'i') {
+@mixin h7($weight: 'r', $family: 'r') {
   @include typography('h7', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -262,7 +263,7 @@ $typography-mobile: (
   }
 }
 
-@mixin s1($weight: 'r', $family: 'i') {
+@mixin s1($weight: 'r', $family: 'r') {
   @include typography('s1', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -270,7 +271,7 @@ $typography-mobile: (
   }
 }
 
-@mixin s2($weight: 'r', $family: 'i') {
+@mixin s2($weight: 'r', $family: 'r') {
   @include typography('s2', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -278,7 +279,7 @@ $typography-mobile: (
   }
 }
 
-@mixin s3($weight: 'r', $family: 'i') {
+@mixin s3($weight: 'r', $family: 'r') {
   @include typography('s3', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -286,7 +287,7 @@ $typography-mobile: (
   }
 }
 
-@mixin i1($weight: 'r', $family: 'i') {
+@mixin i1($weight: 'r', $family: 'r') {
   @include typography('i1', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -294,7 +295,7 @@ $typography-mobile: (
   }
 }
 
-@mixin i2($weight: 'r', $family: 'i') {
+@mixin i2($weight: 'r', $family: 'r') {
   @include typography('i2', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -302,7 +303,7 @@ $typography-mobile: (
   }
 }
 
-@mixin i3($weight: 'r', $family: 'i') {
+@mixin i3($weight: 'r', $family: 'r') {
   @include typography('i3', $weight, $family);
 
   @include media-breakpoint-down(sm) {
@@ -310,7 +311,7 @@ $typography-mobile: (
   }
 }
 
-@mixin c1($weight: 'r', $family: 'i') {
+@mixin c1($weight: 'r', $family: 'r') {
   @include typography('c1', $weight, $family);
 
   @include media-breakpoint-down(sm) {

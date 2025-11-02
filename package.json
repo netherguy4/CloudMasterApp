@@ -16,6 +16,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@fontsource-variable/roboto": "^5.2.8",
     "@vueuse/components": "^11.0.3",
     "@vueuse/core": "^11.0.3",
     "bootstrap": "^5.3.3",
@@ -26,6 +27,7 @@
     "pinia": "^2.2.2",
     "reset-css": "^5.0.2",
     "swiper": "^11.1.14",
+    "typograf": "^7.6.0",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
   },

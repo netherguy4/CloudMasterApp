@@ -20,6 +20,9 @@ export default defineNuxtConfig({
   features: { inlineStyles: false },
   ignore: ['**/src-tauri/**'],
   modules: ['@pinia/nuxt', '@vueuse/nuxt', 'nuxt-swiper', 'nuxt-svgo'],
+  routeRules: {
+    '/': { redirect: '/servers' },
+  },
   ssr: false,
   svgo: { defaultImport: 'component', explicitImportsOnly: true },
   vite: {

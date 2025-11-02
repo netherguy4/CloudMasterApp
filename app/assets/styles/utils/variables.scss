@@ -6,6 +6,7 @@ $color-black: #000000;
 
 $text-color-primary: #302e2d;
 $text-color-secondary: #818181;
+$text-color-invert: #ffffff;
 
 $background-color-primary: #302e2d;
 $background-color-invert: #f8f8f8;
@@ -28,8 +29,12 @@ $time-slow: 350ms;
 
 // font
 $font-size-default: 16;
-$font-family-default-name: 'ivymode';
+$font-family-default-name: 'Roboto Variable';
 $font-family-default: $font-family-default-name, sans-serif;
+
+// header
+$header-default-size: 70;
+$header-adaptive-size: 50;
 
 // Easing presets
 // --------------------------
