@@ -5,6 +5,8 @@ const toggleCompactState = () =>
   isLayoutCompact.value
     ? (isLayoutCompact.value = false)
     : (isLayoutCompact.value = true);
+
+const triggerCompactState = () => (isLayoutCompact.value = true);
 </script>
 
 <template>
@@ -18,6 +20,7 @@ const toggleCompactState = () =>
       <LAsideNavigation
         :is-compact="isLayoutCompact"
         class="layout-aside__nav"
+        @close="triggerCompactState"
       />
 
       <button
@@ -52,6 +55,10 @@ const toggleCompactState = () =>
     gap: em(30);
     min-height: 100%;
     padding-block: em(10) 0;
+
+    @include media-breakpoint-down(sm) {
+      gap: em(15);
+    }
   }
 
   &__logo {
@@ -60,7 +67,7 @@ const toggleCompactState = () =>
     transition: width $time-normal $ease;
 
     @include media-breakpoint-down(sm) {
-      width: em(70);
+      width: em(60);
     }
   }
 

@@ -7,6 +7,8 @@ defineProps({
     default: true,
   },
 });
+
+const emit = defineEmits(['close']);
 </script>
 
 <template>
@@ -20,7 +22,11 @@ defineProps({
         :key="index"
         class="layout-aside-navigation__li"
       >
-        <CTagDetect :to="link" class="layout-aside-navigation__link">
+        <CTagDetect
+          :to="link"
+          class="layout-aside-navigation__link"
+          @click="$emit('close')"
+        >
           <span class="h4-r-r">{{ $tp(title) }}</span>
 
           <CIcon
@@ -54,6 +60,7 @@ defineProps({
     padding: em(10) em(20);
     text-align: center;
     transition: $time-normal $ease;
+    transition-property: background-color;
 
     @include hover-active-focus {
       background-color: $actions-color-primary;
