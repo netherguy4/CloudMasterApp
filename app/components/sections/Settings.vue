@@ -121,6 +121,11 @@ const currentLang = ref(languages.value[1]);
   max-width: em(740);
   padding-inline: em(20);
 
+  @include media-breakpoint-down(sm) {
+    max-width: none;
+    padding: 0;
+  }
+
   &__title {
     padding-block: em(20);
     border-bottom: 1px solid $border-color-primary;
@@ -134,6 +139,7 @@ const currentLang = ref(languages.value[1]);
 
   &__setting {
     display: flex;
+    flex-wrap: wrap;
     gap: em(20);
     align-items: center;
 

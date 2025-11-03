@@ -26,6 +26,10 @@ defineProps({
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(em(300), 1fr));
     gap: em(20);
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: 1fr;
+    }
   }
 }
 </style>

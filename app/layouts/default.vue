@@ -27,6 +27,10 @@
     flex-direction: column;
     padding: em(20);
 
+    @include media-breakpoint-down(sm) {
+      margin-left: em(40);
+    }
+
     // padding-top: em($header-default-size);
 
     // @include media-breakpoint-down(sm) {
@@ -46,6 +50,15 @@
 
   &__content {
     display: flex;
+  }
+
+  &__aside {
+    @include media-breakpoint-down(sm) {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 100;
+      height: 100%;
+    }
   }
 
   &__wrapper {
