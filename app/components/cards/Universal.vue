@@ -151,16 +151,16 @@ const onClickCard = async (text) => {
 
 <template>
   <div
-    class="cards-instance"
+    class="cards-universal"
     @click="onClickCard(IpComputed.trueValue)"
     @mouseover="handleMouseOver"
     @mouseleave="handleMouseLeave"
   >
-    <div class="cards-instance__wrapper">
+    <div class="cards-universal__wrapper">
       <div
         v-for="({ label, value }, index) in partsComputed"
         :key="index"
-        class="cards-instance__part"
+        class="cards-universal__part"
       >
         <p class="i2-r-r">{{ $tp(label) }}</p>
 
@@ -169,16 +169,16 @@ const onClickCard = async (text) => {
 
       <button
         v-if="buttonComputed?.text"
-        class="cards-instance__button"
+        class="cards-universal__button"
         :class="{
-          [`cards-instance__button--${buttonComputed.text.toLowerCase()}`]:
+          [`cards-universal__button--${buttonComputed.text.toLowerCase()}`]:
             !!buttonComputed.text,
         }"
       >
         <span class="i1-r-r">{{ buttonComputed.text }}</span>
       </button>
 
-      <UiStatus class="cards-instance__status" :status="status" />
+      <UiStatus class="cards-universal__status" :status="status" />
     </div>
   </div>
 </template>
@@ -214,7 +214,7 @@ const onClickCard = async (text) => {
   syntax: '<angle>';
 }
 
-.cards-instance {
+.cards-universal {
   $parent: &;
 
   position: relative;

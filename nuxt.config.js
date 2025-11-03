@@ -23,7 +23,13 @@ export default defineNuxtConfig({
   devtools: { enabled: isDev },
   features: { inlineStyles: false },
   ignore: ['**/src-tauri/**'],
-  modules: ['@pinia/nuxt', '@vueuse/nuxt', 'nuxt-swiper', 'nuxt-svgo'],
+  modules: [
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    'nuxt-swiper',
+    'nuxt-svgo',
+    '@formkit/auto-animate/nuxt',
+  ],
   routeRules: {
     '/': { redirect: '/servers' },
   },

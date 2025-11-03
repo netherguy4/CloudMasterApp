@@ -9,6 +9,7 @@ onMounted(serversStore.fetchServers);
     <SectionsDynamicCards
       class="pages-server__section"
       :items="serversStore.servers"
+      :loading="serversStore.loading"
       card-type="server"
     />
   </div>

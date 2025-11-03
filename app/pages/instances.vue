@@ -9,6 +9,7 @@ onMounted(instancesStore.fetchInstances);
     <SectionsDynamicCards
       class="pages-instances__section"
       :items="instancesStore.instances"
+      :loading="instancesStore.loading"
     />
   </div>
 </template>

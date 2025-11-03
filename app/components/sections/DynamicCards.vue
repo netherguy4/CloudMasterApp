@@ -1,7 +1,6 @@
 <script setup>
 import cardTypes from '~/configs/cardTypes';
 
-cardTypes;
 defineProps({
   items: {
     type: Array,
@@ -12,19 +11,41 @@ defineProps({
     default: cardTypes.instance,
     validator: (type) => [cardTypes.instance, cardTypes.server].includes(type),
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const [contentRef, enable] = useAutoAnimate();
+onMounted(async () => {
+  enable?.(false);
+  await nextTick();
+  enable?.(true);
 });
 </script>
 
 <template>
-  <div v-if="items?.length" class="sections-dynamic-cards">
-    <div class="sections-dynamic-cards__content">
-      <slot v-for="item in items" :key="item.id" name="card" :data="item">
-        <CardUniversal
-          v-if="!$slots.card"
-          :card-type="cardType"
-          v-bind="item"
-        />
-      </slot>
+  <div class="sections-dynamic-cards">
+    <div ref="contentRef" class="sections-dynamic-cards__content">
+      <template v-if="items?.length || !loading">
+        <slot v-for="item in items" :key="item.id" name="card" :data="item">
+          <CardUniversal
+            v-if="!$slots.card"
+            :card-type="cardType"
+            v-bind="item"
+          />
+        </slot>
+      </template>
+
+      <template v-else>
+        <slot v-for="n in 8" :key="n" name="skeleton">
+          <CardUniversalSkeleton
+            v-if="!$slots.skeleton"
+            :card-type="cardType"
+          />
+        </slot>
+      </template>
     </div>
   </div>
 </template>
