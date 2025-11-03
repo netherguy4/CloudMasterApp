@@ -10,7 +10,7 @@ defineProps({
 <template>
   <div v-if="items?.length" class="sections-instances">
     <div class="sections-instances__content">
-      <SectionsInstancesCard
+      <CardInstance
         v-for="item in items"
         :key="item.id"
         v-bind="item"

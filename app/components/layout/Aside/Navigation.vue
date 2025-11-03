@@ -29,6 +29,10 @@ import navigationRoutes from '~/configs/navigationRoutes';
       background-color: $actions-color-primary;
     }
 
+    @include media-breakpoint-down(sm) {
+      padding: em(5) em(10);
+    }
+
     &.router-link-active {
       background-color: $actions-color-secondary;
     }

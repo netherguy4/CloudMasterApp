@@ -27,6 +27,10 @@
   &__logo {
     align-self: center;
     width: em(100);
+
+    @include media-breakpoint-down(sm) {
+      width: em(50);
+    }
   }
 
   &__nav {

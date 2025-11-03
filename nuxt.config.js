@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     { path: '@/components/common', prefix: 'C' },
     { path: '@/components/animation', prefix: 'A' },
     { path: '@/components/ui', prefix: 'Ui' },
+    { path: '@/components/cards', prefix: 'Card' },
     { path: '@/components/layout', prefix: 'L' },
   ],
   css: ['reset-css', '@/assets/styles/base/index.scss'],

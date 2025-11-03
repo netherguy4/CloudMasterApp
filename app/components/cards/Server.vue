@@ -63,33 +63,33 @@ const onClickCard = async (text) => {
 </script>
 
 <template>
-  <div class="sections-servers-card">
-    <div class="sections-servers-card__wrapper">
-      <div class="sections-servers-card__part">
+  <div class="cards-server">
+    <div class="cards-server__wrapper">
+      <div class="cards-server__part">
         <p class="i2-r-r">Name:</p>
 
         <p class="h6-r-r">{{ name }}</p>
       </div>
 
-      <div class="sections-servers-card__part sections-servers-card__part--ip">
+      <div class="cards-server__part cards-server__part--ip">
         <p class="i2-r-r">IP:</p>
 
         <p class="h6-r-r">{{ vm?.external_ips[0] }}</p>
       </div>
 
-      <div class="sections-servers-card__part">
+      <div class="cards-server__part">
         <p class="i2-r-r">VM Name:</p>
 
         <p class="h6-r-r">{{ vm?.name }}</p>
       </div>
 
-      <UiStatus class="sections-servers-card__status" :status="status" />
+      <UiStatus class="cards-server__status" :status="status" />
     </div>
 
-    <div class="sections-servers-card__overlay">
+    <div class="cards-server__overlay">
       <div
         v-if="vm?.external_ips[0]"
-        class="sections-servers-card__part"
+        class="cards-server__part"
         @click="onClickCard(vm?.external_ips[0])"
       >
         <p class="i2-r-r">Copy IP:</p>
@@ -103,9 +103,9 @@ const onClickCard = async (text) => {
 
       <button
         v-if="buttonComputed?.text"
-        class="sections-servers-card__button"
+        class="cards-server__button"
         :class="{
-          [`sections-servers-card__button--${buttonComputed.text.toLowerCase()}`]:
+          [`cards-server__button--${buttonComputed.text.toLowerCase()}`]:
             !!buttonComputed.text,
         }"
       >
@@ -146,7 +146,7 @@ const onClickCard = async (text) => {
   syntax: '<angle>';
 }
 
-.sections-servers-card {
+.cards-server {
   $parent: &;
 
   position: relative;
