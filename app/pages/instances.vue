@@ -6,7 +6,7 @@ onMounted(instancesStore.fetchInstances);
 
 <template>
   <div class="pages-instances">
-    <SectionsInstances
+    <SectionsDynamicCards
       class="pages-instances__section"
       :items="instancesStore.instances"
     />

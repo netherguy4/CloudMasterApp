@@ -6,7 +6,10 @@ export const useServersStore = defineStore('Servers', () => {
     try {
       let { data, code, message } = await useRequest('list_servers');
       if (code !== 200 && message) console.log(message);
-      servers.value = data;
+      servers.value = data.map((serv) => ({
+        id: serv.name + serv.vm?.id,
+        ...serv,
+      }));
     } catch (e) {
       console.log(e);
     }

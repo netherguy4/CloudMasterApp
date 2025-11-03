@@ -6,9 +6,10 @@ onMounted(serversStore.fetchServers);
 
 <template>
   <div class="pages-server">
-    <SectionsServers
+    <SectionsDynamicCards
       class="pages-server__section"
       :items="serversStore.servers"
+      card-type="server"
     />
   </div>
 </template>
