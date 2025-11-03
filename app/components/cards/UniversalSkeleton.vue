@@ -85,7 +85,7 @@ const partsNumber = computed(() => {
     background: linear-gradient(
       90deg,
       rgb(255 255 255 / 0%) 0%,
-      rgb(255 255 255 / 20%) 50%,
+      rgb(255 255 255 / 10%) 50%,
       rgb(255 255 255 / 0%) 100%
     );
     background-size: 400% 100%;
