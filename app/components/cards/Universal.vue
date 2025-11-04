@@ -174,6 +174,7 @@ const onClickCard = async (text) => {
           [`cards-universal__button--${buttonComputed.text.toLowerCase()}`]:
             !!buttonComputed.text,
         }"
+        @click.stop
       >
         <span class="i1-r-r">{{ buttonComputed.text }}</span>
       </button>
