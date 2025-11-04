@@ -1,27 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-const vitePlugins = [];
+const vitePlugins = []
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-10-29',
-  app: {
-    pageTransition: { name: 'fade', mode: 'out-in' },
-  },
-  components: [
-    '@/components',
-    { path: '@/components/common', prefix: 'C' },
-    { path: '@/components/animation', prefix: 'A' },
-    { path: '@/components/ui', prefix: 'Ui' },
-    { path: '@/components/cards', prefix: 'Card' },
-    { path: '@/components/layout', prefix: 'L' },
-  ],
-  css: ['reset-css', '@/assets/styles/base/index.scss'],
-  devServer: {
-    host: '0',
-  },
-  devtools: { enabled: false },
-  features: { inlineStyles: false },
-  ignore: ['**/src-tauri/**'],
   modules: [
     '@pinia/nuxt',
     '@vueuse/nuxt',
@@ -30,16 +11,29 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@nuxt/eslint',
   ],
-  eslint: {
-    config: {
-      stylistic: true, // <---
-    },
+  ssr: false,
+  components: [
+    '@/components',
+    { path: '@/components/common', prefix: 'C' },
+    { path: '@/components/animation', prefix: 'A' },
+    { path: '@/components/ui', prefix: 'Ui' },
+    { path: '@/components/cards', prefix: 'Card' },
+    { path: '@/components/layout', prefix: 'L' },
+  ],
+  devtools: { enabled: false },
+  app: {
+    pageTransition: { name: 'fade', mode: 'out-in' },
   },
+  css: ['reset-css', '@/assets/styles/base/index.scss'],
+  ignore: ['**/src-tauri/**'],
   routeRules: {
     '/': { redirect: '/servers' },
   },
-  ssr: false,
-  svgo: { defaultImport: 'component', explicitImportsOnly: true },
+  devServer: {
+    host: '0',
+  },
+  features: { inlineStyles: false },
+  compatibilityDate: '2025-10-29',
   vite: {
     clearScreen: false,
     envPrefix: ['VITE_', 'TAURI_'],
@@ -56,4 +50,10 @@ export default defineNuxtConfig({
     },
     plugins: vitePlugins,
   },
-});
+  eslint: {
+    config: {
+      stylistic: true, // <---
+    },
+  },
+  svgo: { defaultImport: 'component', explicitImportsOnly: true },
+})

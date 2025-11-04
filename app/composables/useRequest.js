@@ -1,5 +1,5 @@
 export const useRequest = async (command) => {
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await new Promise(resolve => setTimeout(resolve, 300))
 
   switch (command) {
     case 'list_instances':
@@ -98,7 +98,7 @@ export const useRequest = async (command) => {
             zone: 'europe-west3-c',
           },
         ],
-      };
+      }
 
     case 'list_servers':
       return {
@@ -256,13 +256,13 @@ export const useRequest = async (command) => {
             },
           },
         ],
-      };
+      }
 
     default:
       return {
         status: 'error',
         code: 404,
         message: 'No instances found for the given command',
-      };
+      }
   }
-};
+}

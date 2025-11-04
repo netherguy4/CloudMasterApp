@@ -12,22 +12,22 @@ const props = defineProps({
     type: String,
     default: 'id',
   },
-});
+})
 
 const model = defineModel({
   type: Object,
   required: true,
-});
+})
 
 const itemList = computed(() =>
   props.items.filter(
-    (item) => item[props.trackBy] !== model.value[props.trackBy],
+    item => item[props.trackBy] !== model.value[props.trackBy],
   ),
-);
+)
 
 function onChange(item, close) {
-  model.value = item;
-  close();
+  model.value = item
+  close()
 }
 </script>
 
@@ -48,7 +48,10 @@ function onChange(item, close) {
             {{ model[labelBy] }}
           </span>
 
-          <CIcon name="chevron-navigation" class="dropdown-accordion__icon" />
+          <CIcon
+            name="chevron-navigation"
+            class="dropdown-accordion__icon"
+          />
         </button>
       </div>
     </template>

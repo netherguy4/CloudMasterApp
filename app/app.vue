@@ -1,8 +1,17 @@
 <template>
-  <CResize id="app" class="app">
-    <NuxtLayout v-slot="{ className }" class="app__layout">
+  <CResize
+    id="app"
+    class="app"
+  >
+    <NuxtLayout
+      v-slot="{ className }"
+      class="app__layout"
+    >
       <div :class="className">
-        <NuxtPage class="app__page" :keepalive="false" />
+        <NuxtPage
+          class="app__page"
+          :keepalive="false"
+        />
       </div>
     </NuxtLayout>
   </CResize>

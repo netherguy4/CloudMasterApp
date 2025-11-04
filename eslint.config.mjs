@@ -1,5 +1,5 @@
-import withNuxt from './.nuxt/eslint.config.mjs';
-import stylistic from '@stylistic/eslint-plugin';
+import withNuxt from './.nuxt/eslint.config.mjs'
+import stylistic from '@stylistic/eslint-plugin'
 
 export default withNuxt(stylistic.configs.recommended, {
   ignores: ['public/*'],
@@ -13,4 +13,4 @@ export default withNuxt(stylistic.configs.recommended, {
     'vue/multi-word-component-names': 'off',
     '@stylistic/indent': ['error', 2],
   },
-});
+})

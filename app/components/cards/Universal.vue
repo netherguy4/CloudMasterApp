@@ -1,12 +1,12 @@
 <script setup>
-import { writeText } from '@tauri-apps/plugin-clipboard-manager';
-import cardTypes from '~/configs/cardTypes';
+import { writeText } from '@tauri-apps/plugin-clipboard-manager'
+import cardTypes from '~/configs/cardTypes'
 
 const props = defineProps({
   cardType: {
     type: String,
     default: cardTypes.instance,
-    validator: (type) => [cardTypes.instance, cardTypes.server].includes(type),
+    validator: type => [cardTypes.instance, cardTypes.server].includes(type),
   },
   name: {
     type: String,
@@ -36,62 +36,62 @@ const props = defineProps({
     type: Object,
     default: undefined,
   },
-});
+})
 
-const mouseOver = ref(false);
-const showMessage = ref(false);
-const showError = ref(false);
+const mouseOver = ref(false)
+const showMessage = ref(false)
+const showError = ref(false)
 
-const handleMouseOver = () => (mouseOver.value = true);
-const handleMouseLeave = () => (mouseOver.value = false);
+const handleMouseOver = () => (mouseOver.value = true)
+const handleMouseLeave = () => (mouseOver.value = false)
 
 const buttonComputed = computed(() => {
-  const status = props.status.toLowerCase();
-  let text;
+  const status = props.status.toLowerCase()
+  let text
   switch (status) {
     case 'running': {
-      text = 'Stop';
-      break;
+      text = 'Stop'
+      break
     }
     case 'terminated': {
-      text = 'Start';
-      break;
+      text = 'Start'
+      break
     }
     default: {
-      text = 'Busy';
-      break;
+      text = 'Busy'
+      break
     }
   }
   return {
     text,
-  };
-});
+  }
+})
 
 const IpComputed = computed(() => {
-  const label = mouseOver.value ? 'Copy IP:' : 'IP:';
-  let trueValue;
+  const label = mouseOver.value ? 'Copy IP:' : 'IP:'
+  let trueValue
   switch (props.cardType) {
     case cardTypes.instance: {
-      trueValue = props.external_ips?.[0];
-      break;
+      trueValue = props.external_ips?.[0]
+      break
     }
     case cardTypes.server: {
-      trueValue = props.vm?.external_ips?.[0] + ':' + props.port;
-      break;
+      trueValue = props.vm?.external_ips?.[0] + ':' + props.port
+      break
     }
   }
   const value = showError.value
     ? 'ERROR'
     : showMessage.value
       ? 'COPIED'
-      : trueValue;
+      : trueValue
 
   return {
     label,
     value,
     trueValue,
-  };
-});
+  }
+})
 
 const partsComputed = computed(() => {
   switch (props.cardType) {
@@ -108,7 +108,7 @@ const partsComputed = computed(() => {
           label: 'Zone',
           value: props.zone,
         },
-      ];
+      ]
     }
     case cardTypes.server: {
       return [
@@ -128,25 +128,26 @@ const partsComputed = computed(() => {
           label: 'Instance Name:',
           value: props.vm?.name,
         },
-      ];
+      ]
     }
     default: {
-      return [];
+      return []
     }
   }
-});
+})
 
 const onClickCard = async (text) => {
   try {
     await writeText(text);
     ((showMessage.value = true),
-      setTimeout(() => (showMessage.value = false), 1000));
-  } catch (e) {
+    setTimeout(() => (showMessage.value = false), 1000))
+  }
+  catch (e) {
     console.log(e);
     ((showError.value = true),
-      setTimeout(() => (showError.value = false), 1000));
+    setTimeout(() => (showError.value = false), 1000))
   }
-};
+}
 </script>
 
 <template>
@@ -162,9 +163,13 @@ const onClickCard = async (text) => {
         :key="index"
         class="cards-universal__part"
       >
-        <p class="i2-r-r">{{ $tp(label) }}</p>
+        <p class="i2-r-r">
+          {{ $tp(label) }}
+        </p>
 
-        <p class="h6-r-r">{{ $tp(value) }}</p>
+        <p class="h6-r-r">
+          {{ $tp(value) }}
+        </p>
       </div>
 
       <button
@@ -179,7 +184,10 @@ const onClickCard = async (text) => {
         <span class="i1-r-r">{{ buttonComputed.text }}</span>
       </button>
 
-      <UiStatus class="cards-universal__status" :status="status" />
+      <UiStatus
+        class="cards-universal__status"
+        :status="status"
+      />
     </div>
   </div>
 </template>

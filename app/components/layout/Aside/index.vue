@@ -1,12 +1,12 @@
 <script setup>
-const isLayoutCompact = ref(true);
+const isLayoutCompact = ref(true)
 
 const toggleCompactState = () =>
   isLayoutCompact.value
     ? (isLayoutCompact.value = false)
-    : (isLayoutCompact.value = true);
+    : (isLayoutCompact.value = true)
 
-const triggerCompactState = () => (isLayoutCompact.value = true);
+const triggerCompactState = () => (isLayoutCompact.value = true)
 </script>
 
 <template>
@@ -15,7 +15,10 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
     :class="{ ['layout-aside--compact']: isLayoutCompact }"
   >
     <div class="layout-aside__content">
-      <CImage class="layout-aside__logo" src="/icons/128x128@2x.png" />
+      <CImage
+        class="layout-aside__logo"
+        src="/icons/128x128@2x.png"
+      />
 
       <LAsideNavigation
         :is-compact="isLayoutCompact"
@@ -27,9 +30,15 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
         class="layout-aside__button hidden-desktop"
         @click="toggleCompactState"
       >
-        <span v-if="!isLayoutCompact" class="c2-r-r">Hide</span>
+        <span
+          v-if="!isLayoutCompact"
+          class="c2-r-r"
+        >Hide</span>
 
-        <CIcon class="layout-aside__icon" name="navigation-left" />
+        <CIcon
+          class="layout-aside__icon"
+          name="navigation-left"
+        />
       </button>
     </div>
   </aside>

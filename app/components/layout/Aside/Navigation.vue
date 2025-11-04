@@ -1,14 +1,14 @@
 <script setup>
-import navigationRoutes from '~/configs/navigationRoutes';
+import navigationRoutes from '~/configs/navigationRoutes'
 
 defineProps({
   isCompact: {
     type: Boolean,
     default: true,
   },
-});
+})
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 </script>
 
 <template>
@@ -16,7 +16,10 @@ const emit = defineEmits(['close']);
     class="layout-aside-navigation"
     :class="{ [`layout-aside-navigation--compact`]: isCompact }"
   >
-    <ul v-if="navigationRoutes.length" class="layout-aside-navigation__list">
+    <ul
+      v-if="navigationRoutes.length"
+      class="layout-aside-navigation__list"
+    >
       <li
         v-for="({ title, link, icon }, index) in navigationRoutes"
         :key="index"
@@ -25,7 +28,7 @@ const emit = defineEmits(['close']);
         <CTagDetect
           :to="link"
           class="layout-aside-navigation__link"
-          @click="$emit('close')"
+          @click="emit('close')"
         >
           <span class="h4-r-r">{{ $tp(title) }}</span>
 

@@ -1,5 +1,5 @@
 <script setup>
-import cardTypes from '~/configs/cardTypes';
+import cardTypes from '~/configs/cardTypes'
 
 defineProps({
   items: {
@@ -9,27 +9,35 @@ defineProps({
   cardType: {
     type: String,
     default: cardTypes.instance,
-    validator: (type) => [cardTypes.instance, cardTypes.server].includes(type),
+    validator: type => [cardTypes.instance, cardTypes.server].includes(type),
   },
   loading: {
     type: Boolean,
     default: false,
   },
-});
+})
 
-const [contentRef, enable] = useAutoAnimate();
+const [contentRef, enable] = useAutoAnimate()
 onMounted(async () => {
-  enable?.(false);
-  await nextTick();
-  enable?.(true);
-});
+  enable?.(false)
+  await nextTick()
+  enable?.(true)
+})
 </script>
 
 <template>
   <div class="sections-dynamic-cards">
-    <div ref="contentRef" class="sections-dynamic-cards__content">
+    <div
+      ref="contentRef"
+      class="sections-dynamic-cards__content"
+    >
       <template v-if="items?.length || !loading">
-        <slot v-for="item in items" :key="item.id" name="card" :data="item">
+        <slot
+          v-for="item in items"
+          :key="item.id"
+          name="card"
+          :data="item"
+        >
           <CardUniversal
             v-if="!$slots.card"
             :card-type="cardType"
@@ -39,7 +47,11 @@ onMounted(async () => {
       </template>
 
       <template v-else>
-        <slot v-for="n in 8" :key="n" name="skeleton">
+        <slot
+          v-for="n in 8"
+          :key="n"
+          name="skeleton"
+        >
           <CardUniversalSkeleton
             v-if="!$slots.skeleton"
             :card-type="cardType"

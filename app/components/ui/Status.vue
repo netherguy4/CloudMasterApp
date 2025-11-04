@@ -1,16 +1,16 @@
 <script setup>
-import statusConfig from '~/configs/statusConfig';
+import statusConfig from '~/configs/statusConfig'
 
 const props = defineProps({
   status: {
     type: String,
     required: true,
-    validator: (status) => [...statusConfig].includes(status.toUpperCase()),
+    validator: status => [...statusConfig].includes(status.toUpperCase()),
   },
   size: {
     type: String,
     default: 'sm',
-    validator: (size) => ['sm'].includes(size),
+    validator: size => ['sm'].includes(size),
   },
   position: {
     type: String,
@@ -23,7 +23,7 @@ const props = defineProps({
   triggerEvent: {
     type: String,
     default: 'hover',
-    validator: (value) => ['click', 'hover'].includes(value),
+    validator: value => ['click', 'hover'].includes(value),
   },
   hoverHideDelay: {
     type: Number,
@@ -41,65 +41,65 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-const visible = ref(false);
+const visible = ref(false)
 
-const rootRef = useTemplateRef('rootRef');
+const rootRef = useTemplateRef('rootRef')
 
 function open() {
-  if (props.disabled || visible.value) return;
+  if (props.disabled || visible.value) return
 
-  visible.value = true;
+  visible.value = true
 }
 
 function close() {
-  if (props.disabled || !visible.value) return;
+  if (props.disabled || !visible.value) return
 
-  visible.value = false;
+  visible.value = false
 }
 
-//<editor-fold desc="Handling events">
+// <editor-fold desc="Handling events">
 const triggerEvents = {
   hover: 'hover',
   click: 'click',
-};
-let hideTimeout = null;
+}
+let hideTimeout = null
 
 // click
 function onTriggerClick() {
-  if (props.triggerEvent !== triggerEvents.click) return;
+  if (props.triggerEvent !== triggerEvents.click) return
 
-  visible.value ? close() : open();
+  visible.value ? close() : open()
 }
 
 onMounted(() => {
   if (props.triggerEvent === triggerEvents.click) {
-    onClickOutside(rootRef, close);
+    onClickOutside(rootRef, close)
   }
-});
+})
 
 // hover
 function onPointerEnter() {
   if (props.triggerEvent === triggerEvents.hover) {
-    clearTimeout(hideTimeout);
-    open();
+    clearTimeout(hideTimeout)
+    open()
   }
 }
 
 function onPointerLeave() {
   if (props.triggerEvent === triggerEvents.hover) {
-    hideTimeout = setTimeout(close, props.hoverHideDelay);
+    hideTimeout = setTimeout(close, props.hoverHideDelay)
   }
 }
 
 // escape
 function onEsc() {
-  if (visible.value && props.escToClose) close();
+  if (visible.value && props.escToClose) close()
 }
 // </editor-fold>
 
-defineExpose({ open, close, visible });
+defineExpose({ open, close, visible })
 </script>
 
 <template>
@@ -125,7 +125,9 @@ defineExpose({ open, close, visible });
         :auto-flip="autoFlip"
         :gap="gap"
       >
-        <p class="i2-r-r">{{ status?.toLowerCase() }}</p>
+        <p class="i2-r-r">
+          {{ status?.toLowerCase() }}
+        </p>
       </CFloating>
     </AFade>
   </div>

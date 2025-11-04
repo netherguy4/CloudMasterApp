@@ -1,4 +1,4 @@
-import Typograf from 'typograf';
+import Typograf from 'typograf'
 
 /**
  * Typograf integration
@@ -8,7 +8,7 @@ export default defineNuxtPlugin({
   parallel: true,
   setup() {
     // nuxtApp
-    const Tp = new Typograf({ locale: ['ru', 'en-US'] });
+    const Tp = new Typograf({ locale: ['ru', 'en-US'] })
 
     // nuxtApp.vueApp.directive('typograph', {
     //   mounted: (el) => {
@@ -16,6 +16,6 @@ export default defineNuxtPlugin({
     //   },
     // });
 
-    return { provide: { tp: (text) => Tp.execute(text) } };
+    return { provide: { tp: text => Tp.execute(text) } }
   },
-});
+})

@@ -11,11 +11,11 @@ const props = defineProps({
     type: String,
     required: true,
   },
-});
+})
 
 const icon = computed(() => {
-  return `svgo-${props.name.split('/').join('-')}`;
-});
+  return `svgo-${props.name.split('/').join('-')}`
+})
 </script>
 
 <template>
