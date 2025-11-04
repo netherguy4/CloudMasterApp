@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 const vitePlugins = [];
-const isDev = process.env.NODE_ENV === 'development';
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-10-29',
@@ -20,7 +19,7 @@ export default defineNuxtConfig({
   devServer: {
     host: '0',
   },
-  devtools: { enabled: isDev },
+  devtools: { enabled: false },
   features: { inlineStyles: false },
   ignore: ['**/src-tauri/**'],
   modules: [

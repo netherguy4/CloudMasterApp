@@ -7,5 +7,5 @@ export default [
   'SUSPENDED',
   'REPAIRING',
   'TERMINATED',
-  'installed',
+  'INSTALLED',
 ];
