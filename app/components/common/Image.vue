@@ -15,12 +15,19 @@ const props = defineProps({
   loading: {
     type: String,
     default: 'lazy',
-    validator: value => ['lazy', 'eager'].includes(value),
+    validator: value => [
+      'lazy',
+      'eager',
+    ].includes(value),
   },
   fetchPriority: {
     type: String,
     default: undefined,
-    validator: value => ['high', 'low', 'auto'].includes(value),
+    validator: value => [
+      'high',
+      'low',
+      'auto',
+    ].includes(value),
   },
 })
 
@@ -29,7 +36,10 @@ const {
 } = useRuntimeConfig()
 
 const imageSrc = computed(() => {
-  return combineURLs(baseURL, props.src)
+  return combineURLs(
+    baseURL,
+    props.src,
+  )
 })
 
 const srcSet = computed(() => {
@@ -37,7 +47,10 @@ const srcSet = computed(() => {
 
   return props.srcset
     .split(',')
-    .map(src => combineURLs(baseURL, src.trim()))
+    .map(src => combineURLs(
+      baseURL,
+      src.trim(),
+    ))
     .join(', ')
 })
 </script>

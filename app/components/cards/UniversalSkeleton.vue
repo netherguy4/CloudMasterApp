@@ -5,7 +5,10 @@ const props = defineProps({
   cardType: {
     type: String,
     default: undefined,
-    validator: type => [cardTypes.instance, cardTypes.server].includes(type),
+    validator: type => [
+      cardTypes.instance,
+      cardTypes.server,
+    ].includes(type),
   },
 })
 

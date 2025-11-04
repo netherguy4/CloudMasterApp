@@ -23,7 +23,10 @@ const props = defineProps({
   triggerEvent: {
     type: String,
     default: 'hover',
-    validator: value => ['click', 'hover'].includes(value),
+    validator: value => [
+      'click',
+      'hover',
+    ].includes(value),
   },
   hoverHideDelay: {
     type: Number,
@@ -75,7 +78,10 @@ function onTriggerClick() {
 
 onMounted(() => {
   if (props.triggerEvent === triggerEvents.click) {
-    onClickOutside(rootRef, close)
+    onClickOutside(
+      rootRef,
+      close,
+    )
   }
 })
 
@@ -89,7 +95,10 @@ function onPointerEnter() {
 
 function onPointerLeave() {
   if (props.triggerEvent === triggerEvents.hover) {
-    hideTimeout = setTimeout(close, props.hoverHideDelay)
+    hideTimeout = setTimeout(
+      close,
+      props.hoverHideDelay,
+    )
   }
 }
 
@@ -99,7 +108,9 @@ function onEsc() {
 }
 // </editor-fold>
 
-defineExpose({ open, close, visible })
+defineExpose({ open,
+  close,
+  visible })
 </script>
 
 <template>
@@ -138,6 +149,7 @@ defineExpose({ open, close, visible })
   pointer-events: auto;
   background-color: $accent-color-warning;
   border-radius: 50%;
+  transition: background-color $time-normal $ease;
 
   &__content {
     padding: em(5) em(10);

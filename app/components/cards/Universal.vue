@@ -2,11 +2,20 @@
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 import cardTypes from '~/configs/cardTypes'
 
+const instancesStore = useInstancesStore()
+
 const props = defineProps({
   cardType: {
     type: String,
     default: cardTypes.instance,
-    validator: type => [cardTypes.instance, cardTypes.server].includes(type),
+    validator: type => [
+      cardTypes.instance,
+      cardTypes.server,
+    ].includes(type),
+  },
+  id: {
+    type: String,
+    default: '',
   },
   name: {
     type: String,
@@ -47,7 +56,7 @@ const handleMouseLeave = () => (mouseOver.value = false)
 
 const buttonComputed = computed(() => {
   const status = props.status.toLowerCase()
-  let text
+  let text, click
   switch (status) {
     case 'running': {
       text = 'Stop'
@@ -62,8 +71,18 @@ const buttonComputed = computed(() => {
       break
     }
   }
+  switch (props.cardType) {
+    case cardTypes.instance: {
+      click = () => handleInstanceTrigger()
+      break
+    }
+    case cardTypes.server: {
+      break
+    }
+  }
   return {
     text,
+    click,
   }
 })
 
@@ -140,12 +159,52 @@ const onClickCard = async (text) => {
   try {
     await writeText(text);
     ((showMessage.value = true),
-    setTimeout(() => (showMessage.value = false), 1000))
+    setTimeout(
+      () => (showMessage.value = false),
+      1000,
+    ))
   }
   catch (e) {
     console.log(e);
     ((showError.value = true),
-    setTimeout(() => (showError.value = false), 1000))
+    setTimeout(
+      () => (showError.value = false),
+      1000,
+    ))
+  }
+}
+
+const handleInstanceTrigger = async () => {
+  const status = props.status.toLowerCase()
+
+  switch (status) {
+    case 'running': {
+      await instancesStore.stopInstance(
+        props.id,
+        props.zone,
+      )
+      await new Promise(resolve => setTimeout(
+        resolve,
+        1000,
+      ))
+      await instancesStore.fetchInstances()
+      break
+    }
+    case 'terminated': {
+      await instancesStore.startInstance(
+        props.id,
+        props.zone,
+      )
+      await new Promise(resolve => setTimeout(
+        resolve,
+        1000,
+      ))
+      await instancesStore.fetchInstances()
+      break
+    }
+    default: {
+      break
+    }
   }
 }
 </script>
@@ -179,7 +238,7 @@ const onClickCard = async (text) => {
           [`cards-universal__button--${buttonComputed.text.toLowerCase()}`]:
             !!buttonComputed.text,
         }"
-        @click.stop
+        @click.stop="buttonComputed.click"
       >
         <span class="i1-r-r">{{ buttonComputed.text }}</span>
       </button>

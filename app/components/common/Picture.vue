@@ -23,7 +23,10 @@ const props = defineProps({
     type: Object,
     default: undefined,
     validator(value) {
-      const validKeys = ['srcset', ...Object.keys(BREAKPOINTS)]
+      const validKeys = [
+        'srcset',
+        ...Object.keys(BREAKPOINTS),
+      ]
 
       return Object.keys(value).every(key => validKeys.includes(key))
     },
@@ -35,17 +38,28 @@ const props = defineProps({
   loading: {
     type: String,
     default: 'lazy',
-    validator: value => ['lazy', 'eager'].includes(value),
+    validator: value => [
+      'lazy',
+      'eager',
+    ].includes(value),
   },
   fetchPriority: {
     type: String,
     default: undefined,
-    validator: value => ['high', 'low', 'auto'].includes(value),
+    validator: value => [
+      'high',
+      'low',
+      'auto',
+    ].includes(value),
   },
   objectFit: {
     type: String,
     default: undefined,
-    validator: value => ['cover', 'contain', 'fill'].includes(value),
+    validator: value => [
+      'cover',
+      'contain',
+      'fill',
+    ].includes(value),
   },
 })
 
@@ -60,12 +74,13 @@ const mimeTypes = {
 const sources = computed(() => {
   if (!props.media && !props.webp) return
 
-  const breakpointsEntriesAsc = Object.entries(BREAKPOINTS).sort(
-    (a, b) => a[1] - b[1],
-  )
+  const breakpointsEntriesAsc = Object.entries(BREAKPOINTS).sort((a, b) => a[1] - b[1])
 
   const sources = breakpointsEntriesAsc.reduce(
-    (sources, [breakpointKey, breakpointValue]) => {
+    (sources, [
+      breakpointKey,
+      breakpointValue,
+    ]) => {
       const jpgPngSource = getSource({
         srcset: props.media?.[breakpointKey],
         breakpoint: breakpointValue,
@@ -98,7 +113,10 @@ function getSource({ srcset, breakpoint, type }) {
   if (!srcset) return
 
   if (baseURL && baseURL !== '/') {
-    srcset = applyBaseUrl(srcset, baseURL)
+    srcset = applyBaseUrl(
+      srcset,
+      baseURL,
+    )
   }
 
   let media
@@ -117,7 +135,10 @@ function getSource({ srcset, breakpoint, type }) {
 function applyBaseUrl(srcset = '', baseUrl = '') {
   return srcset
     .split(',')
-    .map(url => combineURLs(baseUrl, url.trim()))
+    .map(url => combineURLs(
+      baseUrl,
+      url.trim(),
+    ))
     .join(', ')
 }
 </script>

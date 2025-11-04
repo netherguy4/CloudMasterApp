@@ -1,8 +1,10 @@
-// import {
-//   disableBodyScroll,
-//   enableBodyScroll,
-//   clearAllBodyScrollLocks,
-// } from 'body-scroll-lock';
+/*
+ * import {
+ *   disableBodyScroll,
+ *   enableBodyScroll,
+ *   clearAllBodyScrollLocks,
+ * } from 'body-scroll-lock';
+ */
 
 // common
 /**
@@ -15,7 +17,13 @@
  * minMax(15, 5, 10); // returns 10 (max boundary)
  */
 export function minMax(value, min, max) {
-  return Math.min(Math.max(value, min), max)
+  return Math.min(
+    Math.max(
+      value,
+      min,
+    ),
+    max,
+  )
 }
 
 /**
@@ -38,7 +46,10 @@ export function cloneObject(object) {
  * await awaitTimeout(100);
  */
 export function awaitTimeout(duration = 0) {
-  return new Promise(resolve => setTimeout(resolve, duration))
+  return new Promise(resolve => setTimeout(
+    resolve,
+    duration,
+  ))
 }
 
 /**
@@ -101,8 +112,14 @@ export function preloadImage(url) {
     const image = new Image()
     image.src = url
 
-    image.addEventListener('load', resolve)
-    image.addEventListener('error', resolve)
+    image.addEventListener(
+      'load',
+      resolve,
+    )
+    image.addEventListener(
+      'error',
+      resolve,
+    )
   })
 }
 
@@ -147,14 +164,21 @@ export function getFontsPreloadList(fontsList, baseUrl = '/') {
   return fontsList.reduce(
     (result, { path, weights }) => [
       ...result,
-      ...getFontPreloadList({ path, weights }, baseUrl),
+      ...getFontPreloadList(
+        { path,
+          weights },
+        baseUrl,
+      ),
     ],
     [],
   )
 }
 
 export function round(value, digits = 0) {
-  const pow = Math.pow(10, digits)
+  const pow = Math.pow(
+    10,
+    digits,
+  )
   return Math.round(value * pow) / pow
 }
 
@@ -172,7 +196,12 @@ export function round(value, digits = 0) {
 export function formatNumberAbbr(input, decimals = 2) {
   // Убираем пробелы и приводим к числу
   const num
-    = typeof input === 'string' ? parseFloat(input.replace(/\s+/g, '')) : input
+    = typeof input === 'string'
+      ? parseFloat(input.replace(
+        /\s+/g,
+        '',
+      ))
+      : input
 
   const abs = Math.abs(num)
   const sign = num < 0 ? '-' : ''
@@ -181,36 +210,57 @@ export function formatNumberAbbr(input, decimals = 2) {
   function fmt(divisor, suffix) {
     const n = (num / divisor).toFixed(decimals)
     // Убираем лишний ".0" в конце
-    const clean = parseFloat(n.replace(/\.0+$/, '')).toFixed(2)
+    const clean = parseFloat(n.replace(
+      /\.0+$/,
+      '',
+    )).toFixed(2)
     return sign + clean + suffix
   }
 
   if (abs >= 1e9) {
-    return fmt(1e9, 'B')
+    return fmt(
+      1e9,
+      'B',
+    )
   }
   if (abs >= 1e6) {
-    return fmt(1e6, 'M')
+    return fmt(
+      1e6,
+      'M',
+    )
   }
   if (abs >= 1e3) {
-    return fmt(1e3, 'K')
+    return fmt(
+      1e3,
+      'K',
+    )
   }
   // Меньше тысячи — просто возвращаем число без изменений
   return num ? String(num) : num
 }
 
 export function scrollHidden(value) {
-  // const html = document?.documentElement;
-  // const body = document?.body
-  // TODO закоментил потому что на IOS сайт зависал
+
+  /*
+   * const html = document?.documentElement;
+   * const body = document?.body
+   * TODO закоментил потому что на IOS сайт зависал
+   */
   if (value) {
-    // clearAllBodyScrollLocks();
-    // disableBodyScroll(html);
-    // disableBodyScroll(body);
+
+    /*
+     * clearAllBodyScrollLocks();
+     * disableBodyScroll(html);
+     * disableBodyScroll(body);
+     */
   }
   else {
-    // enableBodyScroll(html);
-    // enableBodyScroll(body);
-    // clearAllBodyScrollLocks();
+
+    /*
+     * enableBodyScroll(html);
+     * enableBodyScroll(body);
+     * clearAllBodyScrollLocks();
+     */
   }
 }
 
@@ -221,7 +271,10 @@ export function scrollHidden(value) {
  */
 export function formatToQuarter(isoDate = '') {
   // Разбиваем по дефисам и получаем год и месяц
-  const [year, month] = isoDate.split('-').map(Number)
+  const [
+    year,
+    month,
+  ] = isoDate.split('-').map(Number)
   // Квартал: (0–2)→1, (3–5)→2, (6–8)→3, (9–11)→4
   const quarter = Math.floor((month - 1) / 3) + 1
   return `Q${quarter} ${year}`
@@ -242,17 +295,26 @@ export function formatPrice(value) {
   let str
     = typeof value === 'number'
       ? String(value)
-      : value.toString().replace(/\s+/g, '')
+      : value.toString().replace(
+        /\s+/g,
+        '',
+      )
 
   // Сохраняем знак, если есть
   const sign = str.startsWith('-') ? '-' : ''
   if (sign) str = str.slice(1)
 
   // Разделяем целую и дробную части
-  const [intPart, fracPart] = str.split('.')
+  const [
+    intPart,
+    fracPart,
+  ] = str.split('.')
 
   // Вставляем пробел перед каждой группой из трёх цифр с конца
-  const intFormatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const intFormatted = intPart.replace(
+    /\B(?=(\d{3})+(?!\d))/g,
+    ',',
+  )
 
   // Собираем обратно, добавляем дробную часть, если она была
   return sign + intFormatted + (fracPart !== undefined ? '.' + fracPart : '')
@@ -267,8 +329,15 @@ export const formatDate = (dateString) => {
   if (!dateString) return ''
 
   const date = new Date(dateString)
-  const day = date.getDate().toString().padStart(2, '0')
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString()
+    .padStart(
+      2,
+      '0',
+    )
+  const month = (date.getMonth() + 1).toString().padStart(
+    2,
+    '0',
+  )
   const year = date.getFullYear()
 
   return `${day}.${month}.${year}`
@@ -279,10 +348,23 @@ export const formatBytes = (a, b) => {
 
   const c = 1024,
     d = b || 2,
-    e = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    e = [
+      'Bytes',
+      'KB',
+      'MB',
+      'GB',
+      'TB',
+      'PB',
+      'EB',
+      'ZB',
+      'YB',
+    ],
     f = Math.floor(Math.log(a) / Math.log(c))
 
-  return parseFloat((a / Math.pow(c, f)).toFixed(d)) + ' ' + e[f]
+  return parseFloat((a / Math.pow(
+    c,
+    f,
+  )).toFixed(d)) + ' ' + e[f]
 }
 
 export function buildStrapiFilters(filterArray) {
@@ -308,10 +390,8 @@ export function buildStrapiFilters(filterArray) {
       && !Array.isArray(value)
     ) {
       filters.price_aed = {}
-      if (value.min.value != null)
-        filters.price_aed.$gte = Number(value.min?.value || 0)
-      if (value.max.value != null)
-        filters.price_aed.$lte = Number(value.max?.value || Infinity)
+      if (value.min.value != null) filters.price_aed.$gte = Number(value.min?.value || 0)
+      if (value.max.value != null) filters.price_aed.$lte = Number(value.max?.value || Infinity)
       return
     }
 
@@ -363,7 +443,10 @@ export function parseQueryParams(query) {
   let priceMin = null,
     priceMax = null
 
-  Object.entries(query).forEach(([key, val]) => {
+  Object.entries(query).forEach(([
+    key,
+    val,
+  ]) => {
     if (key === 'price_min') {
       priceMin = val
       return
@@ -374,7 +457,8 @@ export function parseQueryParams(query) {
     }
     // всё остальное: разбить по запятым
     const arr = ('' + val).split(',').filter(Boolean)
-    filters.push({ name: key, value: arr })
+    filters.push({ name: key,
+      value: arr })
   })
 
   if (priceMin != null || priceMax != null) {
@@ -404,10 +488,14 @@ export function youtubeParser(url) {
 }
 
 export function slugFromString(name) {
-  return name.toLowerCase().split(' ').join('_')
+  return name.toLowerCase().split(' ')
+    .join('_')
 }
 
-export const cleanPhone = phone => phone.replace(/\s/g, '')
+export const cleanPhone = phone => phone.replace(
+  /\s/g,
+  '',
+)
 
 /**
  * Builds a valid srcset string for <img> or <source> tags based on the image object and its formats.
@@ -448,9 +536,7 @@ export function buildSrcset(obj, mainKey = 'url', formatKeys = []) {
     && obj.formats?.[formatKeys]?.url
     && obj.formats?.[formatKeys]?.width
   ) {
-    srcs.push(
-      `${obj.formats[formatKeys].url} ${obj.formats[formatKeys].width}w`,
-    )
+    srcs.push(`${obj.formats[formatKeys].url} ${obj.formats[formatKeys].width}w`)
   }
 
   return srcs.join(', ')
@@ -465,6 +551,12 @@ export function buildSrcset(obj, mainKey = 'url', formatKeys = []) {
  */
 export function combineURLs(baseURL, relativeURL) {
   return relativeURL
-    ? baseURL.replace(/\/?\/$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+    ? baseURL.replace(
+      /\/?\/$/,
+      '',
+    ) + '/' + relativeURL.replace(
+      /^\/+/,
+      '',
+    )
     : baseURL
 }

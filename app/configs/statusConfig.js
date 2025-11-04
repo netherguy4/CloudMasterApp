@@ -1,4 +1,5 @@
 export default [
+  'BUSY',
   'PROVISIONING',
   'STAGING',
   'RUNNING',

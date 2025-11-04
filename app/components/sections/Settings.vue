@@ -2,7 +2,10 @@
 const appVersion = ref('')
 
 const checkForUpd = async () => {
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  await new Promise(resolve => setTimeout(
+    resolve,
+    1000,
+  ))
   appVersion.value = 'Latest version'
 }
 

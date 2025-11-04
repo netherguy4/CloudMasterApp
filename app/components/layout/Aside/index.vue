@@ -1,10 +1,9 @@
 <script setup>
 const isLayoutCompact = ref(true)
 
-const toggleCompactState = () =>
-  isLayoutCompact.value
-    ? (isLayoutCompact.value = false)
-    : (isLayoutCompact.value = true)
+const toggleCompactState = () => (isLayoutCompact.value
+  ? (isLayoutCompact.value = false)
+  : (isLayoutCompact.value = true))
 
 const triggerCompactState = () => (isLayoutCompact.value = true)
 </script>

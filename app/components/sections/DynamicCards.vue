@@ -9,7 +9,10 @@ defineProps({
   cardType: {
     type: String,
     default: cardTypes.instance,
-    validator: type => [cardTypes.instance, cardTypes.server].includes(type),
+    validator: type => [
+      cardTypes.instance,
+      cardTypes.server,
+    ].includes(type),
   },
   loading: {
     type: Boolean,
@@ -17,7 +20,10 @@ defineProps({
   },
 })
 
-const [contentRef, enable] = useAutoAnimate()
+const [
+  contentRef,
+  enable,
+] = useAutoAnimate()
 onMounted(async () => {
   enable?.(false)
   await nextTick()
@@ -66,8 +72,12 @@ onMounted(async () => {
 .sections-dynamic-cards {
   &__content {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: em(20);
+
+    @include media-breakpoint-down(xxl) {
+      grid-template-columns: repeat(4, 1fr);
+    }
 
     @include media-breakpoint-down(lg) {
       grid-template-columns: repeat(3, 1fr);

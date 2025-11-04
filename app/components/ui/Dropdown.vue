@@ -19,11 +19,7 @@ const model = defineModel({
   required: true,
 })
 
-const itemList = computed(() =>
-  props.items.filter(
-    item => item[props.trackBy] !== model.value[props.trackBy],
-  ),
-)
+const itemList = computed(() => props.items.filter(item => item[props.trackBy] !== model.value[props.trackBy]))
 
 function onChange(item, close) {
   model.value = item

@@ -15,7 +15,10 @@ const props = defineProps({
   triggerEvent: {
     type: String,
     default: 'click',
-    validator: value => ['click', 'hover'].includes(value),
+    validator: value => [
+      'click',
+      'hover',
+    ].includes(value),
   },
   referenceRef: {
     type: Object,
@@ -86,7 +89,10 @@ function onTriggerClick() {
 
 onMounted(() => {
   if (props.triggerEvent === triggerEvents.click) {
-    onClickOutside(rootRef, close)
+    onClickOutside(
+      rootRef,
+      close,
+    )
   }
 })
 
@@ -100,7 +106,10 @@ function onPointerEnter() {
 
 function onPointerLeave() {
   if (props.triggerEvent === triggerEvents.hover) {
-    hideTimeout = setTimeout(close, props.hoverHideDelay)
+    hideTimeout = setTimeout(
+      close,
+      props.hoverHideDelay,
+    )
   }
 }
 
@@ -110,7 +119,9 @@ function onEsc() {
 }
 // </editor-fold>
 
-defineExpose({ open, close, visible })
+defineExpose({ open,
+  close,
+  visible })
 </script>
 
 <template>

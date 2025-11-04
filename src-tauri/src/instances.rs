@@ -49,8 +49,9 @@ pub async fn instance_status(
     }
 }
 
-pub async fn instances_list(project_id: &str) -> Result<String> {
-    let client = build_instances_client().await?;
+#[tauri::command]
+pub async fn instances_list(project_id: &str) -> Result<String, String> {
+    let client = build_instances_client().await.map_err(|e| e.to_string())?;
     let mut instances_json = Vec::new();
 
     let mut instances = client
@@ -88,10 +89,16 @@ pub async fn instances_list(project_id: &str) -> Result<String> {
     }
 }
 
-pub async fn instance_get(project_id: &str, instance: &str, zone: &str) -> Result<String> {
+#[tauri::command]
+pub async fn instance_get(project_id: &str, instance: &str, zone: &str) -> Result<String, String> {
     let mut instances_json = Vec::new();
 
-    if let Some(instance_obj) = fetch_instance(project_id, instance, zone).await? {
+    // Try fetching the instance
+    let instance_obj = fetch_instance(project_id, instance, zone)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    if let Some(instance_obj) = instance_obj {
         match extract_instance_info(&instance_obj, zone) {
             Ok(info) => instances_json.push(info),
             Err(err) => {
@@ -104,33 +111,44 @@ pub async fn instance_get(project_id: &str, instance: &str, zone: &str) -> Resul
     if instances_json.is_empty() {
         Ok(error_response(
             404,
-            &format!("Instance {} not found", instance),
+            &format!("Instance '{}' not found", instance),
         ))
     } else {
         Ok(success_response(instances_json))
     }
 }
 
-pub async fn instance_start(project_id: &str, instance: &str, zone: &str) -> Result<String> {
-    let client = build_instances_client().await?;
+#[tauri::command]
+pub async fn instance_start(
+    project_id: &str,
+    instance: &str,
+    zone: &str,
+) -> Result<String, String> {
+    let client = build_instances_client().await.map_err(|e| e.to_string())?;
 
-    let status = match instance_status(project_id, instance, zone).await? {
+    // Get current instance status
+    let status = match instance_status(project_id, instance, zone)
+        .await
+        .map_err(|e| e.to_string())?
+    {
         Some(s) => s,
         None => {
             return Ok(error_response(
                 404,
-                &format!("Instance {} not found", instance),
+                &format!("Instance '{}' not found", instance),
             ));
         }
     };
 
-    if status != "terminated" {
+    // Prevent starting if not in TERMINATED state
+    if status.to_lowercase() != "terminated" {
         return Ok(error_response(
             406,
-            &format!("Can't start, instance {} is {}", instance, status),
+            &format!("Cannot start '{}': instance is {}", instance, status),
         ));
     }
 
+    // Attempt to start the instance
     match client
         .start()
         .set_instance(instance)
@@ -139,37 +157,47 @@ pub async fn instance_start(project_id: &str, instance: &str, zone: &str) -> Res
         .send()
         .await
     {
-        Ok(_) => Ok(success_response("")),
+        Ok(_) => Ok(success_response(format!(
+            "Instance '{}' start operation initiated",
+            instance
+        ))),
         Err(err) => {
-            error!("Failed to start instance {}: {:?}", instance, err);
+            error!("Failed to start instance '{}': {:?}", instance, err);
             Ok(error_response(
                 500,
-                &format!("Failed to start instance {}: {:?}", instance, err),
+                &format!("Failed to start instance '{}': {}", instance, err),
             ))
         }
     }
 }
 
-pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Result<String> {
-    let client = build_instances_client().await?;
+#[tauri::command]
+pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Result<String, String> {
+    let client = build_instances_client().await.map_err(|e| e.to_string())?;
 
-    let status = match instance_status(project_id, instance, zone).await? {
+    // Get current instance status
+    let status = match instance_status(project_id, instance, zone)
+        .await
+        .map_err(|e| e.to_string())?
+    {
         Some(s) => s,
         None => {
             return Ok(error_response(
                 404,
-                &format!("Instance {} not found", instance),
+                &format!("Instance '{}' not found", instance),
             ));
         }
     };
 
-    if status != "running" {
+    // Only stop if running
+    if status.to_lowercase() != "running" {
         return Ok(error_response(
             406,
-            &format!("Can't stop, instance {} is {}", instance, status),
+            &format!("Cannot stop '{}': instance is {}", instance, status),
         ));
     }
 
+    // Try stopping the instance
     match client
         .stop()
         .set_instance(instance)
@@ -178,12 +206,15 @@ pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Resu
         .send()
         .await
     {
-        Ok(_) => Ok(success_response("")),
+        Ok(_) => Ok(success_response(format!(
+            "Instance '{}' stop operation initiated",
+            instance
+        ))),
         Err(err) => {
-            error!("Failed to stop instance {}: {:?}", instance, err);
+            error!("Failed to stop instance '{}': {:?}", instance, err);
             Ok(error_response(
                 500,
-                &format!("Failed to stop instance {}: {:?}", instance, err),
+                &format!("Failed to stop instance '{}': {}", instance, err),
             ))
         }
     }

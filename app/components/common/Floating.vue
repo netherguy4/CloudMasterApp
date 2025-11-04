@@ -6,7 +6,10 @@ import { useFloating, offset, shift, autoUpdate } from '@floating-ui/vue'
 
 const props = defineProps({
   referenceRef: {
-    type: [Object, null],
+    type: [
+      Object,
+      null,
+    ],
     required: true,
   },
   position: {
@@ -27,11 +30,18 @@ const referenceElement = computed(() => props.referenceRef)
 const rootRef = ref(null)
 
 // init floating plugin
-const { floatingStyles } = useFloating(referenceElement, rootRef, {
-  placement: props.position,
-  middleware: [offset(props.gap), shift({ padding: props.padding })],
-  whileElementsMounted: autoUpdate,
-})
+const { floatingStyles } = useFloating(
+  referenceElement,
+  rootRef,
+  {
+    placement: props.position,
+    middleware: [
+      offset(props.gap),
+      shift({ padding: props.padding }),
+    ],
+    whileElementsMounted: autoUpdate,
+  },
+)
 </script>
 
 <template>
