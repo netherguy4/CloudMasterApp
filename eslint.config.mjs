@@ -1,6 +1,6 @@
-require('@rushstack/eslint-patch/modern-module-resolution');
+import { createConfigForNuxt } from '@nuxt/eslint-config';
 
-module.exports = {
+export default createConfigForNuxt({
   root: true,
   extends: ['@nuxt/eslint-config', '@vue/eslint-config-prettier'],
   parserOptions: {
@@ -11,4 +11,4 @@ module.exports = {
     'vue/no-v-html': 'off',
   },
   ignorePatterns: ['public/*'],
-};
+});

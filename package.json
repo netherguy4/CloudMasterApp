@@ -41,7 +41,6 @@
     "@nuxt/devtools": "^3.0.1",
     "@nuxt/eslint-config": "1.10.0",
     "@pinia/nuxt": "0.11.2",
-    "@rushstack/eslint-patch": "^1.10.4",
     "@tauri-apps/api": "^2.9.0",
     "@tauri-apps/cli": "^2.9.2",
     "@vee-validate/nuxt": "^4.13.2",
