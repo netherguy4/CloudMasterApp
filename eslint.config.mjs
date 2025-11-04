@@ -1,14 +1,16 @@
-import { createConfigForNuxt } from '@nuxt/eslint-config';
+import withNuxt from './.nuxt/eslint.config.mjs';
+import stylistic from '@stylistic/eslint-plugin';
 
-export default createConfigForNuxt({
-  root: true,
-  extends: ['@nuxt/eslint-config', '@vue/eslint-config-prettier'],
-  parserOptions: {
-    ecmaVersion: 'latest',
+export default withNuxt(stylistic.configs.recommended, {
+  ignores: ['public/*'],
+  plugins: {
+    '@stylistic': stylistic,
   },
   rules: {
     'no-undef': 'off',
     'vue/no-v-html': 'off',
+    'vue/prop-name-casing': 'off',
+    'vue/multi-word-component-names': 'off',
+    '@stylistic/indent': ['error', 2],
   },
-  ignorePatterns: ['public/*'],
 });

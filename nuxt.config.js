@@ -28,7 +28,13 @@ export default defineNuxtConfig({
     'nuxt-swiper',
     'nuxt-svgo',
     '@formkit/auto-animate/nuxt',
+    '@nuxt/eslint',
   ],
+  eslint: {
+    config: {
+      stylistic: true, // <---
+    },
+  },
   routeRules: {
     '/': { redirect: '/servers' },
   },
