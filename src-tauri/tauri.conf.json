@@ -14,9 +14,9 @@
       {
         "title": "Cloud Master",
         "width": 800,
-        "minWidth": 320,
+        "minWidth": 770,
         "height": 600,
-        "minHeight": 300,
+        "minHeight": 560,
         "resizable": true,
         "fullscreen": false,
         "maximized": false
