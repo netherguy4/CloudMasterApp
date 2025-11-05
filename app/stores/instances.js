@@ -8,37 +8,32 @@ const mapInstances = (data) =>
 
 const errorMessage = (err, code = 418) => ({
   data: null,
-  error: { code: code, message: err },
+  error: { code: code, status: 'Internal Error', message: err },
 });
 
 export const useInstancesStore = defineStore('Instances', () => {
-  const loading = ref(false);
   const instances = ref([]);
 
   const fetchInstances = async () => {
     try {
-      if (!instances.value.length) loading.value = true;
       let { data, error } = await useRequest('instances_list');
+      if (error) return { data, error };
       data = mapInstances(data);
       instances.value = data;
       return { data, error };
     } catch (e) {
       return errorMessage(e);
-    } finally {
-      loading.value = false;
     }
   };
 
   const getInstance = async (instance, zone) => {
     try {
-      if (!instances.value.length) loading.value = true;
       let { data, error } = await useRequest('instance_get', instance, zone);
+      if (error) return { data, error };
       data = mapInstances(data);
       return { data, error };
     } catch (e) {
       return errorMessage(e);
-    } finally {
-      loading.value = false;
     }
   };
 
@@ -66,6 +61,5 @@ export const useInstancesStore = defineStore('Instances', () => {
     stopInstance,
     getInstance,
     instances,
-    loading,
   };
 });
