@@ -1,23 +1,20 @@
 <script setup>
 const instancesStore = useInstancesStore();
 
-const { data: instances, pending } = useAsyncData(
+const { data, error, status, code, pending } = useAsyncData(
   'instances',
-  instancesStore.fetchInstances,
-  {
-    default: () => ({ data: instancesStore.instances || [] }),
-  },
+  async () => await useRequest('instances_list'),
 );
 </script>
 
 <template>
   <div class="pages-instances">
-    {{ instances.error }}
-    <SectionsDynamicCards
+    {{ { data, error, status, code, pending } }}
+    <!-- <SectionsDynamicCards
       class="pages-instances__section"
-      :items="instances?.data"
+      :items="instancesStore.instances"
       :loading="pending"
-    />
+    /> -->
   </div>
 </template>
 

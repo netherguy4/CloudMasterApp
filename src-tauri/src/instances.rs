@@ -1,17 +1,18 @@
-use crate::utils::{JsonResponse, error_response, extract_instance_info, success_response};
-use anyhow::{Context, Result};
+use crate::utils::{
+    InstanceInfo, JsonResponse, error_response, extract_instance_info, success_response,
+};
+use anyhow::{Context, Error, Result};
 use google_cloud_compute_v1::client::Instances;
 use google_cloud_compute_v1::model::Instance;
 use google_cloud_gax::paginator::ItemPaginator;
-use log::error;
 use serde_json::{Value, json};
+use tracing::error;
 
-pub async fn build_instances_client() -> Result<Instances> {
-    let client = Instances::builder()
+pub async fn build_instances_client() -> Result<Instances, Error> {
+    Instances::builder()
         .build()
         .await
-        .context("Failed to build Instances client")?;
-    Ok(client)
+        .context("Failed to build Instances client")
 }
 
 pub async fn fetch_instance(
@@ -51,9 +52,12 @@ pub async fn instance_status(
 }
 
 #[tauri::command]
-pub async fn instances_list(project_id: &str) -> Result<JsonResponse<Value>, String> {
-    let client = build_instances_client().await.map_err(|e| e.to_string())?;
-    let mut instances_json = Vec::new();
+pub async fn instances_list(project_id: &str) -> Result<Vec<InstanceInfo>, String> {
+    let client = build_instances_client()
+        .await
+        .map_err(|e| format!("Failed to initialize instances client: {e}"))?;
+
+    let mut instances_array = Vec::new();
 
     let mut instances = client
         .aggregated_list()
@@ -62,31 +66,24 @@ pub async fn instances_list(project_id: &str) -> Result<JsonResponse<Value>, Str
         .by_item();
 
     while let Some(result) = instances.next().await {
-        match result {
-            Ok((zone, scoped_list)) => {
-                if scoped_list.instances.is_empty() {
-                    continue;
-                }
+        let (zone, scoped_list) =
+            result.map_err(|e| format!("Error retrieving instance list: {e}"))?;
 
-                for instance in scoped_list.instances {
-                    match extract_instance_info(&instance, &zone) {
-                        Ok(info) => instances_json.push(info),
-                        Err(err) => {
-                            error!("Failed to process instance in zone {}: {:?}", zone, err);
-                        }
-                    }
-                }
-            }
-            Err(err) => {
-                error!("Error retrieving instance list: {:?}", err);
-            }
+        if scoped_list.instances.is_empty() {
+            continue;
+        }
+
+        for instance in scoped_list.instances {
+            let info = extract_instance_info(&instance, &zone)
+                .map_err(|e| format!("Failed to process instance in zone {}: {e}", zone))?;
+            instances_array.push(info);
         }
     }
 
-    if instances_json.is_empty() {
-        Ok(error_response(404, "No instances found"))
+    if instances_array.is_empty() {
+        Err(format!("No instances found for project '{}'", project_id))
     } else {
-        Ok(success_response(json!(instances_json)))
+        Ok(instances_array)
     }
 }
 
