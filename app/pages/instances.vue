@@ -1,14 +1,18 @@
 <script setup>
 const instancesStore = useInstancesStore();
 
-onMounted(instancesStore.fetchInstances);
+const { data: instances } = useAsyncData(
+  'instances',
+  instancesStore.fetchInstances,
+  { default: () => ({ data: instancesStore.instances || [] }) },
+);
 </script>
 
 <template>
   <div class="pages-instances">
     <SectionsDynamicCards
       class="pages-instances__section"
-      :items="instancesStore.instances"
+      :items="instances?.data"
       :loading="instancesStore.loading"
     />
   </div>

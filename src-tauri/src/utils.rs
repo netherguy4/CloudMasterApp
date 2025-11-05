@@ -1,48 +1,46 @@
 use anyhow::Result;
 use google_cloud_compute_v1::model::Instance;
 use serde::Serialize;
-use serde_json::{Value, json};
+use serde_json::Value;
 
-#[derive(serde::Serialize)]
-struct JsonResponse<T: Serialize> {
-    status: String,
-    code: u16,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    message: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    data: Option<T>,
+#[derive(Serialize)]
+pub struct SuccessResponse<T: Serialize> {
+    pub data: T,
 }
 
-pub fn convert_to_json_response<T: Serialize>(
-    status: &str,
-    code: u16,
-    data: Option<T>,
-    message: Option<String>,
-) -> String {
-    let response = JsonResponse {
-        status: status.to_string(),
-        code,
-        message,
-        data,
-    };
+#[derive(Serialize)]
+pub struct ErrorDetails {
+    pub code: u16,
+    pub status: &'static str,
+    pub message: String,
+}
 
-    serde_json::to_string_pretty(&response).unwrap_or_else(|_| {
-        json!({
-            "status": "error",
-            "code": 500,
-            "message": "Failed to serialize response",
-            "data": Value::Null
-        })
-        .to_string()
+#[derive(Serialize)]
+pub struct ErrorResponse {
+    pub data: Value, // always null
+    pub error: ErrorDetails,
+}
+
+#[derive(Serialize)]
+#[serde(untagged)]
+pub enum JsonResponse<T: Serialize> {
+    Success(SuccessResponse<T>),
+    Error(ErrorResponse),
+}
+
+pub fn success_response<T: Serialize>(data: T) -> JsonResponse<T> {
+    JsonResponse::Success(SuccessResponse { data })
+}
+
+pub fn error_response(code: u16, message: &str) -> JsonResponse<Value> {
+    JsonResponse::Error(ErrorResponse {
+        data: Value::Null,
+        error: ErrorDetails {
+            code,
+            status: "error",
+            message: message.to_string(),
+        },
     })
-}
-
-pub fn success_response<T: Serialize>(data: T) -> String {
-    convert_to_json_response("success", 200, Some(data), None)
-}
-
-pub fn error_response(code: u16, message: &str) -> String {
-    convert_to_json_response::<Value>("error", code, None, Some(message.to_string()))
 }
 
 #[derive(Serialize, Debug)]

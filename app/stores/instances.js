@@ -1,26 +1,42 @@
 import { defineStore } from 'pinia';
 
+const mapInstances = (data) =>
+  data.map(({ zone, ...inst }) => ({
+    ...inst,
+    zone: zone.split('/')[1],
+  }));
+
+const errorMessage = (err, code = 418) => ({
+  data: null,
+  error: { code: code, message: err },
+});
+
 export const useInstancesStore = defineStore('Instances', () => {
-  const instances = ref();
-  const error = ref();
-  const loading = ref();
+  const loading = ref(false);
+  const instances = ref([]);
 
   const fetchInstances = async () => {
     try {
-      error.value = false;
-      loading.value = true;
-      let { data, code, message } = await useRequest('instances_list');
-      if (code !== 200 && message) {
-        error.value = message;
-        return;
-      }
-      data = data.map(({ zone, ...inst }) => ({
-        ...inst,
-        zone: zone.split('/')[1],
-      }));
+      if (!instances.value.length) loading.value = true;
+      let { data, error } = await useRequest('instances_list');
+      data = mapInstances(data);
       instances.value = data;
+      return { data, error };
     } catch (e) {
-      error.value = e;
+      return errorMessage(e);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const getInstance = async (instance, zone) => {
+    try {
+      if (!instances.value.length) loading.value = true;
+      let { data, error } = await useRequest('instance_get', instance, zone);
+      data = mapInstances(data);
+      return { data, error };
+    } catch (e) {
+      return errorMessage(e);
     } finally {
       loading.value = false;
     }
@@ -28,44 +44,19 @@ export const useInstancesStore = defineStore('Instances', () => {
 
   const startInstance = async (instance, zone) => {
     try {
-      let { code, message } = await useRequest(
-        'instance_start',
-        instance,
-        zone,
-      );
-      if (code === 200) {
-        return 'Instance start scedulled successfuly';
-      } else if (message) return message;
-      else return 'Something went wrong';
+      let { data, error } = await useRequest('instance_start', instance, zone);
+      return { data, error };
     } catch (e) {
-      return `Something went wrong: ${e}`;
+      return errorMessage(e);
     }
   };
 
   const stopInstance = async (instance, zone) => {
     try {
-      let { code, message } = await useRequest('instance_stop', instance, zone);
-      if (code === 200) {
-        return 'Instance stop scedulled successfuly';
-      } else if (message) return message;
-      else return 'Something went wrong';
+      let { data, error } = await useRequest('instance_stop', instance, zone);
+      return { data, error };
     } catch (e) {
-      return `Something went wrong: ${e}`;
-    }
-  };
-
-  const getInstance = async (instance, zone) => {
-    try {
-      let { data, code, message } = await useRequest(
-        'instance_get',
-        instance,
-        zone,
-      );
-      if (code === 200 && data) return data;
-      else if (message) return message;
-      else return 'Something went wrong';
-    } catch (e) {
-      return `Something went wrong: ${e}`;
+      return errorMessage(e);
     }
   };
 
@@ -75,7 +66,6 @@ export const useInstancesStore = defineStore('Instances', () => {
     stopInstance,
     getInstance,
     instances,
-    error,
     loading,
   };
 });

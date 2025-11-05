@@ -4,7 +4,7 @@ import cardTypes from '~/configs/cardTypes';
 defineProps({
   items: {
     type: Array,
-    default: undefined,
+    default: () => [],
   },
   cardType: {
     type: String,

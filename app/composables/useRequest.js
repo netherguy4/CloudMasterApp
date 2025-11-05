@@ -8,7 +8,7 @@ export const useRequest = async (command, arg1, arg2) => {
       const data = await invoke('instances_list', {
         projectId,
       });
-      return JSON.parse(data);
+      return data;
     }
     case 'instance_get': {
       const data = await invoke('instance_get', {
@@ -16,7 +16,7 @@ export const useRequest = async (command, arg1, arg2) => {
         instance: arg1,
         zone: arg2,
       });
-      return JSON.parse(data);
+      return data;
     }
     case 'instance_start': {
       const data = await invoke('instance_start', {
@@ -24,7 +24,7 @@ export const useRequest = async (command, arg1, arg2) => {
         instance: arg1,
         zone: arg2,
       });
-      return JSON.parse(data);
+      return data;
     }
     case 'instance_stop': {
       const data = await invoke('instance_stop', {
@@ -32,7 +32,7 @@ export const useRequest = async (command, arg1, arg2) => {
         instance: arg1,
         zone: arg2,
       });
-      return JSON.parse(data);
+      return data;
     }
     case 'list_servers':
       return {

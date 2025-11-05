@@ -1,9 +1,10 @@
-use crate::utils::{error_response, extract_instance_info, success_response};
+use crate::utils::{JsonResponse, error_response, extract_instance_info, success_response};
 use anyhow::{Context, Result};
 use google_cloud_compute_v1::client::Instances;
 use google_cloud_compute_v1::model::Instance;
 use google_cloud_gax::paginator::ItemPaginator;
 use log::error;
+use serde_json::{Value, json};
 
 pub async fn build_instances_client() -> Result<Instances> {
     let client = Instances::builder()
@@ -50,7 +51,7 @@ pub async fn instance_status(
 }
 
 #[tauri::command]
-pub async fn instances_list(project_id: &str) -> Result<String, String> {
+pub async fn instances_list(project_id: &str) -> Result<JsonResponse<Value>, String> {
     let client = build_instances_client().await.map_err(|e| e.to_string())?;
     let mut instances_json = Vec::new();
 
@@ -85,12 +86,16 @@ pub async fn instances_list(project_id: &str) -> Result<String, String> {
     if instances_json.is_empty() {
         Ok(error_response(404, "No instances found"))
     } else {
-        Ok(success_response(instances_json))
+        Ok(success_response(json!(instances_json)))
     }
 }
 
 #[tauri::command]
-pub async fn instance_get(project_id: &str, instance: &str, zone: &str) -> Result<String, String> {
+pub async fn instance_get(
+    project_id: &str,
+    instance: &str,
+    zone: &str,
+) -> Result<JsonResponse<Value>, String> {
     let mut instances_json = Vec::new();
 
     // Try fetching the instance
@@ -114,7 +119,7 @@ pub async fn instance_get(project_id: &str, instance: &str, zone: &str) -> Resul
             &format!("Instance '{}' not found", instance),
         ))
     } else {
-        Ok(success_response(instances_json))
+        Ok(success_response(json!(instances_json)))
     }
 }
 
@@ -123,7 +128,7 @@ pub async fn instance_start(
     project_id: &str,
     instance: &str,
     zone: &str,
-) -> Result<String, String> {
+) -> Result<JsonResponse<Value>, String> {
     let client = build_instances_client().await.map_err(|e| e.to_string())?;
 
     // Get current instance status
@@ -157,10 +162,10 @@ pub async fn instance_start(
         .send()
         .await
     {
-        Ok(_) => Ok(success_response(format!(
+        Ok(_) => Ok(success_response(json!(format!(
             "Instance '{}' start operation initiated",
             instance
-        ))),
+        )))),
         Err(err) => {
             error!("Failed to start instance '{}': {:?}", instance, err);
             Ok(error_response(
@@ -172,7 +177,11 @@ pub async fn instance_start(
 }
 
 #[tauri::command]
-pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Result<String, String> {
+pub async fn instance_stop(
+    project_id: &str,
+    instance: &str,
+    zone: &str,
+) -> Result<JsonResponse<Value>, String> {
     let client = build_instances_client().await.map_err(|e| e.to_string())?;
 
     // Get current instance status
@@ -206,10 +215,10 @@ pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Resu
         .send()
         .await
     {
-        Ok(_) => Ok(success_response(format!(
+        Ok(_) => Ok(success_response(json!(format!(
             "Instance '{}' stop operation initiated",
             instance
-        ))),
+        )))),
         Err(err) => {
             error!("Failed to stop instance '{}': {:?}", instance, err);
             Ok(error_response(
