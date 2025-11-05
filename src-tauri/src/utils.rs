@@ -1,47 +1,6 @@
 use anyhow::Result;
 use google_cloud_compute_v1::model::Instance;
 use serde::Serialize;
-use serde_json::Value;
-
-#[derive(Serialize)]
-pub struct SuccessResponse<T: Serialize> {
-    pub data: T,
-}
-
-#[derive(Serialize)]
-pub struct ErrorDetails {
-    pub code: u16,
-    pub status: &'static str,
-    pub message: String,
-}
-
-#[derive(Serialize)]
-pub struct ErrorResponse {
-    pub data: Value, // always null
-    pub error: ErrorDetails,
-}
-
-#[derive(Serialize)]
-#[serde(untagged)]
-pub enum JsonResponse<T: Serialize> {
-    Success(SuccessResponse<T>),
-    Error(ErrorResponse),
-}
-
-pub fn success_response<T: Serialize>(data: T) -> JsonResponse<T> {
-    JsonResponse::Success(SuccessResponse { data })
-}
-
-pub fn error_response(code: u16, message: &str) -> JsonResponse<Value> {
-    JsonResponse::Error(ErrorResponse {
-        data: Value::Null,
-        error: ErrorDetails {
-            code,
-            status: "error",
-            message: message.to_string(),
-        },
-    })
-}
 
 #[derive(Serialize, Debug)]
 pub struct InstanceInfo {

@@ -1,12 +1,8 @@
-use crate::utils::{
-    InstanceInfo, JsonResponse, error_response, extract_instance_info, success_response,
-};
-use anyhow::{Context, Error, Result};
+use crate::utils::{InstanceInfo, extract_instance_info};
+use anyhow::{Context, Error, Result, anyhow};
 use google_cloud_compute_v1::client::Instances;
 use google_cloud_compute_v1::model::Instance;
 use google_cloud_gax::paginator::ItemPaginator;
-use serde_json::{Value, json};
-use tracing::error;
 
 pub async fn build_instances_client() -> Result<Instances, Error> {
     Instances::builder()
@@ -19,36 +15,39 @@ pub async fn fetch_instance(
     project_id: &str,
     instance: &str,
     zone: &str,
-) -> Result<Option<Instance>> {
-    let client = build_instances_client().await?;
+) -> Result<Instance, Error> {
+    let client = build_instances_client()
+        .await
+        .context("Failed to build instances client")?;
 
-    match client
+    let instance_obj = client
         .get()
         .set_instance(instance)
         .set_project(project_id)
         .set_zone(zone)
         .send()
         .await
-    {
-        Ok(instance) => Ok(Some(instance)),
-        Err(err) => {
-            error!("Error retrieving instance {}: {:?}", instance, err);
-            Ok(None)
-        }
-    }
+        .with_context(|| format!("Failed to retrieve instance '{}'", instance))?;
+
+    Ok(instance_obj)
 }
 
 pub async fn instance_status(
     project_id: &str,
     instance: &str,
     zone: &str,
-) -> Result<Option<String>> {
-    if let Some(inst) = fetch_instance(project_id, instance, zone).await? {
-        let status = format!("{:?}", inst.status.unwrap_or_default()).to_lowercase();
-        Ok(Some(status))
-    } else {
-        Ok(None)
-    }
+) -> Result<String, Error> {
+    let inst = fetch_instance(project_id, instance, zone)
+        .await
+        .with_context(|| format!("Failed to fetch instance '{}'", instance))?;
+
+    let status = inst
+        .status
+        .as_ref()
+        .map(|s| format!("{:?}", s).to_lowercase())
+        .ok_or_else(|| anyhow!("Instance '{}' has no status", instance))?;
+
+    Ok(status)
 }
 
 #[tauri::command]
@@ -92,32 +91,15 @@ pub async fn instance_get(
     project_id: &str,
     instance: &str,
     zone: &str,
-) -> Result<JsonResponse<Value>, String> {
-    let mut instances_json = Vec::new();
-
-    // Try fetching the instance
+) -> Result<InstanceInfo, String> {
     let instance_obj = fetch_instance(project_id, instance, zone)
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| format!("Failed to fetch instance '{}': {e}", instance))?;
 
-    if let Some(instance_obj) = instance_obj {
-        match extract_instance_info(&instance_obj, zone) {
-            Ok(info) => instances_json.push(info),
-            Err(err) => {
-                error!("Failed to process instance: {:?}", err);
-                return Ok(error_response(500, "Failed to process instance"));
-            }
-        }
-    }
+    let info = extract_instance_info(&instance_obj, zone)
+        .map_err(|e| format!("Failed to process instance '{}': {e}", instance))?;
 
-    if instances_json.is_empty() {
-        Ok(error_response(
-            404,
-            &format!("Instance '{}' not found", instance),
-        ))
-    } else {
-        Ok(success_response(json!(instances_json)))
-    }
+    Ok(info)
 }
 
 #[tauri::command]
@@ -125,103 +107,65 @@ pub async fn instance_start(
     project_id: &str,
     instance: &str,
     zone: &str,
-) -> Result<JsonResponse<Value>, String> {
-    let client = build_instances_client().await.map_err(|e| e.to_string())?;
-
-    // Get current instance status
-    let status = match instance_status(project_id, instance, zone)
+) -> Result<String, String> {
+    let client = build_instances_client()
         .await
-        .map_err(|e| e.to_string())?
-    {
-        Some(s) => s,
-        None => {
-            return Ok(error_response(
-                404,
-                &format!("Instance '{}' not found", instance),
-            ));
-        }
-    };
+        .map_err(|e| format!("Failed to initialize instances client: {e}"))?;
 
-    // Prevent starting if not in TERMINATED state
+    let status = instance_status(project_id, instance, zone)
+        .await
+        .map_err(|e| format!("Failed to retrieve instance status: {e}"))?;
+
     if status.to_lowercase() != "terminated" {
-        return Ok(error_response(
-            406,
-            &format!("Cannot start '{}': instance is {}", instance, status),
+        return Err(format!(
+            "Cannot start '{}': instance is currently {}",
+            instance, status
         ));
     }
 
-    // Attempt to start the instance
-    match client
+    client
         .start()
         .set_instance(instance)
         .set_project(project_id)
         .set_zone(zone)
         .send()
         .await
-    {
-        Ok(_) => Ok(success_response(json!(format!(
-            "Instance '{}' start operation initiated",
-            instance
-        )))),
-        Err(err) => {
-            error!("Failed to start instance '{}': {:?}", instance, err);
-            Ok(error_response(
-                500,
-                &format!("Failed to start instance '{}': {}", instance, err),
-            ))
-        }
-    }
+        .map_err(|e| format!("Failed to start instance '{}': {e}", instance))?;
+
+    Ok(format!(
+        "Instance '{}' start operation initiated successfully",
+        instance
+    ))
 }
 
 #[tauri::command]
-pub async fn instance_stop(
-    project_id: &str,
-    instance: &str,
-    zone: &str,
-) -> Result<JsonResponse<Value>, String> {
-    let client = build_instances_client().await.map_err(|e| e.to_string())?;
-
-    // Get current instance status
-    let status = match instance_status(project_id, instance, zone)
+pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Result<String, String> {
+    let client = build_instances_client()
         .await
-        .map_err(|e| e.to_string())?
-    {
-        Some(s) => s,
-        None => {
-            return Ok(error_response(
-                404,
-                &format!("Instance '{}' not found", instance),
-            ));
-        }
-    };
+        .map_err(|e| format!("Failed to initialize instances client: {e}"))?;
 
-    // Only stop if running
+    let status = instance_status(project_id, instance, zone)
+        .await
+        .map_err(|e| format!("Failed to retrieve instance status: {e}"))?;
+
     if status.to_lowercase() != "running" {
-        return Ok(error_response(
-            406,
-            &format!("Cannot stop '{}': instance is {}", instance, status),
+        return Err(format!(
+            "Cannot stop '{}': instance is currently {}",
+            instance, status
         ));
     }
 
-    // Try stopping the instance
-    match client
+    client
         .stop()
         .set_instance(instance)
         .set_project(project_id)
         .set_zone(zone)
         .send()
         .await
-    {
-        Ok(_) => Ok(success_response(json!(format!(
-            "Instance '{}' stop operation initiated",
-            instance
-        )))),
-        Err(err) => {
-            error!("Failed to stop instance '{}': {:?}", instance, err);
-            Ok(error_response(
-                500,
-                &format!("Failed to stop instance '{}': {}", instance, err),
-            ))
-        }
-    }
+        .map_err(|e| format!("Failed to stop instance '{}': {e}", instance))?;
+
+    Ok(format!(
+        "Instance '{}' stop operation initiated successfully",
+        instance
+    ))
 }

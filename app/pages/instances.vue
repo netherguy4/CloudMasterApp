@@ -9,12 +9,16 @@ const { data, error, status, code, pending } = useAsyncData(
 
 <template>
   <div class="pages-instances">
-    {{ { data, error, status, code, pending } }}
-    <!-- <SectionsDynamicCards
+    <SectionsDynamicCards
       class="pages-instances__section"
-      :items="instancesStore.instances"
+      :items="
+        data?.map(({ zone, ...inst }) => ({
+          ...inst,
+          zone: zone.split('/')[1],
+        }))
+      "
       :loading="pending"
-    /> -->
+    />
   </div>
 </template>
 
