@@ -9,4 +9,4 @@ export default [
   'REPAIRING',
   'TERMINATED',
   'INSTALLED',
-]
+];

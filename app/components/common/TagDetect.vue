@@ -1,10 +1,7 @@
 <script setup>
 const props = defineProps({
   to: {
-    type: [
-      Object,
-      String,
-    ],
+    type: [Object, String],
     default: undefined,
   },
   href: {
@@ -27,43 +24,40 @@ const props = defineProps({
     type: String,
     default: 'button',
   },
-})
+});
 
 const component = computed(() => {
-  let element
-  const attrs = {}
+  let element;
+  const attrs = {};
 
   switch (true) {
     case !!props.to:
-      element = resolveComponent('NuxtLink') // https://nuxt.com/docs/guide/directory-structure/components#dynamic-components
-      attrs.to = props.to
-      attrs.target = props.target
-      break
+      element = resolveComponent('NuxtLink'); // https://nuxt.com/docs/guide/directory-structure/components#dynamic-components
+      attrs.to = props.to;
+      attrs.target = props.target;
+      break;
     case !!props.href:
-      element = 'a'
-      attrs.href = props.href
-      attrs.target = props.target
-      break
+      element = 'a';
+      attrs.href = props.href;
+      attrs.target = props.target;
+      break;
     case props.isStaticByDefault:
-      element = props.staticTag
-      break
+      element = props.staticTag;
+      break;
     default:
-      element = 'button'
-      attrs.type = props.type
+      element = 'button';
+      attrs.type = props.type;
   }
 
   return {
     element,
     attrs,
-  }
-})
+  };
+});
 </script>
 
 <template>
-  <component
-    :is="component.element"
-    v-bind="component.attrs"
-  >
+  <component :is="component.element" v-bind="component.attrs">
     <slot />
   </component>
 </template>

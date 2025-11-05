@@ -1,7 +1,7 @@
 <script setup>
-const instancesStore = useInstancesStore()
+const instancesStore = useInstancesStore();
 
-onMounted(instancesStore.fetchInstances)
+onMounted(instancesStore.fetchInstances);
 </script>
 
 <template>

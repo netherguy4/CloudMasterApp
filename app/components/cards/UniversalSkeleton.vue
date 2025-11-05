@@ -1,30 +1,27 @@
 <script setup>
-import cardTypes from '~/configs/cardTypes'
+import cardTypes from '~/configs/cardTypes';
 
 const props = defineProps({
   cardType: {
     type: String,
     default: undefined,
-    validator: type => [
-      cardTypes.instance,
-      cardTypes.server,
-    ].includes(type),
+    validator: (type) => [cardTypes.instance, cardTypes.server].includes(type),
   },
-})
+});
 
 const partsNumber = computed(() => {
   switch (props.cardType) {
     case cardTypes.instance: {
-      return 3
+      return 3;
     }
     case cardTypes.server: {
-      return 4
+      return 4;
     }
     default: {
-      return 3
+      return 3;
     }
   }
-})
+});
 </script>
 
 <template>

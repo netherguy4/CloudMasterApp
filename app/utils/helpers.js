@@ -17,13 +17,7 @@
  * minMax(15, 5, 10); // returns 10 (max boundary)
  */
 export function minMax(value, min, max) {
-  return Math.min(
-    Math.max(
-      value,
-      min,
-    ),
-    max,
-  )
+  return Math.min(Math.max(value, min), max);
 }
 
 /**
@@ -34,7 +28,7 @@ export function minMax(value, min, max) {
  * const clonedObject = cloneObject(originalObject);
  */
 export function cloneObject(object) {
-  return JSON.parse(JSON.stringify(object))
+  return JSON.parse(JSON.stringify(object));
 }
 
 // promise-based utils
@@ -46,10 +40,7 @@ export function cloneObject(object) {
  * await awaitTimeout(100);
  */
 export function awaitTimeout(duration = 0) {
-  return new Promise(resolve => setTimeout(
-    resolve,
-    duration,
-  ))
+  return new Promise((resolve) => setTimeout(resolve, duration));
 }
 
 /**
@@ -59,7 +50,7 @@ export function awaitTimeout(duration = 0) {
  * await awaitRAF();
  */
 export function awaitRAF() {
-  return new Promise(resolve => requestAnimationFrame(resolve))
+  return new Promise((resolve) => requestAnimationFrame(resolve));
 }
 
 // em font-sizing
@@ -70,13 +61,13 @@ export function awaitRAF() {
  */
 export function getElementFz(element = document.body) {
   if (typeof element === 'string') {
-    element = document.querySelector(element)
+    element = document.querySelector(element);
   }
 
-  if (!element) return 0
+  if (!element) return 0;
 
-  const elementStyle = window.getComputedStyle(element)
-  return parseFloat(elementStyle.fontSize)
+  const elementStyle = window.getComputedStyle(element);
+  return parseFloat(elementStyle.fontSize);
 }
 
 /**
@@ -85,9 +76,9 @@ export function getElementFz(element = document.body) {
  * @returns {number} calculated px value
  */
 export function toResizedPx(pxValue) {
-  const contextElement = document.querySelector('.resize') || document.body
-  const pxContext = getElementFz(contextElement)
-  return (pxValue / 16) * pxContext
+  const contextElement = document.querySelector('.resize') || document.body;
+  const pxContext = getElementFz(contextElement);
+  return (pxValue / 16) * pxContext;
 }
 
 /**
@@ -96,9 +87,9 @@ export function toResizedPx(pxValue) {
  * @returns {number} calculated em value
  */
 export function toResizedEm(pxValue) {
-  const contextElement = document.querySelector('.resize') || document.body
-  const pxContext = getElementFz(contextElement)
-  return pxValue / pxContext
+  const contextElement = document.querySelector('.resize') || document.body;
+  const pxContext = getElementFz(contextElement);
+  return pxValue / pxContext;
 }
 
 // preload images
@@ -109,18 +100,12 @@ export function toResizedEm(pxValue) {
  */
 export function preloadImage(url) {
   return new Promise((resolve) => {
-    const image = new Image()
-    image.src = url
+    const image = new Image();
+    image.src = url;
 
-    image.addEventListener(
-      'load',
-      resolve,
-    )
-    image.addEventListener(
-      'error',
-      resolve,
-    )
-  })
+    image.addEventListener('load', resolve);
+    image.addEventListener('error', resolve);
+  });
 }
 
 /**
@@ -129,9 +114,9 @@ export function preloadImage(url) {
  * @returns {Promise<Awaited<void>[]>} upload promises
  */
 export function preloadImages(imageUrls = []) {
-  const preloads = Array.from(imageUrls).map(preloadImage)
+  const preloads = Array.from(imageUrls).map(preloadImage);
 
-  return Promise.all(preloads)
+  return Promise.all(preloads);
 }
 
 // preload fonts
@@ -143,13 +128,13 @@ export function preloadImages(imageUrls = []) {
  * @returns {{rel: string, href: string, as: string, type: string, crossorigin: true}[]} font preload list
  */
 export function getFontPreloadList({ path, weights }, baseUrl = '/') {
-  return weights.map(weight => ({
+  return weights.map((weight) => ({
     rel: 'preload',
     href: `${baseUrl}fonts/${path}${weight}.woff2`,
     as: 'font',
     type: 'font/woff2',
     crossorigin: true,
-  }))
+  }));
 }
 
 /**
@@ -164,22 +149,15 @@ export function getFontsPreloadList(fontsList, baseUrl = '/') {
   return fontsList.reduce(
     (result, { path, weights }) => [
       ...result,
-      ...getFontPreloadList(
-        { path,
-          weights },
-        baseUrl,
-      ),
+      ...getFontPreloadList({ path, weights }, baseUrl),
     ],
     [],
-  )
+  );
 }
 
 export function round(value, digits = 0) {
-  const pow = Math.pow(
-    10,
-    digits,
-  )
-  return Math.round(value * pow) / pow
+  const pow = Math.pow(10, digits);
+  return Math.round(value * pow) / pow;
 }
 
 /**
@@ -195,67 +173,46 @@ export function round(value, digits = 0) {
  */
 export function formatNumberAbbr(input, decimals = 2) {
   // Убираем пробелы и приводим к числу
-  const num
-    = typeof input === 'string'
-      ? parseFloat(input.replace(
-        /\s+/g,
-        '',
-      ))
-      : input
+  const num =
+    typeof input === 'string' ? parseFloat(input.replace(/\s+/g, '')) : input;
 
-  const abs = Math.abs(num)
-  const sign = num < 0 ? '-' : ''
+  const abs = Math.abs(num);
+  const sign = num < 0 ? '-' : '';
 
   // Вспомогательная функция форматирования
   function fmt(divisor, suffix) {
-    const n = (num / divisor).toFixed(decimals)
+    const n = (num / divisor).toFixed(decimals);
     // Убираем лишний ".0" в конце
-    const clean = parseFloat(n.replace(
-      /\.0+$/,
-      '',
-    )).toFixed(2)
-    return sign + clean + suffix
+    const clean = parseFloat(n.replace(/\.0+$/, '')).toFixed(2);
+    return sign + clean + suffix;
   }
 
   if (abs >= 1e9) {
-    return fmt(
-      1e9,
-      'B',
-    )
+    return fmt(1e9, 'B');
   }
   if (abs >= 1e6) {
-    return fmt(
-      1e6,
-      'M',
-    )
+    return fmt(1e6, 'M');
   }
   if (abs >= 1e3) {
-    return fmt(
-      1e3,
-      'K',
-    )
+    return fmt(1e3, 'K');
   }
   // Меньше тысячи — просто возвращаем число без изменений
-  return num ? String(num) : num
+  return num ? String(num) : num;
 }
 
 export function scrollHidden(value) {
-
   /*
    * const html = document?.documentElement;
    * const body = document?.body
    * TODO закоментил потому что на IOS сайт зависал
    */
   if (value) {
-
     /*
      * clearAllBodyScrollLocks();
      * disableBodyScroll(html);
      * disableBodyScroll(body);
      */
-  }
-  else {
-
+  } else {
     /*
      * enableBodyScroll(html);
      * enableBodyScroll(body);
@@ -271,13 +228,10 @@ export function scrollHidden(value) {
  */
 export function formatToQuarter(isoDate = '') {
   // Разбиваем по дефисам и получаем год и месяц
-  const [
-    year,
-    month,
-  ] = isoDate.split('-').map(Number)
+  const [year, month] = isoDate.split('-').map(Number);
   // Квартал: (0–2)→1, (3–5)→2, (6–8)→3, (9–11)→4
-  const quarter = Math.floor((month - 1) / 3) + 1
-  return `Q${quarter} ${year}`
+  const quarter = Math.floor((month - 1) / 3) + 1;
+  return `Q${quarter} ${year}`;
 }
 
 /**
@@ -292,32 +246,23 @@ export function formatToQuarter(isoDate = '') {
  */
 export function formatPrice(value) {
   // Приводим к строке без пробелов
-  let str
-    = typeof value === 'number'
+  let str =
+    typeof value === 'number'
       ? String(value)
-      : value.toString().replace(
-        /\s+/g,
-        '',
-      )
+      : value.toString().replace(/\s+/g, '');
 
   // Сохраняем знак, если есть
-  const sign = str.startsWith('-') ? '-' : ''
-  if (sign) str = str.slice(1)
+  const sign = str.startsWith('-') ? '-' : '';
+  if (sign) str = str.slice(1);
 
   // Разделяем целую и дробную части
-  const [
-    intPart,
-    fracPart,
-  ] = str.split('.')
+  const [intPart, fracPart] = str.split('.');
 
   // Вставляем пробел перед каждой группой из трёх цифр с конца
-  const intFormatted = intPart.replace(
-    /\B(?=(\d{3})+(?!\d))/g,
-    ',',
-  )
+  const intFormatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   // Собираем обратно, добавляем дробную часть, если она была
-  return sign + intFormatted + (fracPart !== undefined ? '.' + fracPart : '')
+  return sign + intFormatted + (fracPart !== undefined ? '.' + fracPart : '');
 }
 
 /**
@@ -326,77 +271,59 @@ export function formatPrice(value) {
  * @returns {string} — строка вида "Q3 2025"
  */
 export const formatDate = (dateString) => {
-  if (!dateString) return ''
+  if (!dateString) return '';
 
-  const date = new Date(dateString)
-  const day = date.getDate().toString()
-    .padStart(
-      2,
-      '0',
-    )
-  const month = (date.getMonth() + 1).toString().padStart(
-    2,
-    '0',
-  )
-  const year = date.getFullYear()
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
 
-  return `${day}.${month}.${year}`
-}
+  return `${day}.${month}.${year}`;
+};
 
 export const formatBytes = (a, b) => {
-  if (0 === a) return '0 Bytes'
+  if (0 === a) return '0 Bytes';
 
   const c = 1024,
     d = b || 2,
-    e = [
-      'Bytes',
-      'KB',
-      'MB',
-      'GB',
-      'TB',
-      'PB',
-      'EB',
-      'ZB',
-      'YB',
-    ],
-    f = Math.floor(Math.log(a) / Math.log(c))
+    e = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    f = Math.floor(Math.log(a) / Math.log(c));
 
-  return parseFloat((a / Math.pow(
-    c,
-    f,
-  )).toFixed(d)) + ' ' + e[f]
-}
+  return parseFloat((a / Math.pow(c, f)).toFixed(d)) + ' ' + e[f];
+};
 
 export function buildStrapiFilters(filterArray) {
-  const filters = {}
+  const filters = {};
 
   filterArray.forEach(({ name, value }) => {
     // Пропускаем пустые значения
     if (
-      value == null
-      || (Array.isArray(value) && value.length === 0)
-      || (typeof value === 'object'
-        && !Array.isArray(value)
-        && value.min?.value == null
-        && value.max?.value == null)
+      value == null ||
+      (Array.isArray(value) && value.length === 0) ||
+      (typeof value === 'object' &&
+        !Array.isArray(value) &&
+        value.min?.value == null &&
+        value.max?.value == null)
     ) {
-      return
+      return;
     }
 
     // 1) Диапазон цен
     if (
-      name === 'price'
-      && typeof value === 'object'
-      && !Array.isArray(value)
+      name === 'price' &&
+      typeof value === 'object' &&
+      !Array.isArray(value)
     ) {
-      filters.price_aed = {}
-      if (value.min.value != null) filters.price_aed.$gte = Number(value.min?.value || 0)
-      if (value.max.value != null) filters.price_aed.$lte = Number(value.max?.value || Infinity)
-      return
+      filters.price_aed = {};
+      if (value.min.value != null)
+        filters.price_aed.$gte = Number(value.min?.value || 0);
+      if (value.max.value != null)
+        filters.price_aed.$lte = Number(value.max?.value || Infinity);
+      return;
     }
 
-    const filtersData = Array.isArray(value) ? value : [value]
-    const valuesFromFiltersData = filtersData.map(data => data.value)
+    const filtersData = Array.isArray(value) ? value : [value];
+    const valuesFromFiltersData = filtersData.map((data) => data.value);
     // 2) Вложенный фильтр по slug для связанной коллекции project(s)
     if (name === 'projects' || name === 'project') {
       // Если пришёл просто строкой, приводим к массиву
@@ -404,62 +331,58 @@ export function buildStrapiFilters(filterArray) {
       // Здесь — любой оператор: $in (несколько), или $eq (одно значение)
       filters[name] = {
         slug: { $in: valuesFromFiltersData },
-      }
-      return
+      };
+      return;
     }
 
     // 3) Обычный фильтр по полю в массиве
     filters[name] = {
       $in: valuesFromFiltersData,
-    }
-  })
+    };
+  });
 
-  return filters
+  return filters;
 }
 
 export function buildQueryParams(filterArray) {
-  const query = {}
+  const query = {};
 
   filterArray.forEach(({ name, value }) => {
-    console.log(value)
+    console.log(value);
 
     if (name === 'price' && typeof value === 'object') {
-      if (value.min.value != null) query.price_min = value.min.value
-      if (value.max.value != null) query.price_max = value.max.value
-      return
+      if (value.min.value != null) query.price_min = value.min.value;
+      if (value.max.value != null) query.price_max = value.max.value;
+      return;
     }
     // массив → "a,b,c"; одиночное значение тоже оборачиваем в массив
-    const vals = Array.isArray(value) ? value : [value]
+    const vals = Array.isArray(value) ? value : [value];
     if (vals.length) {
-      query[name] = vals.map(data => data.value).join(',')
+      query[name] = vals.map((data) => data.value).join(',');
     }
-  })
+  });
 
-  return query
+  return query;
 }
 
 export function parseQueryParams(query) {
-  const filters = []
+  const filters = [];
   let priceMin = null,
-    priceMax = null
+    priceMax = null;
 
-  Object.entries(query).forEach(([
-    key,
-    val,
-  ]) => {
+  Object.entries(query).forEach(([key, val]) => {
     if (key === 'price_min') {
-      priceMin = val
-      return
+      priceMin = val;
+      return;
     }
     if (key === 'price_max') {
-      priceMax = val
-      return
+      priceMax = val;
+      return;
     }
     // всё остальное: разбить по запятым
-    const arr = ('' + val).split(',').filter(Boolean)
-    filters.push({ name: key,
-      value: arr })
-  })
+    const arr = ('' + val).split(',').filter(Boolean);
+    filters.push({ name: key, value: arr });
+  });
 
   if (priceMin != null || priceMax != null) {
     filters.push({
@@ -474,28 +397,24 @@ export function parseQueryParams(query) {
           value: priceMin != null ? Number(priceMax) : null,
         },
       },
-    })
+    });
   }
 
-  return filters
+  return filters;
 }
 
 export function youtubeParser(url) {
-  const regExp
-    = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
-  const match = url.match(regExp)
-  return match && match[7].length == 11 ? match[7] : false
+  const regExp =
+    /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[7].length == 11 ? match[7] : false;
 }
 
 export function slugFromString(name) {
-  return name.toLowerCase().split(' ')
-    .join('_')
+  return name.toLowerCase().split(' ').join('_');
 }
 
-export const cleanPhone = phone => phone.replace(
-  /\s/g,
-  '',
-)
+export const cleanPhone = (phone) => phone.replace(/\s/g, '');
 
 /**
  * Builds a valid srcset string for <img> or <source> tags based on the image object and its formats.
@@ -519,27 +438,28 @@ export const cleanPhone = phone => phone.replace(
  * // srcset: "/uploads/image.png 800w, /uploads/large_image.png 1600w, /uploads/medium_image.png 750w"
  */
 export function buildSrcset(obj, mainKey = 'url', formatKeys = []) {
-  if (!obj) return ''
-  const srcs = []
+  if (!obj) return '';
+  const srcs = [];
 
-  if (obj[mainKey] && obj.width) srcs.push(`${obj[mainKey]} ${obj.width}w`)
+  if (obj[mainKey] && obj.width) srcs.push(`${obj[mainKey]} ${obj.width}w`);
 
   if (Array.isArray(formatKeys)) {
     formatKeys.forEach((key) => {
       if (obj.formats?.[key]?.url && obj.formats?.[key]?.width) {
-        srcs.push(`${obj.formats[key].url} ${obj.formats[key].width}w`)
+        srcs.push(`${obj.formats[key].url} ${obj.formats[key].width}w`);
       }
-    })
-  }
-  else if (
-    typeof formatKeys === 'string'
-    && obj.formats?.[formatKeys]?.url
-    && obj.formats?.[formatKeys]?.width
+    });
+  } else if (
+    typeof formatKeys === 'string' &&
+    obj.formats?.[formatKeys]?.url &&
+    obj.formats?.[formatKeys]?.width
   ) {
-    srcs.push(`${obj.formats[formatKeys].url} ${obj.formats[formatKeys].width}w`)
+    srcs.push(
+      `${obj.formats[formatKeys].url} ${obj.formats[formatKeys].width}w`,
+    );
   }
 
-  return srcs.join(', ')
+  return srcs.join(', ');
 }
 
 /**
@@ -551,12 +471,6 @@ export function buildSrcset(obj, mainKey = 'url', formatKeys = []) {
  */
 export function combineURLs(baseURL, relativeURL) {
   return relativeURL
-    ? baseURL.replace(
-      /\/?\/$/,
-      '',
-    ) + '/' + relativeURL.replace(
-      /^\/+/,
-      '',
-    )
-    : baseURL
+    ? baseURL.replace(/\/?\/$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+    : baseURL;
 }

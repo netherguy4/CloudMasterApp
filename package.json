@@ -13,6 +13,7 @@
     "dev": "nuxt dev --host",
     "build": "nuxt generate",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs",
+    "lint & fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
     "postinstall": "nuxt prepare"
   },
   "resolutions": {

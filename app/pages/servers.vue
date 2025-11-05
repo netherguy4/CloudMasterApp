@@ -1,7 +1,7 @@
 <script setup>
-const serversStore = useServersStore()
+const serversStore = useServersStore();
 
-onMounted(serversStore.fetchServers)
+onMounted(serversStore.fetchServers);
 </script>
 
 <template>

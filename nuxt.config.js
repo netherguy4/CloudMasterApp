@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-const vitePlugins = []
+const vitePlugins = [];
 
 export default defineNuxtConfig({
   modules: [
@@ -14,26 +14,17 @@ export default defineNuxtConfig({
   ssr: false,
   components: [
     '@/components',
-    { path: '@/components/common',
-      prefix: 'C' },
-    { path: '@/components/animation',
-      prefix: 'A' },
-    { path: '@/components/ui',
-      prefix: 'Ui' },
-    { path: '@/components/cards',
-      prefix: 'Card' },
-    { path: '@/components/layout',
-      prefix: 'L' },
+    { path: '@/components/common', prefix: 'C' },
+    { path: '@/components/animation', prefix: 'A' },
+    { path: '@/components/ui', prefix: 'Ui' },
+    { path: '@/components/cards', prefix: 'Card' },
+    { path: '@/components/layout', prefix: 'L' },
   ],
   devtools: { enabled: false },
   app: {
-    pageTransition: { name: 'fade',
-      mode: 'out-in' },
+    pageTransition: { name: 'fade', mode: 'out-in' },
   },
-  css: [
-    'reset-css',
-    '@/assets/styles/base/index.scss',
-  ],
+  css: ['reset-css', '@/assets/styles/base/index.scss'],
   ignore: ['**/src-tauri/**'],
   routeRules: {
     '/': { redirect: '/servers' },
@@ -45,10 +36,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-10-29',
   vite: {
     clearScreen: false,
-    envPrefix: [
-      'VITE_',
-      'TAURI_',
-    ],
+    envPrefix: ['VITE_', 'TAURI_'],
     server: {
       strictPort: true,
     },
@@ -56,10 +44,7 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           additionalData: '@use "@/assets/styles/utils" as *;',
-          silenceDeprecations: [
-            'global-builtin',
-            'import',
-          ],
+          silenceDeprecations: ['global-builtin', 'import'],
         },
       },
     },
@@ -70,6 +55,5 @@ export default defineNuxtConfig({
       stylistic: true, // <---
     },
   },
-  svgo: { defaultImport: 'component',
-    explicitImportsOnly: true },
-})
+  svgo: { defaultImport: 'component', explicitImportsOnly: true },
+});

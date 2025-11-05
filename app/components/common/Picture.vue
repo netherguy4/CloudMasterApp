@@ -1,5 +1,5 @@
 <script setup>
-import { BREAKPOINTS } from '@/constants/breakpoints'
+import { BREAKPOINTS } from '@/constants/breakpoints';
 
 const props = defineProps({
   src: {
@@ -14,21 +14,18 @@ const props = defineProps({
     type: Object,
     default: undefined,
     validator(value) {
-      const validKeys = Object.keys(BREAKPOINTS)
+      const validKeys = Object.keys(BREAKPOINTS);
 
-      return Object.keys(value).every(key => validKeys.includes(key))
+      return Object.keys(value).every((key) => validKeys.includes(key));
     },
   },
   webp: {
     type: Object,
     default: undefined,
     validator(value) {
-      const validKeys = [
-        'srcset',
-        ...Object.keys(BREAKPOINTS),
-      ]
+      const validKeys = ['srcset', ...Object.keys(BREAKPOINTS)];
 
-      return Object.keys(value).every(key => validKeys.includes(key))
+      return Object.keys(value).every((key) => validKeys.includes(key));
     },
   },
   alt: {
@@ -38,108 +35,90 @@ const props = defineProps({
   loading: {
     type: String,
     default: 'lazy',
-    validator: value => [
-      'lazy',
-      'eager',
-    ].includes(value),
+    validator: (value) => ['lazy', 'eager'].includes(value),
   },
   fetchPriority: {
     type: String,
     default: undefined,
-    validator: value => [
-      'high',
-      'low',
-      'auto',
-    ].includes(value),
+    validator: (value) => ['high', 'low', 'auto'].includes(value),
   },
   objectFit: {
     type: String,
     default: undefined,
-    validator: value => [
-      'cover',
-      'contain',
-      'fill',
-    ].includes(value),
+    validator: (value) => ['cover', 'contain', 'fill'].includes(value),
   },
-})
+});
 
 const {
   app: { baseURL },
-} = useRuntimeConfig()
+} = useRuntimeConfig();
 
 const mimeTypes = {
   webp: 'image/webp',
-}
+};
 
 const sources = computed(() => {
-  if (!props.media && !props.webp) return
+  if (!props.media && !props.webp) return;
 
-  const breakpointsEntriesAsc = Object.entries(BREAKPOINTS).sort((a, b) => a[1] - b[1])
+  const breakpointsEntriesAsc = Object.entries(BREAKPOINTS).sort(
+    (a, b) => a[1] - b[1],
+  );
 
   const sources = breakpointsEntriesAsc.reduce(
-    (sources, [
-      breakpointKey,
-      breakpointValue,
-    ]) => {
+    (sources, [breakpointKey, breakpointValue]) => {
       const jpgPngSource = getSource({
         srcset: props.media?.[breakpointKey],
         breakpoint: breakpointValue,
-      })
+      });
       const webpSource = getSource({
         srcset: props.webp?.[breakpointKey],
         breakpoint: breakpointValue,
         type: mimeTypes.webp,
-      })
+      });
 
-      if (webpSource) sources.push(webpSource)
-      if (jpgPngSource) sources.push(jpgPngSource)
+      if (webpSource) sources.push(webpSource);
+      if (jpgPngSource) sources.push(jpgPngSource);
 
-      return sources
+      return sources;
     },
     [],
-  )
+  );
 
   const webpSrcsetSource = getSource({
     srcset: props.webp?.srcset,
     type: mimeTypes.webp,
-  })
+  });
 
-  if (webpSrcsetSource) sources.push(webpSrcsetSource)
+  if (webpSrcsetSource) sources.push(webpSrcsetSource);
 
-  return sources
-})
+  return sources;
+});
 
 function getSource({ srcset, breakpoint, type }) {
-  if (!srcset) return
+  if (!srcset) return;
 
   if (baseURL && baseURL !== '/') {
-    srcset = applyBaseUrl(
-      srcset,
-      baseURL,
-    )
+    srcset = applyBaseUrl(srcset, baseURL);
   }
 
-  let media
+  let media;
 
   if (breakpoint) {
-    media = `(max-width: ${breakpoint - 0.02}px)`
+    media = `(max-width: ${breakpoint - 0.02}px)`;
   }
 
   return {
     srcset,
     media,
     type,
-  }
+  };
 }
 
 function applyBaseUrl(srcset = '', baseUrl = '') {
   return srcset
     .split(',')
-    .map(url => combineURLs(
-      baseUrl,
-      url.trim(),
-    ))
-    .join(', ')
+    .map((url) => combineURLs(baseUrl, url.trim()))
+    .join(', ');
 }
 </script>
 
@@ -153,7 +132,7 @@ function applyBaseUrl(srcset = '', baseUrl = '') {
       :srcset="sourceSrcset"
       :type="sourceType"
       :media="sourceMedia"
-    >
+    />
 
     <CImage
       :src="src"

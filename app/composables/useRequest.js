@@ -1,50 +1,38 @@
-import { invoke } from '@tauri-apps/api/core'
+import { invoke } from '@tauri-apps/api/core';
 
-const projectId = 'leafy-container-473321-k7'
+const projectId = 'leafy-container-473321-k7';
 
 export const useRequest = async (command, arg1, arg2) => {
   switch (command) {
     case 'instances_list': {
-      const data = await invoke(
-        'instances_list',
-        {
-          projectId,
-        },
-      )
-      return JSON.parse(data)
+      const data = await invoke('instances_list', {
+        projectId,
+      });
+      return JSON.parse(data);
     }
     case 'instance_get': {
-      const data = await invoke(
-        'instance_get',
-        {
-          projectId,
-          instance: arg1,
-          zone: arg2,
-        },
-      )
-      return JSON.parse(data)
+      const data = await invoke('instance_get', {
+        projectId,
+        instance: arg1,
+        zone: arg2,
+      });
+      return JSON.parse(data);
     }
     case 'instance_start': {
-      const data = await invoke(
-        'instance_start',
-        {
-          projectId,
-          instance: arg1,
-          zone: arg2,
-        },
-      )
-      return JSON.parse(data)
+      const data = await invoke('instance_start', {
+        projectId,
+        instance: arg1,
+        zone: arg2,
+      });
+      return JSON.parse(data);
     }
     case 'instance_stop': {
-      const data = await invoke(
-        'instance_stop',
-        {
-          projectId,
-          instance: arg1,
-          zone: arg2,
-        },
-      )
-      return JSON.parse(data)
+      const data = await invoke('instance_stop', {
+        projectId,
+        instance: arg1,
+        zone: arg2,
+      });
+      return JSON.parse(data);
     }
     case 'list_servers':
       return {
@@ -202,13 +190,13 @@ export const useRequest = async (command, arg1, arg2) => {
             },
           },
         ],
-      }
+      };
 
     default:
       return {
         status: 'error',
         code: 404,
         message: 'No instances found for the given command',
-      }
+      };
   }
-}
+};

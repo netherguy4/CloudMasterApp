@@ -1,17 +1,14 @@
 <script setup>
-import { writeText } from '@tauri-apps/plugin-clipboard-manager'
-import cardTypes from '~/configs/cardTypes'
+import { writeText } from '@tauri-apps/plugin-clipboard-manager';
+import cardTypes from '~/configs/cardTypes';
 
-const instancesStore = useInstancesStore()
+const instancesStore = useInstancesStore();
 
 const props = defineProps({
   cardType: {
     type: String,
     default: cardTypes.instance,
-    validator: type => [
-      cardTypes.instance,
-      cardTypes.server,
-    ].includes(type),
+    validator: (type) => [cardTypes.instance, cardTypes.server].includes(type),
   },
   id: {
     type: String,
@@ -45,72 +42,72 @@ const props = defineProps({
     type: Object,
     default: undefined,
   },
-})
+});
 
-const mouseOver = ref(false)
-const showMessage = ref(false)
-const showError = ref(false)
+const mouseOver = ref(false);
+const showMessage = ref(false);
+const showError = ref(false);
 
-const handleMouseOver = () => (mouseOver.value = true)
-const handleMouseLeave = () => (mouseOver.value = false)
+const handleMouseOver = () => (mouseOver.value = true);
+const handleMouseLeave = () => (mouseOver.value = false);
 
 const buttonComputed = computed(() => {
-  const status = props.status.toLowerCase()
-  let text, click
+  const status = props.status.toLowerCase();
+  let text, click;
   switch (status) {
     case 'running': {
-      text = 'Stop'
-      break
+      text = 'Stop';
+      break;
     }
     case 'terminated': {
-      text = 'Start'
-      break
+      text = 'Start';
+      break;
     }
     default: {
-      text = 'Busy'
-      break
+      text = 'Busy';
+      break;
     }
   }
   switch (props.cardType) {
     case cardTypes.instance: {
-      click = () => handleInstanceTrigger()
-      break
+      click = () => handleInstanceTrigger();
+      break;
     }
     case cardTypes.server: {
-      break
+      break;
     }
   }
   return {
     text,
     click,
-  }
-})
+  };
+});
 
 const IpComputed = computed(() => {
-  const label = mouseOver.value ? 'Copy IP:' : 'IP:'
-  let trueValue
+  const label = mouseOver.value ? 'Copy IP:' : 'IP:';
+  let trueValue;
   switch (props.cardType) {
     case cardTypes.instance: {
-      trueValue = props.external_ips?.[0]
-      break
+      trueValue = props.external_ips?.[0];
+      break;
     }
     case cardTypes.server: {
-      trueValue = props.vm?.external_ips?.[0] + ':' + props.port
-      break
+      trueValue = props.vm?.external_ips?.[0] + ':' + props.port;
+      break;
     }
   }
   const value = showError.value
     ? 'ERROR'
     : showMessage.value
       ? 'COPIED'
-      : trueValue
+      : trueValue;
 
   return {
     label,
     value,
     trueValue,
-  }
-})
+  };
+});
 
 const partsComputed = computed(() => {
   switch (props.cardType) {
@@ -127,7 +124,7 @@ const partsComputed = computed(() => {
           label: 'Zone',
           value: props.zone,
         },
-      ]
+      ];
     }
     case cardTypes.server: {
       return [
@@ -147,66 +144,47 @@ const partsComputed = computed(() => {
           label: 'Instance Name:',
           value: props.vm?.name,
         },
-      ]
+      ];
     }
     default: {
-      return []
+      return [];
     }
   }
-})
+});
 
 const onClickCard = async (text) => {
   try {
     await writeText(text);
     ((showMessage.value = true),
-    setTimeout(
-      () => (showMessage.value = false),
-      1000,
-    ))
-  }
-  catch (e) {
+      setTimeout(() => (showMessage.value = false), 1000));
+  } catch (e) {
     console.log(e);
     ((showError.value = true),
-    setTimeout(
-      () => (showError.value = false),
-      1000,
-    ))
+      setTimeout(() => (showError.value = false), 1000));
   }
-}
+};
 
 const handleInstanceTrigger = async () => {
-  const status = props.status.toLowerCase()
+  const status = props.status.toLowerCase();
 
   switch (status) {
     case 'running': {
-      await instancesStore.stopInstance(
-        props.id,
-        props.zone,
-      )
-      await new Promise(resolve => setTimeout(
-        resolve,
-        1000,
-      ))
-      await instancesStore.fetchInstances()
-      break
+      await instancesStore.stopInstance(props.id, props.zone);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await instancesStore.fetchInstances();
+      break;
     }
     case 'terminated': {
-      await instancesStore.startInstance(
-        props.id,
-        props.zone,
-      )
-      await new Promise(resolve => setTimeout(
-        resolve,
-        1000,
-      ))
-      await instancesStore.fetchInstances()
-      break
+      await instancesStore.startInstance(props.id, props.zone);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await instancesStore.fetchInstances();
+      break;
     }
     default: {
-      break
+      break;
     }
   }
-}
+};
 </script>
 
 <template>
@@ -243,10 +221,7 @@ const handleInstanceTrigger = async () => {
         <span class="i1-r-r">{{ buttonComputed.text }}</span>
       </button>
 
-      <UiStatus
-        class="cards-universal__status"
-        :status="status"
-      />
+      <UiStatus class="cards-universal__status" :status="status" />
     </div>
   </div>
 </template>
