@@ -1,8 +1,9 @@
-import withNuxt from './.nuxt/eslint.config.mjs'
-import stylistic from '@stylistic/eslint-plugin'
+import withNuxt from './.nuxt/eslint.config.mjs';
+import stylistic from '@stylistic/eslint-plugin';
+import prettier from 'eslint-plugin-prettier/recommended';
 
 export default withNuxt(
-  stylistic.configs.all,
+  stylistic.configs.recommended,
   {
     ignores: ['public/*'],
     plugins: {
@@ -13,10 +14,8 @@ export default withNuxt(
       'vue/no-v-html': 'off',
       'vue/prop-name-casing': 'off',
       'vue/multi-word-component-names': 'off',
-      '@stylistic/indent': [
-        'error',
-        2,
-      ],
+      '@stylistic/indent': ['error', 2],
     },
   },
-)
+  prettier,
+);
