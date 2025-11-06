@@ -34,22 +34,6 @@ pub async fn fetch_instance(
     }
 }
 
-pub async fn instance_status(
-    project_id: &str,
-    instance: &str,
-    zone: &str,
-) -> Result<String, Error> {
-    let inst = fetch_instance(project_id, instance, zone).await;
-    match inst {
-        Ok(inst) => inst
-            .status
-            .as_ref()
-            .map(|s| format!("{:?}", s).to_lowercase())
-            .ok_or_else(|| anyhow!("Instance '{}' has no status", instance)),
-        Err(e) => Err(anyhow!("{}", e)),
-    }
-}
-
 #[tauri::command]
 pub async fn instances_list(project_id: &str) -> Result<Vec<InstanceInfo>, String> {
     let client = build_instances_client()
@@ -112,27 +96,6 @@ pub async fn instance_start(
         .await
         .map_err(|e| format!("Error: {}", e))?;
 
-    let status = match instance_status(project_id, instance, zone).await {
-        Ok(status) => status,
-        Err(e) => {
-            return Err(format!("{}", e));
-        }
-    };
-
-    if status.trim().is_empty() {
-        return Err(format!(
-            "Instance '{}' has no valid status (response may be malformed)",
-            instance
-        ));
-    }
-
-    if status.to_lowercase() != "terminated" {
-        return Err(format!(
-            "Cannot start '{}': instance is currently in '{}' state",
-            instance, status
-        ));
-    }
-
     let result = client
         .start()
         .set_instance(instance)
@@ -155,27 +118,6 @@ pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Resu
     let client = build_instances_client()
         .await
         .map_err(|e| format!("Error: {}", e))?;
-
-    let status = match instance_status(project_id, instance, zone).await {
-        Ok(status) => status,
-        Err(e) => {
-            return Err(format!("{}", e));
-        }
-    };
-
-    if status.trim().is_empty() {
-        return Err(format!(
-            "Instance '{}' has no valid status (response may be malformed)",
-            instance
-        ));
-    }
-
-    if status.to_lowercase() != "running" {
-        return Err(format!(
-            "Cannot stop '{}': instance is currently in '{}' state",
-            instance, status
-        ));
-    }
 
     let result = client
         .stop()
