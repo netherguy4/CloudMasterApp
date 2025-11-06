@@ -169,15 +169,16 @@ const handleInstanceTrigger = async () => {
 
   switch (status) {
     case 'running': {
-      await instancesStore.stopInstance(props.id, props.zone);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await instancesStore.fetchInstances();
+      const { error } = await instancesStore.stopInstance(props.id, props.zone);
+      if (!error) instancesStore.updateInstanceStatus(props.id, 'STOPPING');
       break;
     }
     case 'terminated': {
-      await instancesStore.startInstance(props.id, props.zone);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await instancesStore.fetchInstances();
+      const { error } = await instancesStore.startInstance(
+        props.id,
+        props.zone,
+      );
+      if (!error) instancesStore.updateInstanceStatus(props.id, 'STAGING');
       break;
     }
     default: {

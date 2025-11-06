@@ -11,17 +11,13 @@ defineProps({
     default: cardTypes.instance,
     validator: (type) => [cardTypes.instance, cardTypes.server].includes(type),
   },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
 });
 </script>
 
 <template>
   <div class="sections-dynamic-cards">
     <div v-auto-animate class="sections-dynamic-cards__content">
-      <template v-if="items?.length || !loading">
+      <template v-if="items?.length">
         <slot v-for="item in items" :key="item.id" name="card" :data="item">
           <CardUniversal
             v-if="!$slots.card"
