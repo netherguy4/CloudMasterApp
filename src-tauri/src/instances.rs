@@ -1,9 +1,9 @@
 use crate::utils::{InstanceInfo, extract_instance_info};
 use anyhow::{Error, Result, anyhow};
+use futures::future::join_all;
 use google_cloud_compute_v1::client::Instances;
 use google_cloud_compute_v1::model::Instance;
 use google_cloud_gax::paginator::ItemPaginator;
-
 use once_cell::sync::OnceCell;
 
 static INSTANCE_CLIENT: OnceCell<Instances> = OnceCell::new();
@@ -43,26 +43,55 @@ pub async fn instances_list(project_id: &str) -> Result<Vec<InstanceInfo>, Strin
         .await
         .map_err(|e| format!("Client error: {e}"))?;
 
-    let mut instances_array = Vec::new();
-
     let mut instances = client
         .aggregated_list()
         .set_return_partial_success(true)
         .set_project(project_id)
         .by_item();
 
+    let mut tasks = Vec::new();
+
+    // Collect tasks instead of awaiting sequentially
     while let Some(result) = instances.next().await {
-        let (zone, scoped_list) =
-            result.map_err(|e| format!("Error retrieving instance list: {e}"))?;
+        let result = result.map_err(|e| format!("Error retrieving instance list: {e}"))?;
+        let (zone, scoped_list) = result;
 
         if scoped_list.instances.is_empty() {
             continue;
         }
 
-        for instance in scoped_list.instances {
-            let info = extract_instance_info(&instance, &zone)
-                .map_err(|e| format!("Failed to process instance in zone {}: {e}", zone))?;
-            instances_array.push(info);
+        // Clone what we need for async processing
+        let zone_str = zone.clone();
+        let instances_vec = scoped_list.instances;
+
+        // Spawn async processing task
+        tasks.push(tokio::spawn(async move {
+            let mut infos = Vec::new();
+            for instance in instances_vec {
+                match extract_instance_info(&instance, &zone_str) {
+                    Ok(info) => infos.push(info),
+                    Err(err) => {
+                        return Err(format!(
+                            "Failed to process instance in zone {}: {err}",
+                            zone_str
+                        ));
+                    }
+                }
+            }
+            Ok::<Vec<InstanceInfo>, String>(infos)
+        }));
+    }
+
+    // Run all tasks concurrently
+    let results = join_all(tasks).await;
+
+    // Flatten results
+    let mut instances_array = Vec::new();
+    for res in results {
+        match res {
+            Ok(Ok(mut infos)) => instances_array.append(&mut infos),
+            Ok(Err(e)) => return Err(e),
+            Err(e) => return Err(format!("Join error: {e}")),
         }
     }
 
