@@ -1,7 +1,9 @@
 <script setup>
 const instancesStore = useInstancesStore();
 
-onMounted(instancesStore.fetchInstances);
+onMounted(
+  () => !instancesStore.instances?.length || instancesStore.fetchInstances(),
+);
 </script>
 
 <template>

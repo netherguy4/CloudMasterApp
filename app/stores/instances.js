@@ -33,7 +33,7 @@ export const useInstancesStore = defineStore('Instances', () => {
       setInstances(newData);
       return newData;
     },
-    { dedupe: 'cancel', immediate: false },
+    { dedupe: 'cancel' },
   );
 
   const instances = computed(() => localData.value ?? data.value ?? null);
