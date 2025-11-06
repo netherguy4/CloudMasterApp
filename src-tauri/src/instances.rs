@@ -1,14 +1,19 @@
 use crate::utils::{InstanceInfo, extract_instance_info};
-use anyhow::{Context, Error, Result, anyhow};
+use anyhow::{Error, Result, anyhow};
 use google_cloud_compute_v1::client::Instances;
 use google_cloud_compute_v1::model::Instance;
 use google_cloud_gax::paginator::ItemPaginator;
 
-pub async fn build_instances_client() -> Result<Instances, Error> {
-    Instances::builder()
-        .build()
-        .await
-        .context("Failed to build Instances client")
+use once_cell::sync::OnceCell;
+
+static INSTANCE_CLIENT: OnceCell<Instances> = OnceCell::new();
+
+async fn get_instance_client() -> Result<&'static Instances, Error> {
+    if INSTANCE_CLIENT.get().is_none() {
+        let client = Instances::builder().build().await?;
+        INSTANCE_CLIENT.set(client).ok();
+    }
+    Ok(INSTANCE_CLIENT.get().unwrap())
 }
 
 pub async fn fetch_instance(
@@ -16,9 +21,7 @@ pub async fn fetch_instance(
     instance: &str,
     zone: &str,
 ) -> Result<Instance, Error> {
-    let client = build_instances_client()
-        .await
-        .map_err(|e| anyhow!("Error: {}", e))?;
+    let client = get_instance_client().await?;
 
     let instance_obj = client
         .get()
@@ -36,9 +39,9 @@ pub async fn fetch_instance(
 
 #[tauri::command]
 pub async fn instances_list(project_id: &str) -> Result<Vec<InstanceInfo>, String> {
-    let client = build_instances_client()
+    let client = get_instance_client()
         .await
-        .map_err(|e| format!("Error: {e}"))?;
+        .map_err(|e| format!("Client error: {e}"))?;
 
     let mut instances_array = Vec::new();
 
@@ -92,9 +95,9 @@ pub async fn instance_start(
     instance: &str,
     zone: &str,
 ) -> Result<String, String> {
-    let client = build_instances_client()
+    let client = get_instance_client()
         .await
-        .map_err(|e| format!("Error: {}", e))?;
+        .map_err(|e| format!("Client error: {e}"))?;
 
     let result = client
         .start()
@@ -115,9 +118,9 @@ pub async fn instance_start(
 
 #[tauri::command]
 pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Result<String, String> {
-    let client = build_instances_client()
+    let client = get_instance_client()
         .await
-        .map_err(|e| format!("Error: {}", e))?;
+        .map_err(|e| format!("Client error: {e}"))?;
 
     let result = client
         .stop()
