@@ -7,7 +7,9 @@ mod instances;
 mod utils;
 use crate::instances::{instance_get, instance_start, instance_stop, instances_list};
 
-fn main() {
+#[tokio::main]
+async fn main() {
+    tauri::async_runtime::set(tokio::runtime::Handle::current());
     tauri::Builder::default()
         .plugin(WindowStateBuilder::default().build())
         .invoke_handler(tauri::generate_handler![

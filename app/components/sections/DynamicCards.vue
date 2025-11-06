@@ -16,18 +16,11 @@ defineProps({
     default: false,
   },
 });
-
-const [contentRef, enable] = useAutoAnimate();
-onMounted(async () => {
-  enable?.(false);
-  await nextTick();
-  enable?.(true);
-});
 </script>
 
 <template>
   <div class="sections-dynamic-cards">
-    <div ref="contentRef" class="sections-dynamic-cards__content">
+    <div v-auto-animate class="sections-dynamic-cards__content">
       <template v-if="items?.length || !loading">
         <slot v-for="item in items" :key="item.id" name="card" :data="item">
           <CardUniversal
