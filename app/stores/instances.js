@@ -1,122 +1,87 @@
 import { defineStore } from 'pinia';
-
-const mapInstances = (data) =>
-  data.map(({ zone, ...inst }) => ({
-    ...inst,
-    zone: zone.split('/')[1],
-  }));
-
-const errorMessage = (err, code = 418) => ({
-  data: null,
-  error: { code: code, status: 'Internal Error', message: err },
-});
+import { instancesAdapter } from '@/adapters/instances';
 
 export const useInstancesStore = defineStore('Instances', () => {
-  const localData = ref(null);
+  const instances = ref(null);
+  const isStarting = ref(false);
+  const isStopping = ref(false);
 
-  function setInstances(newData) {
-    localData.value = newData;
-  }
-  // function clearInstances() {
-  //   localData.value = null;
-  // }
-
-  const {
-    data,
-    refresh: fetchInstances,
-    error: errorInstances,
-  } = useAsyncData(
-    'instances',
-    async () => {
-      const response = await useRequest('instances_list');
-      const newData = mapInstances(response);
-      setInstances(newData);
-      return newData;
-    },
-    { dedupe: 'cancel' },
-  );
-
-  const instances = computed(() => localData.value ?? data.value ?? null);
-
-  function updateInstanceStatus(id, newStatus) {
-    const list = localData.value ?? data.value;
-    if (!list) return;
-
-    const instance = list.find((i) => i.id === id);
-    if (instance) {
-      instance.status = newStatus;
-      if (localData.value) {
-        localData.value = [...localData.value];
-      } else if (data.value) {
-        data.value = [...data.value];
-      }
+  const updateListItem = (list, freshItem) => {
+    const index = list.findIndex((i) => i.id === freshItem.id);
+    if (index !== -1) {
+      list[index] = freshItem;
+    } else {
+      list.push(freshItem);
     }
-  }
+  };
 
-  async function getInstance(instance, zone) {
+  const fetchInstances = async () => {
     try {
-      const updated = await useRequest('instance_get', instance, zone);
+      const response = await useRequest('instances_list');
+      instances.value = instancesAdapter(response);
+      return instances.value;
+    } catch (error) {
+      throw error;
+    }
+  };
 
-      if (localData.value) {
-        const index = localData.value.findIndex((i) => i.id === updated.id);
-        if (index !== -1) {
-          localData.value[index] = updated;
-        } else {
-          localData.value.push(updated);
-        }
-      } else if (data.value) {
-        const index = data.value.findIndex((i) => i.id === updated.id);
-        if (index !== -1) {
-          data.value[index] = updated;
-        } else {
-          data.value.push(updated);
-        }
+  const updateInstanceStatus = (id, newStatus) => {
+    if (!instances.value) return;
+
+    const instanceIndex = instances.value.findIndex?.((i) => i.id === id);
+    if (instanceIndex >= 0) {
+      instances.value[instanceIndex].status = newStatus;
+    }
+  };
+
+  const getInstance = async (instance, zone) => {
+    try {
+      const freshItem = await useRequest('instance_get', instance, zone);
+
+      if (instances.value) {
+        updateListItem(instances.value, freshItem);
       } else {
-        localData.value = [updated];
+        instances.value[0] = freshItem;
       }
 
-      return updated;
+      return freshItem;
     } catch (e) {
-      console.error('Failed to refresh instance:', e);
       throw e;
     }
-  }
+  };
 
-  const isStarting = ref(false);
   const startInstance = async (instance, zone) => {
-    if (isStarting.value) return errorMessage('Instance is starting');
+    if (isStarting.value) throw new Error('Instance is starting');
+
     try {
       isStarting.value = true;
-      let { data, error } = await useRequest('instance_start', instance, zone);
-      return { data, error };
+      return await useRequest('instance_start', instance, zone);
     } catch (e) {
-      return errorMessage(e);
+      throw e;
     } finally {
       isStarting.value = false;
     }
   };
 
-  const isStopping = ref(false);
   const stopInstance = async (instance, zone) => {
-    if (isStopping.value) return errorMessage('Instance is starting');
+    if (isStopping.value) throw new Error('Instance is stopping');
+
     try {
       isStopping.value = true;
-      let { data, error } = await useRequest('instance_stop', instance, zone);
-      return { data, error };
+      return await useRequest('instance_stop', instance, zone);
     } catch (e) {
-      return errorMessage(e);
+      throw e;
     } finally {
       isStopping.value = false;
     }
   };
 
   return {
+    instances,
     fetchInstances,
     startInstance,
     stopInstance,
     getInstance,
     updateInstanceStatus,
-    instances,
-    errorInstances,
   };
 });

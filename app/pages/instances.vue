@@ -1,17 +1,8 @@
-<script setup>
-const instancesStore = useInstancesStore();
-
-onMounted(
-  () => !instancesStore.instances?.length || instancesStore.fetchInstances(),
-);
-</script>
+<script setup></script>
 
 <template>
   <div class="pages-instances">
-    <SectionsDynamicCards
-      class="pages-instances__section"
-      :items="instancesStore.instances"
-    />
+    <SectionsInstances class="pages-instances__section" />
   </div>
 </template>
 
