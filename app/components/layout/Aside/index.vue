@@ -15,7 +15,7 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
     :class="{ ['layout-aside--compact']: isLayoutCompact }"
   >
     <div class="layout-aside__content">
-      <CImage class="layout-aside__logo" src="/icons/128x128@2x.png" />
+      <CImage class="layout-aside__logo" src="/icons/logo.svg" />
 
       <LAsideNavigation
         :is-compact="isLayoutCompact"
@@ -45,8 +45,8 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
 
   &__icon {
     height: em(30);
-    transition: $time-normal $ease;
     rotate: 0deg;
+    transition: $time-normal $ease;
   }
 
   &__content {
@@ -54,7 +54,7 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
     flex-direction: column;
     gap: em(30);
     min-height: 100%;
-    padding-block: em(10) 0;
+    padding-block: em(30) 0;
 
     @include media-breakpoint-down(sm) {
       gap: em(15);
