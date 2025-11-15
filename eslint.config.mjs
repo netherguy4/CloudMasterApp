@@ -11,6 +11,7 @@ export default withNuxt(
     },
     rules: {
       'no-undef': 'off',
+      'no-useless-catch': 'off',
       'vue/no-v-html': 'off',
       'vue/prop-name-casing': 'off',
       'vue/multi-word-component-names': 'off',
