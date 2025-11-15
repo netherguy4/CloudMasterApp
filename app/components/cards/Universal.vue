@@ -169,16 +169,18 @@ const handleInstanceTrigger = async () => {
 
   switch (status) {
     case 'running': {
+      instancesStore.updateInstanceStatus(props.id, 'STOPPING');
       const { error } = await instancesStore.stopInstance(props.id, props.zone);
-      if (!error) instancesStore.updateInstanceStatus(props.id, 'STOPPING');
+      if (error) instancesStore.updateInstanceStatus(props.id, 'RUNNING');
       break;
     }
     case 'terminated': {
+      instancesStore.updateInstanceStatus(props.id, 'STAGING');
       const { error } = await instancesStore.startInstance(
         props.id,
         props.zone,
       );
-      if (!error) instancesStore.updateInstanceStatus(props.id, 'STAGING');
+      if (error) instancesStore.updateInstanceStatus(props.id, 'TERMINATED');
       break;
     }
     default: {
