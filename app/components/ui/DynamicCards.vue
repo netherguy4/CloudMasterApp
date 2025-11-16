@@ -32,7 +32,7 @@ const stopWatcher = watch(
 
     nextTick(() => {
       $flip.from(flipState, {
-        duration: 0.5,
+        duration: 0.25,
         ease: 'power0.inOut',
       });
     });
