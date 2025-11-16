@@ -35,6 +35,7 @@ export const useRequest = async (command, arg1, arg2) => {
       return data;
     }
     case 'list_servers':
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return {
         status: 'success',
         code: 200,
@@ -196,7 +197,7 @@ export const useRequest = async (command, arg1, arg2) => {
       return {
         status: 'error',
         code: 404,
-        message: 'No instances found for the given command',
+        message: 'Nothing found for the given command',
       };
   }
 };
