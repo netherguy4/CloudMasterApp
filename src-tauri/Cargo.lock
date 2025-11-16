@@ -522,11 +522,10 @@ name = "cloud-master"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "futures",
  "google-cloud-compute-v1",
  "google-cloud-gax",
- "google-cloud-secretmanager-v1",
  "once_cell",
+ "rayon",
  "serde",
  "tauri",
  "tauri-build",
@@ -534,7 +533,6 @@ dependencies = [
  "tauri-plugin-opener",
  "tauri-plugin-shell",
  "tauri-plugin-window-state",
- "tokio",
 ]
 
 [[package]]
@@ -635,6 +633,25 @@ name = "crossbeam-channel"
 version = "0.5.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "82b8f8f868b36967f9606790d1903570de9ceaf870a7bf9fbbd3016d636a2cb2"
+dependencies = [
+ "crossbeam-utils",
+]
+
+[[package]]
+name = "crossbeam-deque"
+version = "0.8.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9dd111b7b7f7d55b72c0a6ae361660ee5853c9af73f70c3c2ef6858b950e2e51"
+dependencies = [
+ "crossbeam-epoch",
+ "crossbeam-utils",
+]
+
+[[package]]
+name = "crossbeam-epoch"
+version = "0.9.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
 dependencies = [
  "crossbeam-utils",
 ]
@@ -880,6 +897,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0881ea181b1df73ff77ffaaf9c7544ecc11e82fba9b5f27b262a3c73a332555"
 
 [[package]]
+name = "either"
+version = "1.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
+
+[[package]]
 name = "embed-resource"
 version = "3.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1116,7 +1139,6 @@ checksum = "65bc07b1a8bc7c85c5f2e110c476c7389b4554ba72af57d8445ea63a576b0876"
 dependencies = [
  "futures-channel",
  "futures-core",
- "futures-executor",
  "futures-io",
  "futures-sink",
  "futures-task",
@@ -1198,7 +1220,6 @@ version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9fa08315bb612088cc391249efdc3bc77536f16c91f6cf495e6fbe85b20a4a81"
 dependencies = [
- "futures-channel",
  "futures-core",
  "futures-io",
  "futures-macro",
@@ -1559,45 +1580,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "google-cloud-iam-v1"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2f2c6d094d0ed9453de0fba8bb690b0c039a3d056f009d2e6c7909c32a446bb"
-dependencies = [
- "async-trait",
- "bytes",
- "google-cloud-gax",
- "google-cloud-gax-internal",
- "google-cloud-type",
- "google-cloud-wkt",
- "lazy_static",
- "reqwest",
- "serde",
- "serde_json",
- "serde_with",
- "tracing",
-]
-
-[[package]]
-name = "google-cloud-location"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6710e61195b0570c1239881c58f465b4726049eb6de6b42904c5d0d6f9196ca6"
-dependencies = [
- "async-trait",
- "bytes",
- "google-cloud-gax",
- "google-cloud-gax-internal",
- "google-cloud-wkt",
- "lazy_static",
- "reqwest",
- "serde",
- "serde_json",
- "serde_with",
- "tracing",
-]
-
-[[package]]
 name = "google-cloud-longrunning"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1636,40 +1618,6 @@ name = "google-cloud-rpc"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5b655e3540a78e18fd753ebd8f11e068210a3fa392892370f932ffcc8774346"
-dependencies = [
- "bytes",
- "google-cloud-wkt",
- "serde",
- "serde_json",
- "serde_with",
-]
-
-[[package]]
-name = "google-cloud-secretmanager-v1"
-version = "1.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e8ac49283a67c7fc08e245ff806b36cd551ccfff56f2d85ff222c7f4b1f8b75"
-dependencies = [
- "async-trait",
- "bytes",
- "google-cloud-gax",
- "google-cloud-gax-internal",
- "google-cloud-iam-v1",
- "google-cloud-location",
- "google-cloud-wkt",
- "lazy_static",
- "reqwest",
- "serde",
- "serde_json",
- "serde_with",
- "tracing",
-]
-
-[[package]]
-name = "google-cloud-type"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "290760412b63cd266376273e4fbeb13afaa4bc7dadd5340786c916866139e14c"
 dependencies = [
  "bytes",
  "google-cloud-wkt",
@@ -3501,6 +3449,26 @@ name = "raw-window-handle"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
+
+[[package]]
+name = "rayon"
+version = "1.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "368f01d005bf8fd9b1206fb6fa653e6c4a81ceb1466406b81792d87c5677a58f"
+dependencies = [
+ "either",
+ "rayon-core",
+]
+
+[[package]]
+name = "rayon-core"
+version = "1.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "22e18b0f0062d30d4230b2e85ff77fdfe4326feb054b9783a3460d8435c8ab91"
+dependencies = [
+ "crossbeam-deque",
+ "crossbeam-utils",
+]
 
 [[package]]
 name = "redox_syscall"

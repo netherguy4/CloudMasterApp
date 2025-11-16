@@ -1,10 +1,11 @@
 use crate::utils::{InstanceInfo, extract_instance_info};
+
 use anyhow::{Error, Result, anyhow};
-use futures::future::join_all;
 use google_cloud_compute_v1::client::Instances;
 use google_cloud_compute_v1::model::Instance;
 use google_cloud_gax::paginator::ItemPaginator;
 use once_cell::sync::OnceCell;
+use rayon::prelude::*;
 
 static INSTANCE_CLIENT: OnceCell<Instances> = OnceCell::new();
 
@@ -16,25 +17,17 @@ async fn get_instance_client() -> Result<&'static Instances, Error> {
     Ok(INSTANCE_CLIENT.get().unwrap())
 }
 
-pub async fn fetch_instance(
-    project_id: &str,
-    instance: &str,
-    zone: &str,
-) -> Result<Instance, Error> {
+pub async fn fetch_instance(project_id: &str, instance: &str, zone: &str) -> Result<Instance> {
     let client = get_instance_client().await?;
 
-    let instance_obj = client
+    client
         .get()
         .set_instance(instance)
         .set_project(project_id)
         .set_zone(zone)
         .send()
-        .await;
-
-    match instance_obj {
-        Ok(instance_obj) => Ok(instance_obj),
-        Err(e) => Err(anyhow!("Error: {}", e)),
-    }
+        .await
+        .map_err(|e| anyhow!("Error: {}", e))
 }
 
 #[tauri::command]
@@ -43,63 +36,43 @@ pub async fn instances_list(project_id: &str) -> Result<Vec<InstanceInfo>, Strin
         .await
         .map_err(|e| format!("Client error: {e}"))?;
 
-    let mut instances = client
+    let mut paginator = client
         .aggregated_list()
         .set_return_partial_success(true)
         .set_project(project_id)
         .by_item();
 
-    let mut tasks = Vec::new();
+    let mut zone_results = Vec::new();
 
-    // Collect tasks instead of awaiting sequentially
-    while let Some(result) = instances.next().await {
-        let result = result.map_err(|e| format!("Error retrieving instance list: {e}"))?;
-        let (zone, scoped_list) = result;
+    while let Some(result) = paginator.next().await {
+        let (zone, scoped) = result.map_err(|e| format!("Pagination error: {e}"))?;
 
-        if scoped_list.instances.is_empty() {
-            continue;
-        }
+        if !scoped.instances.is_empty() {
+            let zone_instances: Result<Vec<InstanceInfo>, String> = scoped
+                .instances
+                .into_par_iter()
+                .map(|inst| {
+                    extract_instance_info(&inst, &zone)
+                        .map_err(|e| format!("Failed to process instance in {}: {}", zone, e))
+                })
+                .collect();
 
-        // Clone what we need for async processing
-        let zone_str = zone.clone();
-        let instances_vec = scoped_list.instances;
-
-        // Spawn async processing task
-        tasks.push(tokio::spawn(async move {
-            let mut infos = Vec::new();
-            for instance in instances_vec {
-                match extract_instance_info(&instance, &zone_str) {
-                    Ok(info) => infos.push(info),
-                    Err(err) => {
-                        return Err(format!(
-                            "Failed to process instance in zone {}: {err}",
-                            zone_str
-                        ));
-                    }
-                }
-            }
-            Ok::<Vec<InstanceInfo>, String>(infos)
-        }));
-    }
-
-    // Run all tasks concurrently
-    let results = join_all(tasks).await;
-
-    // Flatten results
-    let mut instances_array = Vec::new();
-    for res in results {
-        match res {
-            Ok(Ok(mut infos)) => instances_array.append(&mut infos),
-            Ok(Err(e)) => return Err(e),
-            Err(e) => return Err(format!("Join error: {e}")),
+            zone_results.push(zone_instances);
         }
     }
 
-    if instances_array.is_empty() {
-        Err(format!("No instances found for project '{}'", project_id))
-    } else {
-        Ok(instances_array)
+    if zone_results.is_empty() {
+        return Err(format!("No instances found for project '{}'", project_id));
     }
+
+    // Now, just flatten the results
+    let mut all = Vec::new();
+    for zone in zone_results {
+        let mut items = zone?;
+        all.append(&mut items);
+    }
+
+    Ok(all)
 }
 
 #[tauri::command]
@@ -112,10 +85,8 @@ pub async fn instance_get(
         .await
         .map_err(|e| format!("Failed to fetch instance '{}': {e}", instance))?;
 
-    let info = extract_instance_info(&instance_obj, zone)
-        .map_err(|e| format!("Failed to process instance '{}': {e}", instance))?;
-
-    Ok(info)
+    extract_instance_info(&instance_obj, zone)
+        .map_err(|e| format!("Failed to process instance '{}': {e}", instance))
 }
 
 #[tauri::command]
@@ -128,21 +99,19 @@ pub async fn instance_start(
         .await
         .map_err(|e| format!("Client error: {e}"))?;
 
-    let result = client
+    client
         .start()
         .set_instance(instance)
         .set_project(project_id)
         .set_zone(zone)
         .send()
-        .await;
+        .await
+        .map_err(|e| format!("Failed to start instance '{}': {}", instance, e))?;
 
-    match result {
-        Ok(_) => Ok(format!(
-            "Instance '{}' start operation initiated successfully",
-            instance
-        )),
-        Err(e) => Err(format!("Failed to start instance '{}': {}", instance, e)),
-    }
+    Ok(format!(
+        "Instance '{}' start operation initiated successfully",
+        instance
+    ))
 }
 
 #[tauri::command]
@@ -151,19 +120,17 @@ pub async fn instance_stop(project_id: &str, instance: &str, zone: &str) -> Resu
         .await
         .map_err(|e| format!("Client error: {e}"))?;
 
-    let result = client
+    client
         .stop()
         .set_instance(instance)
         .set_project(project_id)
         .set_zone(zone)
         .send()
-        .await;
+        .await
+        .map_err(|e| format!("Failed to stop instance '{}': {}", instance, e))?;
 
-    match result {
-        Ok(_) => Ok(format!(
-            "Instance '{}' stop operation initiated successfully",
-            instance
-        )),
-        Err(e) => Err(format!("Failed to stop instance '{}': {}", instance, e)),
-    }
+    Ok(format!(
+        "Instance '{}' stop operation initiated successfully",
+        instance
+    ))
 }
