@@ -1,28 +1,3 @@
-<script setup>
-defineProps({
-  parts: {
-    type: Array,
-    default: () => [],
-  },
-  ip: {
-    type: Object,
-    default: () => ({}),
-  },
-  button: {
-    type: Object,
-    default: () => ({}),
-  },
-  status: {
-    type: String,
-    default: '',
-  },
-  pending: {
-    type: Boolean,
-    default: false,
-  },
-});
-</script>
-
 <template>
   <div
     class="ui-universal-card"
@@ -68,6 +43,31 @@ defineProps({
     </div>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  parts: {
+    type: Array,
+    default: () => [],
+  },
+  ip: {
+    type: Object,
+    default: () => ({}),
+  },
+  button: {
+    type: Object,
+    default: () => ({}),
+  },
+  status: {
+    type: String,
+    default: '',
+  },
+  pending: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
 
 <style lang="scss" scoped>
 @property --gradient1 {
