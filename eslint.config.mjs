@@ -1,9 +1,11 @@
 import withNuxt from './.nuxt/eslint.config.mjs';
 import stylistic from '@stylistic/eslint-plugin';
 import prettier from 'eslint-plugin-prettier/recommended';
+import pluginVue from 'eslint-plugin-vue';
 
 export default withNuxt(
   stylistic.configs.recommended,
+  ...pluginVue.configs['flat/recommended'],
   {
     ignores: ['public/*'],
     plugins: {

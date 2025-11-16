@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     'nuxt-svgo',
     '@formkit/auto-animate/nuxt',
     '@nuxt/eslint',
+    'v-gsap-nuxt',
   ],
   ssr: false,
   components: [
