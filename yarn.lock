@@ -7285,11 +7285,6 @@ type-level-regexp@~0.1.17:
   resolved "https://registry.yarnpkg.com/type-level-regexp/-/type-level-regexp-0.1.17.tgz#ec1bf7dd65b85201f9863031d6f023bdefc2410f"
   integrity sha512-wTk4DH3cxwk196uGLK/E9pE45aLfeKJacKmcEgEOA/q5dnPGNxXt0cfYdFxb57L+sEpf1oJH4Dnx/pnRcku9jg==
 
-typograf@^7.6.0:
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/typograf/-/typograf-7.6.0.tgz#10fb010f7a2e392a671bc8d561f167ea1644f783"
-  integrity sha512-sqYx4X1L7EDNRuJpqg/V+GCWMOpzVD5Om9IW0udi294sQYPwGGeRpPwsLC3gPt2BTsLtLiWJKpkwiyuO5PK2lQ==
-
 ufo@^1.5.4, ufo@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.6.1.tgz#ac2db1d54614d1b22c1d603e3aef44a85d8f146b"

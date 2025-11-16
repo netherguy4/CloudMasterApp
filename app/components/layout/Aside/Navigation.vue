@@ -27,7 +27,7 @@ const emit = defineEmits(['close']);
           class="layout-aside-navigation__link"
           @click="emit('close')"
         >
-          <span class="h4-r-r">{{ $tp(title) }}</span>
+          <span class="h4-r-r">{{ title }}</span>
 
           <CIcon
             v-if="icon"

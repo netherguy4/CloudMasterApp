@@ -16,6 +16,10 @@ defineProps({
     type: String,
     default: '',
   },
+  pending: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
@@ -27,27 +31,40 @@ defineProps({
     @click="ip?.onClick?.()"
   >
     <div class="ui-universal-card__wrapper">
-      <div
-        v-for="({ label, value }, index) in parts"
-        :key="index"
-        class="ui-universal-card__part"
-      >
-        <p class="i2-r-r">{{ label }}</p>
-        <p class="h6-r-r">{{ value }}</p>
-      </div>
+      <template v-for="({ label, value }, index) in parts" :key="index">
+        <UiSkeletonBlock v-if="pending" />
 
-      <button
-        v-if="button?.text"
-        class="ui-universal-card__button"
-        :class="{
-          [`ui-universal-card__button--${button.text.toLowerCase()}`]: true,
-        }"
-        @click.stop="button.click"
-      >
-        <span class="i1-r-r">{{ button.text }}</span>
-      </button>
+        <div v-else class="ui-universal-card__part">
+          <p class="i2-r-r">{{ label }}</p>
+          <p class="h6-r-r">{{ value }}</p>
+        </div>
+      </template>
 
-      <UiStatus :status="status" class="ui-universal-card__status" />
+      <template v-if="button?.text">
+        <UiSkeletonBlock
+          v-if="pending"
+          class="ui-universal-card__button--skeleton"
+        />
+
+        <button
+          v-else
+          class="ui-universal-card__button"
+          :class="{
+            [`ui-universal-card__button--${button.text.toLowerCase()}`]: true,
+          }"
+          @click.stop="button.click"
+        >
+          <span class="i1-r-r">{{ button.text }}</span>
+        </button>
+      </template>
+
+      <AFade>
+        <UiStatus
+          v-if="!pending"
+          :status="status"
+          class="ui-universal-card__status"
+        />
+      </AFade>
     </div>
   </div>
 </template>
@@ -146,6 +163,11 @@ defineProps({
       @include hover-active-focus {
         background-color: $accent-color-error;
       }
+    }
+
+    &--skeleton {
+      min-height: em(49);
+      margin-top: em(10);
     }
   }
 

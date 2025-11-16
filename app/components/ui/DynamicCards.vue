@@ -62,7 +62,11 @@ const emits = defineEmits(['update:contentFlow', 'refresh']);
         [`ui-dynamic-cards__content--${contentFlow}`]: true,
       }"
     >
-      <slot v-for="item in items" :key="item.id" :data="item" />
+      <slot
+        v-for="item in items?.length ? items : 8"
+        :key="item.id || item"
+        :data="item"
+      />
     </div>
   </div>
 </template>
