@@ -13,12 +13,11 @@ const {
   <UiDynamicCards
     v-slot="{ data }"
     title="Instances"
-    class="dynamic-cards"
     :items="items || storeInstances.instances"
     :pending="pending"
     :error="error"
     @refresh="refresh"
   >
-    <CardInstance class="dynamic-card" v-bind="data" />
+    <CardInstance v-bind="data" />
   </UiDynamicCards>
 </template>
