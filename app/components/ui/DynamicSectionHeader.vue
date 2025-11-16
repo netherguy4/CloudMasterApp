@@ -2,6 +2,10 @@
 import sectionFlow from '~/configs/sectionFlow';
 
 const props = defineProps({
+  title: {
+    type: String,
+    default: '',
+  },
   pending: {
     type: Boolean,
     default: false,
@@ -30,19 +34,25 @@ const changeModel = () => {
 </script>
 
 <template>
-  <div class="section-header">
-    <button class="section-header__button">
-      <CIcon
-        class="section-header__icon"
-        name="reload"
-        :class="{ ['section-header__icon--loading']: props.pending }"
-        @click="emit('fetch')"
-      />
-    </button>
+  <div class="dynamic-section-header">
+    <div v-if="title" class="dynamic-section-header__title">
+      <p class="h3-r-r">{{ title }}</p>
+    </div>
 
-    <button class="section-header__button" @click="changeModel">
-      <CIcon class="section-header__icon" :name="model" />
-    </button>
+    <div class="dynamic-section-header__buttons">
+      <button class="dynamic-section-header__button">
+        <CIcon
+          class="dynamic-section-header__icon"
+          name="reload"
+          :class="{ ['dynamic-section-header__icon--loading']: props.pending }"
+          @click="emit('fetch')"
+        />
+      </button>
+
+      <button class="dynamic-section-header__button" @click="changeModel">
+        <CIcon class="dynamic-section-header__icon" :name="model" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -57,10 +67,10 @@ const changeModel = () => {
   }
 }
 
-.section-header {
+.dynamic-section-header {
   display: flex;
   gap: em(8);
-  justify-content: flex-end;
+  align-items: center;
 
   &__icon {
     width: em(24);
@@ -71,7 +81,10 @@ const changeModel = () => {
     }
   }
 
-  &__button {
+  &__buttons {
+    display: flex;
+    gap: em(8);
+    margin-left: auto;
   }
 }
 </style>

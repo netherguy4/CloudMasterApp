@@ -1,17 +1,8 @@
-<script setup>
-const serversStore = useServersStore();
-
-onMounted(serversStore.fetchServers);
-</script>
+<script setup></script>
 
 <template>
   <div class="pages-server">
-    <SectionsServers
-      class="pages-server__section"
-      :items="serversStore.servers"
-      :loading="serversStore.loading"
-      card-type="server"
-    />
+    <SectionsServers class="pages-server__section" />
   </div>
 </template>
 
