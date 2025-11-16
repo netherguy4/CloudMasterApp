@@ -4,17 +4,17 @@ use anyhow::{Error, Result, anyhow};
 use google_cloud_compute_v1::client::Instances;
 use google_cloud_compute_v1::model::Instance;
 use google_cloud_gax::paginator::ItemPaginator;
-use once_cell::sync::OnceCell;
 use rayon::prelude::*;
+use tokio::sync::OnceCell;
 
-static INSTANCE_CLIENT: OnceCell<Instances> = OnceCell::new();
+static INSTANCE_CLIENT: OnceCell<Instances> = OnceCell::const_new();
 
-async fn get_instance_client() -> Result<&'static Instances, Error> {
-    if INSTANCE_CLIENT.get().is_none() {
-        let client = Instances::builder().build().await?;
-        INSTANCE_CLIENT.set(client).ok();
-    }
-    Ok(INSTANCE_CLIENT.get().unwrap())
+async fn get_instance_client() -> Result<&'static Instances> {
+    INSTANCE_CLIENT
+        .get_or_try_init(|| async {
+            Instances::builder().build().await.map_err(Error::from) // Convert Google's error to anyhow::Error
+        })
+        .await
 }
 
 pub async fn fetch_instance(project_id: &str, instance: &str, zone: &str) -> Result<Instance> {

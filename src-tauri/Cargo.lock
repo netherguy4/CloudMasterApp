@@ -524,7 +524,6 @@ dependencies = [
  "anyhow",
  "google-cloud-compute-v1",
  "google-cloud-gax",
- "once_cell",
  "rayon",
  "serde",
  "tauri",
@@ -533,6 +532,7 @@ dependencies = [
  "tauri-plugin-opener",
  "tauri-plugin-shell",
  "tauri-plugin-window-state",
+ "tokio",
 ]
 
 [[package]]
