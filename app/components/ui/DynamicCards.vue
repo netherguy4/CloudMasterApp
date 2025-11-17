@@ -69,7 +69,12 @@ const emits = defineEmits(['update:contentFlow', 'refresh']);
             :key="index"
             class="cards-item"
           >
-            <slot :data="item" />
+            <slot
+              :data="{
+                ...item,
+                pending: !(items?.length || !pending) && !error,
+              }"
+            />
           </div>
         </template>
       </TransitionGroup>

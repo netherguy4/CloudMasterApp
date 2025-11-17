@@ -18,6 +18,6 @@ const {
     :error="error"
     @refresh="refresh"
   >
-    <CardInstance v-bind="data" :pending="pending" />
+    <CardInstance v-bind="data" />
   </UiDynamicCards>
 </template>

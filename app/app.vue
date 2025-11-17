@@ -8,9 +8,7 @@
   </CResize>
 </template>
 
-<script setup>
-useInstancesStore();
-</script>
+<script setup></script>
 
 <style scoped lang="scss">
 .app {
