@@ -27,7 +27,7 @@ const emit = defineEmits(['close']);
           class="layout-aside-navigation__link"
           @click="emit('close')"
         >
-          <span class="h4-r-r">{{ title }}</span>
+          <span class="h4-r">{{ title }}</span>
 
           <CIcon
             v-if="icon"
@@ -48,9 +48,9 @@ const emit = defineEmits(['close']);
     height: em(60);
     transition: height $time-normal $ease;
 
-    @include media-breakpoint-down(sm) {
-      height: em(40);
-    }
+    // @include media-breakpoint-down(sm) {
+    //   height: em(40);
+    // }
   }
 
   &__link {
@@ -71,22 +71,22 @@ const emit = defineEmits(['close']);
     }
   }
 
-  &--compact {
-    @include media-breakpoint-down(sm) {
-      #{$parent} {
-        &__icon {
-          height: em(20);
-        }
+  // &--compact {
+  //   @include media-breakpoint-down(sm) {
+  //     #{$parent} {
+  //       &__icon {
+  //         height: em(20);
+  //       }
 
-        &__link {
-          padding: em(10);
+  //       &__link {
+  //         padding: em(10);
 
-          & > span {
-            display: none;
-          }
-        }
-      }
-    }
-  }
+  //         & > span {
+  //           display: none;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 }
 </style>

@@ -36,7 +36,7 @@ const changeModel = () => {
 <template>
   <div class="dynamic-section-header">
     <div v-if="title" class="dynamic-section-header__title">
-      <p class="h3-r-r">{{ title }}</p>
+      <p class="h2-r">{{ title }}</p>
     </div>
 
     <div class="dynamic-section-header__buttons">

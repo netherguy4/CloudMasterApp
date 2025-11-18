@@ -34,32 +34,32 @@ const currentLang = ref(languages.value[1]);
 <template>
   <div class="sections-settings">
     <div class="sections-settings__title">
-      <p class="h2-r-r">Account</p>
+      <p class="h2-r">Account</p>
     </div>
 
     <div class="sections-settings__content">
       <div class="sections-settings__setting">
-        <p class="h4-r-r">Credentials</p>
+        <p class="h4-r">Credentials</p>
 
         <UiStatus :status="'installed'" />
       </div>
 
       <div class="sections-settings__setting">
-        <p class="h4-r-r">Project id</p>
+        <p class="h4-r">Project id</p>
 
         <UiStatus :status="'installed'" />
       </div>
     </div>
 
     <div class="sections-settings__title">
-      <p class="h2-r-r">App</p>
+      <p class="h2-r">App</p>
     </div>
 
     <div class="sections-settings__content">
       <div class="sections-settings__setting">
-        <p class="h4-r-r">Theme</p>
+        <p class="h4-r">Theme</p>
 
-        <!-- <select class="i2-r-r">
+        <!-- <select class="i2-r">
           <option value="light" disabled>Ligth</option>
 
           <option value="dark" selected>Dark</option>
@@ -69,44 +69,44 @@ const currentLang = ref(languages.value[1]);
       </div>
 
       <div class="sections-settings__setting">
-        <p class="h4-r-r">Language</p>
+        <p class="h4-r">Language</p>
 
         <UiDropdown v-model="currentLang" :items="languages" />
       </div>
     </div>
 
     <div class="sections-settings__title">
-      <p class="h2-r-r">Google</p>
+      <p class="h2-r">Google</p>
     </div>
 
     <div class="sections-settings__content">
       <div class="sections-settings__setting">
-        <p class="h4-r-r">Gcloud CLI</p>
+        <p class="h4-r">Gcloud CLI</p>
 
         <UiStatus :status="'installed'" />
       </div>
     </div>
 
     <div class="sections-settings__title">
-      <p class="h2-r-r">Updates</p>
+      <p class="h2-r">Updates</p>
     </div>
 
     <div class="sections-settings__content">
       <div class="sections-settings__setting">
-        <p class="h4-r-r">Version</p>
+        <p class="h4-r">Version</p>
 
-        <p class="h4-r-r">0.1.0</p>
+        <p class="h4-r">0.1.0</p>
       </div>
     </div>
 
     <div class="sections-settings__content">
       <div class="sections-settings__setting">
         <button class="sections-settings__button" @click="checkForUpd">
-          <p class="h5-r-r">Check for updates</p>
+          <p class="h5-r">Check for updates</p>
         </button>
 
         <AFade>
-          <p v-if="appVersion" class="h5-r-r">
+          <p v-if="appVersion" class="h5-r">
             {{ appVersion }}
           </p>
         </AFade>
@@ -124,10 +124,10 @@ const currentLang = ref(languages.value[1]);
   padding-inline: em(20);
   margin-inline: auto;
 
-  @include media-breakpoint-down(sm) {
-    max-width: none;
-    padding: 0;
-  }
+  // @include media-breakpoint-down(sm) {
+  //   max-width: none;
+  //   padding: 0;
+  // }
 
   &__title {
     padding-block: em(20);

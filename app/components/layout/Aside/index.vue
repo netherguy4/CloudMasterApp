@@ -27,7 +27,7 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
         class="layout-aside__button hidden-desktop"
         @click="toggleCompactState"
       >
-        <span v-if="!isLayoutCompact" class="c2-r-r">Hide</span>
+        <span v-if="!isLayoutCompact" class="c2-r">Hide</span>
 
         <CIcon class="layout-aside__icon" name="navigation-left" />
       </button>
@@ -56,9 +56,9 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
     min-height: 100%;
     padding-block: em(30) 0;
 
-    @include media-breakpoint-down(sm) {
-      gap: em(15);
-    }
+    // @include media-breakpoint-down(sm) {
+    //   gap: em(15);
+    // }
   }
 
   &__logo {
@@ -66,9 +66,9 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
     width: em(100);
     transition: width $time-normal $ease;
 
-    @include media-breakpoint-down(sm) {
-      width: em(60);
-    }
+    // @include media-breakpoint-down(sm) {
+    //   width: em(60);
+    // }
   }
 
   &__button {
@@ -93,19 +93,19 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
     flex: 1;
   }
 
-  &--compact {
-    @include media-breakpoint-down(sm) {
-      #{$parent} {
-        &__icon {
-          height: em(20);
-          rotate: 180deg;
-        }
+  // &--compact {
+  //   @include media-breakpoint-down(sm) {
+  //     #{$parent} {
+  //       &__icon {
+  //         height: em(20);
+  //         rotate: 180deg;
+  //       }
 
-        &__logo {
-          width: em(30);
-        }
-      }
-    }
-  }
+  //       &__logo {
+  //         width: em(30);
+  //       }
+  //     }
+  //   }
+  // }
 }
 </style>

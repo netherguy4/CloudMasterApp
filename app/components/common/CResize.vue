@@ -21,8 +21,8 @@ $min-height: 600px;
 
   font-size: $default-size + px;
 
-  @include media-breakpoint-down(sm) {
-    font-size: min(calc($default-size * max($min-width, 100vw) / 320));
-  }
+  // @include media-breakpoint-down(sm) {
+  //   font-size: min(calc($default-size * max($min-width, 100vw) / 320));
+  // }
 }
 </style>

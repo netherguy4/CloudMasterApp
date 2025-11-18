@@ -25,11 +25,11 @@
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    padding: em(20);
+    padding: em(48);
 
-    @include media-breakpoint-down(sm) {
-      margin-left: em(40);
-    }
+    // @include media-breakpoint-down(sm) {
+    //   margin-left: em(40);
+    // }
 
     // padding-top: em($header-default-size);
 
@@ -53,12 +53,12 @@
   }
 
   &__aside {
-    @include media-breakpoint-down(sm) {
-      position: fixed;
-      inset: 0 auto auto 0;
-      z-index: 100;
-      height: 100%;
-    }
+    // @include media-breakpoint-down(sm) {
+    //   position: fixed;
+    //   inset: 0 auto auto 0;
+    //   z-index: 100;
+    //   height: 100%;
+    // }
   }
 
   &__wrapper {

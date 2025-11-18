@@ -125,7 +125,7 @@ defineExpose({ open, close, visible });
         :auto-flip="autoFlip"
         :gap="gap"
       >
-        <p class="i2-r-r">
+        <p class="i2-r">
           {{ status?.toLowerCase() }}
         </p>
       </CFloating>

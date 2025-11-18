@@ -10,8 +10,8 @@
         <UiSkeletonBlock v-if="pending" />
 
         <div v-else class="ui-universal-card__part">
-          <p class="i2-r-r">{{ label }}</p>
-          <p class="h6-r-r">{{ value }}</p>
+          <p class="i2-r">{{ label }}</p>
+          <p class="h6-r">{{ value }}</p>
         </div>
       </template>
 
@@ -29,7 +29,7 @@
           }"
           @click.stop="button.click"
         >
-          <span class="i1-r-r">{{ button.text }}</span>
+          <span class="i1-r">{{ button.text }}</span>
         </button>
       </template>
 

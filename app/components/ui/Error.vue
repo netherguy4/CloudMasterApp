@@ -10,8 +10,8 @@ defineProps({
 <template>
   <AFade>
     <div v-if="error" class="error">
-      <p class="h2-m-r">{{ error.statusCode }}</p>
-      <p class="h4-r-r">{{ error.message }}</p>
+      <p class="h2-m">{{ error.statusCode }}</p>
+      <p class="h4-r">{{ error.message }}</p>
     </div>
   </AFade>
 </template>
