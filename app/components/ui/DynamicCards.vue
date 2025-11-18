@@ -41,18 +41,23 @@ const stopWatcher = watch(
 
 onBeforeUnmount(stopWatcher);
 
-const emits = defineEmits(['update:contentFlow', 'refresh']);
+const emit = defineEmits(['refresh']);
 </script>
 
 <template>
   <div class="ui-dynamic-cards">
-    <UiDynamicSectionHeader
-      :title="title"
-      :pending="pending"
-      :model-value="contentFlow"
-      @update:model-value="contentFlow = $event"
-      @fetch="emits('refresh')"
-    />
+    <div class="ui-dynamic-cards__header">
+      <div v-if="title" class="ui-dynamic-cards__title">
+        <p class="h2-m">{{ title }}</p>
+      </div>
+
+      <UiDynamicActions
+        v-model="contentFlow"
+        :loading="pending"
+        class="ui-dynamic-cards__buttons"
+        @fetch="emit('refresh')"
+      />
+    </div>
 
     <UiError v-if="error" :error="error" />
 
@@ -87,6 +92,16 @@ const emits = defineEmits(['update:contentFlow', 'refresh']);
   display: flex;
   flex-direction: column;
   gap: em(20);
+
+  &__header {
+    display: flex;
+    gap: em(8);
+    align-items: center;
+  }
+
+  &__buttons {
+    margin-left: auto;
+  }
 
   &__content {
     display: grid;

@@ -34,7 +34,7 @@ const currentLang = ref(languages.value[1]);
 <template>
   <div class="sections-settings">
     <div class="sections-settings__title">
-      <p class="h2-r">Account</p>
+      <p class="h2-m">Account</p>
     </div>
 
     <div class="sections-settings__content">
@@ -52,7 +52,7 @@ const currentLang = ref(languages.value[1]);
     </div>
 
     <div class="sections-settings__title">
-      <p class="h2-r">App</p>
+      <p class="h2-m">App</p>
     </div>
 
     <div class="sections-settings__content">
@@ -76,7 +76,7 @@ const currentLang = ref(languages.value[1]);
     </div>
 
     <div class="sections-settings__title">
-      <p class="h2-r">Google</p>
+      <p class="h2-m">Google</p>
     </div>
 
     <div class="sections-settings__content">
@@ -88,7 +88,7 @@ const currentLang = ref(languages.value[1]);
     </div>
 
     <div class="sections-settings__title">
-      <p class="h2-r">Updates</p>
+      <p class="h2-m">Updates</p>
     </div>
 
     <div class="sections-settings__content">
@@ -121,8 +121,6 @@ const currentLang = ref(languages.value[1]);
   flex-direction: column;
   gap: em(20);
   max-width: em(740);
-  padding-inline: em(20);
-  margin-inline: auto;
 
   // @include media-breakpoint-down(sm) {
   //   max-width: none;
@@ -130,7 +128,7 @@ const currentLang = ref(languages.value[1]);
   // }
 
   &__title {
-    padding-block: em(20);
+    padding-block: 0 em(20);
     border-bottom: 1px solid $border-color-primary;
   }
 

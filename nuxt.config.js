@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: false },
   app: {
-    pageTransition: { name: 'fade', mode: 'out-in' },
+    pageTransition: { name: 'crossfade', mode: 'default' },
   },
   css: ['reset-css', '@/assets/styles/base/index.scss'],
   ignore: ['**/src-tauri/**'],

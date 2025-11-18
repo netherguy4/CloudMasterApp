@@ -22,10 +22,10 @@
   flex-direction: column;
 
   &:deep(#{$parent}__view) {
+    position: relative;
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    padding: em(48);
 
     // @include media-breakpoint-down(sm) {
     //   margin-left: em(40);
@@ -66,6 +66,7 @@
     flex: 1;
     flex-direction: column;
     min-height: 100vh;
+    padding: em(48);
   }
 }
 </style>
