@@ -31,12 +31,12 @@ const shutterStyle = computed(() => {
 <template>
   <div class="dynamic-actions">
     <template v-if="typeof loading === 'boolean'">
-      <button class="dynamic-actions__button" @click="emit('fetch')">
-        <CIcon
-          name="reload"
-          class="dynamic-actions__icon"
-          :class="{ ['dynamic-actions__icon--loading']: props.loading }"
-        />
+      <button
+        class="dynamic-actions__button"
+        :class="{ ['dynamic-actions__button--loading']: props.loading }"
+        @click="emit('fetch')"
+      >
+        <CIcon name="reload" class="dynamic-actions__icon" />
       </button>
 
       <div class="dynamic-actions__divider" />
@@ -45,6 +45,9 @@ const shutterStyle = computed(() => {
     <div class="dynamic-actions__switch">
       <button
         class="dynamic-actions__button"
+        :class="{
+          ['dynamic-actions__button--active']: model === sectionFlow.grid,
+        }"
         @click="() => (model = sectionFlow.grid)"
       >
         <CIcon name="grid" class="dynamic-actions__icon" />
@@ -52,6 +55,9 @@ const shutterStyle = computed(() => {
 
       <button
         class="dynamic-actions__button"
+        :class="{
+          ['dynamic-actions__button--active']: model === sectionFlow.column,
+        }"
         @click="() => (model = sectionFlow.column)"
       >
         <CIcon name="column" class="dynamic-actions__icon" />
@@ -74,6 +80,8 @@ const shutterStyle = computed(() => {
 }
 
 .dynamic-actions {
+  $parent: &;
+
   display: flex;
   gap: em(12);
   align-items: center;
@@ -87,20 +95,31 @@ const shutterStyle = computed(() => {
     z-index: 1;
     width: em(18);
     height: em(18);
-    color: $color-white;
-
-    &--loading {
-      animation: loading 1.5s linear infinite;
-    }
   }
 
   &__button {
     padding: em(9);
+    color: $text-color-secondary;
     border-radius: em(6);
-    transition: background-color $time-normal $ease;
+    transition:
+      background-color $time-normal $ease,
+      color $time-normal $ease;
 
     @include hover-active-focus {
+      color: $color-white;
       background-color: $background-color-tertiary;
+    }
+
+    &--loading {
+      color: $color-white;
+
+      #{$parent}__icon {
+        animation: loading 1.5s linear infinite;
+      }
+    }
+
+    &--active {
+      color: $color-white;
     }
   }
 

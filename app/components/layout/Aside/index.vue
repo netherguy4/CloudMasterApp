@@ -1,36 +1,24 @@
-<script setup>
-const isLayoutCompact = ref(true);
-
-const toggleCompactState = () =>
-  isLayoutCompact.value
-    ? (isLayoutCompact.value = false)
-    : (isLayoutCompact.value = true);
-
-const triggerCompactState = () => (isLayoutCompact.value = true);
-</script>
+<script setup></script>
 
 <template>
-  <aside
-    class="layout-aside"
-    :class="{ ['layout-aside--compact']: isLayoutCompact }"
-  >
+  <aside class="layout-aside">
     <div class="layout-aside__content">
-      <CImage class="layout-aside__logo" src="/icons/logo.svg" />
+      <div class="layout-aside__header">
+        <CImage class="layout-aside__logo" src="/icons/logo.svg" />
+
+        <div class="layout-aside__title">
+          <p class="h3-s">Cloud Master</p>
+        </div>
+
+        <div class="layout-aside__subtitle">
+          <p class="h4-r">Game Server Management</p>
+        </div>
+      </div>
 
       <LAsideNavigation
         :is-compact="isLayoutCompact"
         class="layout-aside__nav"
-        @close="triggerCompactState"
       />
-
-      <button
-        class="layout-aside__button hidden-desktop"
-        @click="toggleCompactState"
-      >
-        <span v-if="!isLayoutCompact" class="c2-r">Hide</span>
-
-        <CIcon class="layout-aside__icon" name="navigation-left" />
-      </button>
     </div>
   </aside>
 </template>
@@ -39,73 +27,40 @@ const triggerCompactState = () => (isLayoutCompact.value = true);
 .layout-aside {
   $parent: &;
 
-  overflow: auto;
   background-color: $background-color-secondary;
   border-right: 1px solid $border-color-primary;
 
-  &__icon {
-    height: em(30);
-    rotate: 0deg;
-    transition: $time-normal $ease;
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: em(8);
+    align-items: center;
+    text-align: center;
+  }
+
+  &__title {
+    color: $text-color-primary;
+  }
+
+  &__subtitle {
+    color: $text-color-tertiary;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    gap: em(30);
+    gap: em(32);
+    min-width: em(240);
     min-height: 100%;
-    padding-block: em(30) 0;
-
-    // @include media-breakpoint-down(sm) {
-    //   gap: em(15);
-    // }
+    padding: em(24) em(16);
   }
 
   &__logo {
-    align-self: center;
     width: em(100);
-    transition: width $time-normal $ease;
-
-    // @include media-breakpoint-down(sm) {
-    //   width: em(60);
-    // }
-  }
-
-  &__button {
-    display: flex;
-    gap: em(5);
-    align-items: center;
-    justify-content: center;
-    padding: em(5);
-    background-color: $actions-color-primary;
-    transition: background-color $time-normal $ease-out;
-
-    @include hover-active-focus {
-      background-color: $actions-color-secondary;
-    }
-
-    @include active {
-      background-color: $actions-color-tertiary;
-    }
   }
 
   &__nav {
     flex: 1;
   }
-
-  // &--compact {
-  //   @include media-breakpoint-down(sm) {
-  //     #{$parent} {
-  //       &__icon {
-  //         height: em(20);
-  //         rotate: 180deg;
-  //       }
-
-  //       &__logo {
-  //         width: em(30);
-  //       }
-  //     }
-  //   }
-  // }
 }
 </style>

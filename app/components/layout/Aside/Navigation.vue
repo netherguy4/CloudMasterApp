@@ -1,42 +1,35 @@
 <script setup>
 import navigationRoutes from '~/configs/navigationRoutes';
-
-defineProps({
-  isCompact: {
-    type: Boolean,
-    default: true,
-  },
-});
-
-const emit = defineEmits(['close']);
 </script>
 
 <template>
-  <nav
-    class="layout-aside-navigation"
-    :class="{ [`layout-aside-navigation--compact`]: isCompact }"
-  >
-    <ul v-if="navigationRoutes.length" class="layout-aside-navigation__list">
-      <li
-        v-for="({ title, link, icon }, index) in navigationRoutes"
-        :key="index"
-        class="layout-aside-navigation__li"
-      >
-        <CTagDetect
-          :to="link"
-          class="layout-aside-navigation__link"
-          @click="emit('close')"
-        >
-          <span class="h4-r">{{ title }}</span>
+  <nav class="layout-aside-navigation">
+    <div
+      v-for="({ title: groupTitle, items }, groupIndex) in navigationRoutes"
+      :key="groupIndex"
+      class="layout-aside-navigation__group"
+    >
+      <div v-if="groupTitle" class="layout-aside-navigation__title">
+        <p class="s3-r">{{ groupTitle }}</p>
+      </div>
 
-          <CIcon
-            v-if="icon"
-            :name="icon"
-            class="layout-aside-navigation__icon"
-          />
-        </CTagDetect>
-      </li>
-    </ul>
+      <ul v-if="items?.length" class="layout-aside-navigation__list">
+        <li
+          v-for="({ title, link, icon }, index) in items"
+          :key="index"
+          class="layout-aside-navigation__li"
+        >
+          <CTagDetect :to="link" class="layout-aside-navigation__link">
+            <CIcon
+              v-if="icon"
+              :name="icon"
+              class="layout-aside-navigation__icon"
+            />
+            <span class="i2-r">{{ title }}</span>
+          </CTagDetect>
+        </li>
+      </ul>
+    </div>
   </nav>
 </template>
 
@@ -44,49 +37,53 @@ const emit = defineEmits(['close']);
 .layout-aside-navigation {
   $parent: &;
 
-  &__icon {
-    height: em(60);
-    transition: height $time-normal $ease;
+  display: flex;
+  flex-direction: column;
+  gap: em(16);
 
-    // @include media-breakpoint-down(sm) {
-    //   height: em(40);
-    // }
+  &__icon {
+    width: em(16);
+    height: em(16);
+  }
+
+  &__title {
+    padding-inline: em(12);
+    color: $text-color-tertiary;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: inherit;
+    flex-direction: inherit;
+    gap: inherit;
+  }
+
+  &__group {
+    display: inherit;
+    flex-direction: inherit;
+    gap: em(8);
   }
 
   &__link {
     display: flex;
-    flex-direction: column;
+    gap: em(10);
     align-items: center;
-    padding: em(10) em(20);
-    text-align: center;
-    transition: $time-normal $ease;
-    transition-property: background-color;
+    padding: em(10) em(12);
+    color: $text-color-secondary;
+    border-radius: em(8);
+    transition:
+      background-color $time-normal $ease,
+      color $time-normal $ease;
 
     @include hover-active-focus {
-      background-color: $actions-color-primary;
+      color: $color-white;
+      background-color: $background-color-tertiary;
     }
 
     &.router-link-active {
-      background-color: $actions-color-secondary;
+      color: $color-white;
+      background-color: $accent-color-secondary;
     }
   }
-
-  // &--compact {
-  //   @include media-breakpoint-down(sm) {
-  //     #{$parent} {
-  //       &__icon {
-  //         height: em(20);
-  //       }
-
-  //       &__link {
-  //         padding: em(10);
-
-  //         & > span {
-  //           display: none;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 }
 </style>
