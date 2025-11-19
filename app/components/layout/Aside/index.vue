@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <aside class="layout-aside">
+  <UiGlowWrapper tag="aside" :size-em="30" class="layout-aside">
     <div class="layout-aside__content">
       <div class="layout-aside__header">
         <CImage class="layout-aside__logo" src="/icons/logo.svg" />
@@ -20,15 +20,15 @@
         class="layout-aside__nav"
       />
     </div>
-  </aside>
+  </UiGlowWrapper>
 </template>
 
 <style lang="scss" scoped>
 .layout-aside {
   $parent: &;
 
+  padding-right: 2px;
   background-color: $background-color-secondary;
-  border-right: 1px solid $border-color-primary;
 
   &__header {
     display: flex;

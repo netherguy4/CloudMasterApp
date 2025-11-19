@@ -138,7 +138,7 @@ defineExpose({ open, close, visible });
   pointer-events: auto;
   background-color: $accent-color-warning;
   border-radius: 50%;
-  box-shadow: 0 0 em(8) $accent-color-warning;
+  box-shadow: 0 0 em(7) $accent-color-warning;
   transition:
     background-color $time-normal $ease,
     box-shadow $time-normal $ease;
@@ -162,12 +162,12 @@ defineExpose({ open, close, visible });
     &--running,
     &--installed {
       background-color: $accent-color-success;
-      box-shadow: 0 0 em(8) $accent-color-success;
+      box-shadow: 0 0 em(7) $accent-color-success;
     }
 
     &--terminated {
       background-color: $accent-color-error;
-      box-shadow: 0 0 em(8) $accent-color-error;
+      box-shadow: 0 0 em(7) $accent-color-error;
     }
   }
 }

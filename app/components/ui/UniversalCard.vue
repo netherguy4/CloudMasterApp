@@ -1,47 +1,49 @@
 <template>
-  <div
+  <UiGlowWrapper
     class="ui-universal-card"
     @mouseover="ip?.onHoverIn?.()"
     @mouseleave="ip?.onHoverOut?.()"
     @click="ip?.onClick?.()"
   >
     <div class="ui-universal-card__wrapper">
-      <template v-for="({ label, value }, index) in parts" :key="index">
-        <UiSkeletonBlock v-if="pending" />
+      <div class="ui-universal-card__inner">
+        <template v-for="({ label, value }, index) in parts" :key="index">
+          <UiSkeletonBlock v-if="pending" />
 
-        <div v-else class="ui-universal-card__part">
-          <p class="i2-r">{{ label }}</p>
-          <p class="h6-r">{{ value }}</p>
-        </div>
-      </template>
+          <div v-else class="ui-universal-card__part">
+            <p class="i2-r">{{ label }}</p>
+            <p class="h6-r">{{ value }}</p>
+          </div>
+        </template>
 
-      <template v-if="button?.text">
-        <UiSkeletonBlock
-          v-if="pending"
-          class="ui-universal-card__button--skeleton"
-        />
+        <template v-if="button?.text">
+          <UiSkeletonBlock
+            v-if="pending"
+            class="ui-universal-card__button--skeleton"
+          />
 
-        <button
-          v-else
-          class="ui-universal-card__button"
-          :class="{
-            [`ui-universal-card__button--${button.text.toLowerCase()}`]: true,
-          }"
-          @click.stop="button.click"
-        >
-          <span class="i1-r">{{ button.text }}</span>
-        </button>
-      </template>
+          <button
+            v-else
+            class="ui-universal-card__button"
+            :class="{
+              [`ui-universal-card__button--${button.text.toLowerCase()}`]: true,
+            }"
+            @click.stop="button.click"
+          >
+            <span class="i1-r">{{ button.text }}</span>
+          </button>
+        </template>
 
-      <AFade>
-        <UiStatus
-          v-if="!pending"
-          :status="status"
-          class="ui-universal-card__status"
-        />
-      </AFade>
+        <AFade>
+          <UiStatus
+            v-if="!pending"
+            :status="status"
+            class="ui-universal-card__status"
+          />
+        </AFade>
+      </div>
     </div>
-  </div>
+  </UiGlowWrapper>
 </template>
 
 <script setup>
@@ -70,66 +72,33 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
-@property --gradient1 {
-  initial-value: $background-color-secondary;
-  inherits: true;
-  syntax: '<color>';
-}
-
-@property --gradient2 {
-  initial-value: $background-color-tertiary;
-  inherits: true;
-  syntax: '<color>';
-}
-
-@property --breakpoint1 {
-  initial-value: 0%;
-  inherits: true;
-  syntax: '<percentage>';
-}
-
-@property --breakpoint2 {
-  initial-value: 100%;
-  inherits: true;
-  syntax: '<percentage>';
-}
-
-@property --angle {
-  initial-value: 45deg;
-  inherits: true;
-  syntax: '<angle>';
-}
-
 .ui-universal-card {
   $parent: &;
 
-  position: relative;
-  padding: em(20);
-  overflow: hidden;
-  cursor: pointer;
-  background: linear-gradient(
-    var(--angle),
-    var(--gradient1) var(--breakpoint1),
-    var(--gradient2) var(--breakpoint2)
-  );
-  border: 1px solid $border-color-secondary;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  background-color: $background-color-secondary;
   border-radius: em(8);
-  transition-timing-function: $ease-out;
-  transition-duration: $time-normal;
-  transition-property:
-    --gradient1, --gradient2, --breakpoint1, --breakpoint2, --angle, box-shadow;
+  transition: translate $time-normal $ease;
 
-  @include hover-active-focus {
-    --breakpoint1: 100%;
-    --gradient1: #{$background-color-primary};
-
-    box-shadow: 0 0 em(10) $border-color-secondary;
+  @include hover {
+    translate: 0 em(-3);
   }
 
   &__wrapper {
+    display: inherit;
+    flex: 1;
+    flex-direction: inherit;
+    padding: em(20);
+    border-radius: inherit;
+  }
+
+  &__inner {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: inherit;
+    flex: 1;
+    flex-direction: inherit;
     gap: em(10);
     pointer-events: none;
   }

@@ -29,43 +29,45 @@ const shutterStyle = computed(() => {
 </script>
 
 <template>
-  <div class="dynamic-actions">
-    <template v-if="typeof loading === 'boolean'">
-      <button
-        class="dynamic-actions__button"
-        :class="{ ['dynamic-actions__button--loading']: props.loading }"
-        @click="emit('fetch')"
-      >
-        <CIcon name="reload" class="dynamic-actions__icon" />
-      </button>
+  <UiGlowWrapper :size-em="6" class="dynamic-actions">
+    <div class="dynamic-actions__content">
+      <template v-if="typeof loading === 'boolean'">
+        <button
+          class="dynamic-actions__button"
+          :class="{ ['dynamic-actions__button--loading']: props.loading }"
+          @click="emit('fetch')"
+        >
+          <CIcon name="reload" class="dynamic-actions__icon" />
+        </button>
 
-      <div class="dynamic-actions__divider" />
-    </template>
+        <div class="dynamic-actions__divider" />
+      </template>
 
-    <div class="dynamic-actions__switch">
-      <button
-        class="dynamic-actions__button"
-        :class="{
-          ['dynamic-actions__button--active']: model === sectionFlow.grid,
-        }"
-        @click="() => (model = sectionFlow.grid)"
-      >
-        <CIcon name="grid" class="dynamic-actions__icon" />
-      </button>
+      <div class="dynamic-actions__switch">
+        <button
+          class="dynamic-actions__button"
+          :class="{
+            ['dynamic-actions__button--active']: model === sectionFlow.grid,
+          }"
+          @click="() => (model = sectionFlow.grid)"
+        >
+          <CIcon name="grid" class="dynamic-actions__icon" />
+        </button>
 
-      <button
-        class="dynamic-actions__button"
-        :class="{
-          ['dynamic-actions__button--active']: model === sectionFlow.column,
-        }"
-        @click="() => (model = sectionFlow.column)"
-      >
-        <CIcon name="column" class="dynamic-actions__icon" />
-      </button>
+        <button
+          class="dynamic-actions__button"
+          :class="{
+            ['dynamic-actions__button--active']: model === sectionFlow.column,
+          }"
+          @click="() => (model = sectionFlow.column)"
+        >
+          <CIcon name="column" class="dynamic-actions__icon" />
+        </button>
 
-      <div :style="shutterStyle" class="dynamic-actions__shutter" />
+        <div :style="shutterStyle" class="dynamic-actions__shutter" />
+      </div>
     </div>
-  </div>
+  </UiGlowWrapper>
 </template>
 
 <style lang="scss" scoped>
@@ -82,12 +84,8 @@ const shutterStyle = computed(() => {
 .dynamic-actions {
   $parent: &;
 
-  display: flex;
-  gap: em(12);
-  align-items: center;
-  padding: em(4);
+  padding: 2px;
   background-color: $background-color-secondary;
-  border: 1px solid $border-color-primary;
   border-radius: em(8);
 
   &__icon {
@@ -95,6 +93,13 @@ const shutterStyle = computed(() => {
     z-index: 1;
     width: em(18);
     height: em(18);
+  }
+
+  &__content {
+    display: flex;
+    gap: em(12);
+    align-items: center;
+    padding: em(4);
   }
 
   &__button {
