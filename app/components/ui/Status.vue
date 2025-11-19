@@ -138,7 +138,10 @@ defineExpose({ open, close, visible });
   pointer-events: auto;
   background-color: $accent-color-warning;
   border-radius: 50%;
-  transition: background-color $time-normal $ease;
+  box-shadow: 0 0 em(8) $accent-color-warning;
+  transition:
+    background-color $time-normal $ease,
+    box-shadow $time-normal $ease;
 
   &__content {
     padding: em(5) em(10);
@@ -150,8 +153,8 @@ defineExpose({ open, close, visible });
 
   &--size {
     &--sm {
-      width: em(13);
-      height: em(13);
+      width: em(12);
+      height: em(12);
     }
   }
 
@@ -159,10 +162,12 @@ defineExpose({ open, close, visible });
     &--running,
     &--installed {
       background-color: $accent-color-success;
+      box-shadow: 0 0 em(8) $accent-color-success;
     }
 
     &--terminated {
       background-color: $accent-color-error;
+      box-shadow: 0 0 em(8) $accent-color-error;
     }
   }
 }

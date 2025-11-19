@@ -128,7 +128,7 @@ const currentLang = ref(languages.value[1]);
   // }
 
   &__title {
-    padding-block: 0 em(20);
+    padding-block: em(3) em(20);
     border-bottom: 1px solid $border-color-primary;
   }
 
