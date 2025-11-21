@@ -20,12 +20,14 @@ import navigationRoutes from '~/configs/navigationRoutes';
           class="layout-aside-navigation__li"
         >
           <CTagDetect :to="link" class="layout-aside-navigation__link">
-            <CIcon
-              v-if="icon"
-              :name="icon"
-              class="layout-aside-navigation__icon"
-            />
-            <span class="i2-r">{{ title }}</span>
+            <UiGlowText :dimm="false">
+              <CIcon
+                v-if="icon"
+                :name="icon"
+                class="layout-aside-navigation__icon"
+              />
+            </UiGlowText>
+            <UiGlowText :dimm="false" class="i2-r">{{ title }}</UiGlowText>
           </CTagDetect>
         </li>
       </ul>

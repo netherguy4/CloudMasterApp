@@ -7,6 +7,10 @@ const props = defineProps({
     type: Number,
     default: 150,
   },
+  tag: {
+    type: String,
+    default: 'span',
+  },
   glowColor: {
     type: String,
     default: '#ffffff',
@@ -33,7 +37,8 @@ const glowStyle = computed(() => ({
 </script>
 
 <template>
-  <div
+  <component
+    :is="tag"
     ref="container"
     class="glow"
     :class="{
@@ -49,7 +54,7 @@ const glowStyle = computed(() => ({
     <div class="glow__layer glow__overlay" aria-hidden="true">
       <slot />
     </div>
-  </div>
+  </component>
 </template>
 
 <style lang="scss" scoped>
@@ -80,7 +85,7 @@ const glowStyle = computed(() => ({
     user-select: none;
     opacity: 0.7;
     mask-image: radial-gradient(
-      calc(var(--glow-size) / 16px * 1em) circle at var(--x) var(--y),
+      calc(var(--glow-size) / 16 * 1em) circle at var(--x) var(--y),
       rgb(255 255 255 / 100%) 0%,
       transparent 100%
     );
