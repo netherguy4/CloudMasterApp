@@ -10,26 +10,22 @@ const props = defineProps({
   },
 });
 
-const container = ref(null);
-const glow = ref(null);
+const container = useTemplateRef('container');
 
-useDocumentMouseMove((e) => {
-  if (!container.value || !glow.value) return;
+const { x, y } = useMouse();
+const { top, left } = useElementBounding(container);
 
-  const rect = container.value.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  glow.value.style.setProperty('--x', `${x}px`);
-  glow.value.style.setProperty('--y', `${y}px`);
-});
+const glowStyle = computed(() => ({
+  '--x': `${x.value - left.value}px`,
+  '--y': `${y.value - top.value}px`,
+}));
 
 const size = computed(() => props.sizeEm + 'em');
 </script>
 
 <template>
   <component :is="tag" ref="container" class="glow-container">
-    <div ref="glow" class="glow-border"></div>
+    <div :style="glowStyle" class="glow-border"></div>
     <slot />
   </component>
 </template>
@@ -59,8 +55,8 @@ const size = computed(() => props.sizeEm + 'em');
   border-radius: inherit;
   opacity: 0.4;
   mask:
-    linear-gradient(rgba($color-white, 0.99) 0 0) content-box,
-    linear-gradient(rgba($color-white, 0.99) 0 0);
+    linear-gradient(rgba($color-white, 0.995) 0 0) content-box,
+    linear-gradient(rgba($color-white, 0.995) 0 0);
   mask-composite: xor;
   mask-composite: exclude;
   transition: opacity $time-slow ease;
