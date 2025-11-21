@@ -1,6 +1,7 @@
 <template>
   <UiGlowWrapper
     class="ui-universal-card"
+    hover-effect
     @mouseover="ip?.onHoverIn?.()"
     @mouseleave="ip?.onHoverOut?.()"
     @click="ip?.onClick?.()"

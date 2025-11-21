@@ -32,37 +32,46 @@ const shutterStyle = computed(() => {
   <UiGlowWrapper :size-em="6" class="dynamic-actions">
     <div class="dynamic-actions__content">
       <template v-if="typeof loading === 'boolean'">
-        <button
+        <UiGlowText
+          role="button"
+          hover-effect
           class="dynamic-actions__button"
           :class="{ ['dynamic-actions__button--loading']: props.loading }"
+          :dimm="!props.loading"
           @click="emit('fetch')"
         >
           <CIcon name="reload" class="dynamic-actions__icon" />
-        </button>
+        </UiGlowText>
 
         <div class="dynamic-actions__divider" />
       </template>
 
       <div class="dynamic-actions__switch">
-        <button
+        <UiGlowText
+          role="button"
+          hover-effect
           class="dynamic-actions__button"
           :class="{
             ['dynamic-actions__button--active']: model === sectionFlow.grid,
           }"
+          :dimm="model !== sectionFlow.grid"
           @click="() => (model = sectionFlow.grid)"
         >
           <CIcon name="grid" class="dynamic-actions__icon" />
-        </button>
+        </UiGlowText>
 
-        <button
+        <UiGlowText
+          role="button"
+          hover-effect
           class="dynamic-actions__button"
           :class="{
             ['dynamic-actions__button--active']: model === sectionFlow.column,
           }"
+          :dimm="model !== sectionFlow.column"
           @click="() => (model = sectionFlow.column)"
         >
           <CIcon name="column" class="dynamic-actions__icon" />
-        </button>
+        </UiGlowText>
 
         <div :style="shutterStyle" class="dynamic-actions__shutter" />
       </div>
@@ -105,6 +114,7 @@ const shutterStyle = computed(() => {
   &__button {
     padding: em(9);
     color: $text-color-secondary;
+    cursor: pointer;
     border-radius: em(6);
     transition:
       background-color $time-normal $ease,

@@ -11,14 +11,11 @@
         </div>
 
         <div class="layout-aside__subtitle">
-          <p class="h4-r">Game Server Management</p>
+          <UiGlowText class="h4-r">Game Server Management</UiGlowText>
         </div>
       </div>
 
-      <LAsideNavigation
-        :is-compact="isLayoutCompact"
-        class="layout-aside__nav"
-      />
+      <LAsideNavigation class="layout-aside__nav" />
     </div>
   </UiGlowWrapper>
 </template>

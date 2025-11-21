@@ -93,8 +93,8 @@ function onChange(item, close) {
       width: em(12);
       height: em(12);
       color: $accent-color-primary;
-      transition: rotate $time-normal $ease-out;
       rotate: 90deg;
+      transition: rotate $time-normal $ease-out;
     }
 
     &--opened {
