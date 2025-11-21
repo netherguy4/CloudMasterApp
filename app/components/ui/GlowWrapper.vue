@@ -12,12 +12,11 @@ const props = defineProps({
 
 const container = useTemplateRef('container');
 
-const { x, y } = useMouse();
-const { top, left } = useElementBounding(container);
+const { elementX, elementY } = useMouseInElement(container);
 
 const glowStyle = computed(() => ({
-  '--x': `${x.value - left.value}px`,
-  '--y': `${y.value - top.value}px`,
+  '--x': `${elementX.value}px`,
+  '--y': `${elementY.value}px`,
 }));
 
 const size = computed(() => props.sizeEm + 'em');
